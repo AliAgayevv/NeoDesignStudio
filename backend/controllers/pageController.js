@@ -13,7 +13,7 @@ exports.getPage = async (req, res) => {
     }
 
     // Dil kontrolü
-    if (!["tr", "en", "ru"].includes(lang)) {
+    if (!["az", "en", "ru"].includes(lang)) {
       return res.status(400).json({ message: "Invalid language parameter." });
     }
 
@@ -29,11 +29,10 @@ exports.createPage = async (req, res) => {
   try {
     const { page, pageType, content } = req.body;
 
-    // İçerik validasyonu
-    if (!content.tr || !content.en || !content.ru) {
+    if (!content.az || !content.en || !content.ru) {
       return res
         .status(400)
-        .json({ message: "All languages (tr, en, ru) must be provided." });
+        .json({ message: "All languages (az, en, ru) must be provided." });
     }
 
     // Aynı sayfa daha önce eklenmiş mi?

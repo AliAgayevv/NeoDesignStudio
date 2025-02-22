@@ -17,7 +17,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body>
         <ReduxProvider>
-          {" "}
           <Navbar />
           {children}
         </ReduxProvider>

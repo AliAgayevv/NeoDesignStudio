@@ -6,7 +6,7 @@ const ProjectSchema = new mongoose.Schema({
   pageType: { type: String, default: "static" }, // Sayfa tipi
   images: { type: [String], default: [] }, // Fotoğraf URL'leri (dillerden bağımsız)
   content: {
-    tr: {
+    az: {
       type: Object,
       required: true,
     },

@@ -3,7 +3,7 @@ const Work = require("../models/Work");
 exports.getWorkById = async (req, res) => {
   try {
     const { id } = req.params; // projectId
-    const { lang } = req.query; // (tr, en, ru)
+    const { lang } = req.query;
 
     // Find the project by projectId
     const project = await Work.findOne({ projectId: id });
@@ -44,11 +44,10 @@ exports.createWork = async (req, res) => {
       uploadedImages = req.files.map((file) => file.path);
     }
 
-    // Validate content fields (tr, en, ru)
-    if (!content || !content.tr || !content.en || !content.ru) {
+    if (!content || !content.az || !content.en || !content.ru) {
       return res
         .status(400)
-        .json({ message: "All languages (tr, en, ru) must be provided." });
+        .json({ message: "All languages (az, en, ru) must be provided." });
     }
 
     // Check if projectId already exists

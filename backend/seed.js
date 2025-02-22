@@ -14,7 +14,7 @@ const seedData = async () => {
         title: "Welcome to our site",
         description: "We provide the best services for you.",
       },
-      tr: {
+      az: {
         title: "Sitemize Hoş Geldiniz",
         description: "Sizin için en iyi hizmetleri sunuyoruz.",
       },

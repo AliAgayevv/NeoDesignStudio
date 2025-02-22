@@ -4,7 +4,7 @@ const PageSchema = new mongoose.Schema({
   page: { type: String, required: true },
   pageType: { type: String, required: true },
   content: {
-    tr: { type: Object, required: true }, //
+    az: { type: Object, required: true }, //
     en: { type: Object, required: true },
     ru: { type: Object, required: true },
   },

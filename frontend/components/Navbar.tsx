@@ -3,6 +3,7 @@
 import Image from "next/image";
 import languageIcon from "@/public/assets/icons/languageIcon.svg";
 import phoneDropdownIcon from "@/public/assets/icons/phoneDropdownIcon.svg";
+import wellDoneIcon from "@/public/assets/icons/wellDoneIcon.svg";
 import { useEffect, useRef, useState } from "react";
 import useBreakpoint from "@/utils/hooks/useBreakpoint";
 import useOutsideClick from "@/utils/hooks/useOutsideClick";
@@ -61,7 +62,7 @@ const Navbar = () => {
   }, [dispatch]);
 
   return (
-    <nav className="bg-black w-full" role="navigation">
+    <nav className="bg-transparent w-full fixed top-0 z-20" role="navigation">
       <div className="w-11/12 flex justify-between md:justify-normal mx-auto p-4 min-h-24">
         <Image
           src={languageIcon}
@@ -74,14 +75,16 @@ const Navbar = () => {
         {isLangugageDropdownOpen && (
           <div className="w-full h-full fixed top-0 left-0 z-50">
             <div
-              className="absolute top-[97px] left-12 w-32 bg-[#F3F1F1] rounded-lg shadow-lg overflow-hidden flex flex-col"
+              className="absolute top-[97px] left-12 w-32 shadow-lg overflow-hidden flex flex-col gap-2.5"
               ref={languageDropdownRef}
             >
               {["EN", "AZ", "RU"].map((lang) => (
                 <p
                   key={lang}
-                  className={`text-[#463A28] text-lg py-4 px-6 cursor-pointer ${
-                    language.toUpperCase() === lang ? "font-bold" : ""
+                  className={` text-lg py-4 px-6 cursor-pointer flex justify-between bg-[#646060] text-[#F3F1F1] transition-all duration-300 ease-in rounded-lg ${
+                    language.toUpperCase() === lang
+                      ? "font-bold bg-white text-[#646060]"
+                      : "hover:bg-white hover:text-[#646060] hover:scale-125 "
                   }`}
                   onClick={() => {
                     dispatch(
@@ -91,6 +94,9 @@ const Navbar = () => {
                   }}
                 >
                   {lang}
+                  {language.toUpperCase() === lang && (
+                    <Image src={wellDoneIcon} alt="Well done SVG" />
+                  )}
                 </p>
               ))}
             </div>
@@ -129,12 +135,14 @@ const Navbar = () => {
           </div>
         )}
 
-        <div className="hidden md:flex md:w-4/6 justify-evenly bg-[#646060] rounded-[32px] h-full p-0 md:p-4 md:ml-[20%]">
+        <div className="hidden md:flex md:w-4/6 justify-between bg-[#64606054] rounded-[32px] h-full p-0 md:p-4 md:ml-[20%] items-center">
           {navbarElements[language].map((item, index) => (
             <Link key={index} href={item.href}>
               <p
                 className={`text-white text-lg px-4 ${
-                  pathname === item.href ? "underline" : ""
+                  pathname === item.href
+                    ? "bg-[#646060] rounded-3xl px-16 py-2.5"
+                    : ""
                 }`}
               >
                 {item.title}
@@ -143,7 +151,6 @@ const Navbar = () => {
           ))}
         </div>
       </div>
-      <hr />
     </nav>
   );
 };

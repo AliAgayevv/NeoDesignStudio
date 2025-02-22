@@ -6,7 +6,11 @@ type LanguageState = {
 };
 
 const initialState: LanguageState = {
-  language: "az",
+  language:
+    ((typeof window !== "undefined" && localStorage.getItem("language")) as
+      | "en"
+      | "az"
+      | "ru") || "en",
 };
 
 export const languageSlice = createSlice({
@@ -15,7 +19,9 @@ export const languageSlice = createSlice({
   reducers: {
     setLanguage: (state, action: PayloadAction<"en" | "az" | "ru">) => {
       state.language = action.payload;
-      localStorage.setItem("language", action.payload); // Kullanıcı dilini kaydet
+      if (typeof window !== "undefined") {
+        localStorage.setItem("language", action.payload);
+      }
     },
   },
 });

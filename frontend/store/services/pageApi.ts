@@ -10,13 +10,13 @@ type PageContent = {
 type Page = {
   page: string;
   pageType: string;
-  content: PageContent;
+  content: PageContent[];
 };
 
 export const pageApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPage: builder.query<Page, { page: string; lang: string }>({
-      query: ({ page, lang }) => `/page/${page}?lang=${lang}`,
+      query: ({ page, lang }) => `/pages/${page}?lang=${lang}`,
     }),
     createPage: builder.mutation<void, Page>({
       query: (newPage) => ({
