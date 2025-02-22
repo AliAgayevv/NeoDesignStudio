@@ -12,26 +12,9 @@ import { usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { setLanguage, selectLanguage } from "@/store/services/languageSlice";
 
-const navbarElements = {
-  en: [
-    { title: "Home", href: "/" },
-    { title: "Projects", href: "/projects" },
-    { title: "Services", href: "/services" },
-    { title: "Contact", href: "/contact" },
-  ],
-  az: [
-    { title: "Ana Səhifə", href: "/" },
-    { title: "Layihələr", href: "/projects" },
-    { title: "Xidmətlər", href: "/services" },
-    { title: "Əlaqə", href: "/contact" },
-  ],
-  ru: [
-    { title: "Главная", href: "/" },
-    { title: "Проекты", href: "/projects" },
-    { title: "Услуги", href: "/services" },
-    { title: "Контакты", href: "/contact" },
-  ],
-};
+import { handleGoSomewhere } from "@/utils/handleGoSomewhere";
+
+import { dropdownItems } from "@/data/mockDatas";
 
 const Navbar = () => {
   const [isDropdownMenuOpen, setIsDropdownMenu] = useState(false);
@@ -117,18 +100,19 @@ const Navbar = () => {
               ref={dropdownRef}
               className="absolute top-[97px] right-[5%] w-64 bg-[#F3F1F1] rounded-lg shadow-lg overflow-hidden"
             >
-              {navbarElements[language].map((item, index) => (
-                <div key={index}>
-                  <Link
-                    href={item.href}
-                    onClick={() => setIsDropdownMenu(false)}
-                    className="block py-4 px-6 text-lg text-[#463A28] mx-auto active:bg-[#463A28] active:text-[#E7E7E6] transition-all duration-200 text-center font-[600]"
-                  >
-                    {item.title}
-                  </Link>
-                  {index < navbarElements[language].length - 1 && (
-                    <div className="h-px bg-[#463A28]" />
-                  )}
+              {dropdownItems.map((item) => (
+                <div
+                  onClick={() => {
+                    if (item.isNewPage) {
+                      window.location.href = "" + item.path;
+                    } else {
+                      handleGoSomewhere(item.element);
+                    }
+                  }}
+                  className="block py-4 px-6 text-lg text-[#463A28] mx-auto active:bg-[#463A28] active:text-[#E7E7E6] transition-all duration-200 text-center font-[600]"
+                  key={item.id}
+                >
+                  {item.title[language]}
                 </div>
               ))}
             </div>
@@ -136,18 +120,24 @@ const Navbar = () => {
         )}
 
         <div className="hidden md:flex md:w-4/6 justify-between bg-[#64606054] rounded-[32px] h-full p-0 md:p-4 md:ml-[20%] items-center">
-          {navbarElements[language].map((item, index) => (
-            <Link key={index} href={item.href}>
-              <p
-                className={`text-white text-lg px-4 ${
-                  pathname === item.href
-                    ? "bg-[#646060] rounded-3xl px-16 py-2.5"
-                    : ""
-                }`}
-              >
-                {item.title}
-              </p>
-            </Link>
+          {dropdownItems.map((item) => (
+            <p
+              key={item.id}
+              onClick={() => {
+                if (item.isNewPage) {
+                  window.location.href = "" + item.path;
+                } else {
+                  handleGoSomewhere(item.element);
+                }
+              }}
+              className={`text-white text-lg px-4 cursor-pointer ${
+                pathname === item.path
+                  ? "bg-[#646060] rounded-3xl px-16 py-2.5"
+                  : ""
+              } `}
+            >
+              {item.title[language]}{" "}
+            </p>
           ))}
         </div>
       </div>

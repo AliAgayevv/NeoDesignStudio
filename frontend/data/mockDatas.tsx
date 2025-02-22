@@ -29,3 +29,50 @@ export const heroContent = {
     mainTitle: "Добро пожаловать на наш сайт",
   },
 };
+
+export const dropdownItems = [
+  {
+    id: 1,
+    title: {
+      en: "Home",
+      az: "Ana Səhifə",
+      ru: "Главная",
+    },
+    isNewPage: true,
+    element: null,
+    path: "/",
+  },
+  {
+    id: 2,
+    title: {
+      en: "Projects",
+      az: "Layihələr",
+      ru: "Проекты",
+    },
+    isNewPage: true,
+    element: null,
+    path: "/projects",
+  },
+  {
+    id: 3,
+    title: {
+      en: "Services",
+      az: "Xidmətlər",
+      ru: "Услуги",
+    },
+    isNewPage: false,
+    element: "services",
+    path: null,
+  },
+  {
+    id: 4,
+    title: {
+      en: "Contact",
+      az: "Əlaqə",
+      ru: "Конт",
+    },
+    isNewPage: false,
+    element: "contact",
+    path: false,
+  },
+];

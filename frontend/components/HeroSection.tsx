@@ -29,7 +29,7 @@ const HeroSection = () => {
   // if (error) return <p>Failed to load data</p>;
 
   return (
-    <section className="relative z-0">
+    <section className="relative z-0 h-[100vh] w-full">
       <Image
         src={landingPhoto}
         alt="Exterior Photo"
@@ -38,7 +38,6 @@ const HeroSection = () => {
       <h1 className="text-white text-4xl font-bold text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         {heroContent[lang].mainTitle}
       </h1>
-
       <div className=" absolute bottom-28 left-8 flex z-10 ">
         <NavigationButton
           backgroundColor="#9C9C9C"
@@ -47,7 +46,6 @@ const HeroSection = () => {
           Get a quote
         </NavigationButton>
       </div>
-
       {/* Social media links */}
       <div className="absolute bottom-8 left-8 flex gap-4 z-10">
         {socialMedias.map((socialMedia) => (
