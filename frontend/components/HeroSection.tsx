@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import landingPhoto from "@/public/assets/photos/landingPhoto.png";
-import { useGetPageQuery } from "@/store/services/pageApi";
+// import { useGetPageQuery } from "@/store/services/pageApi";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
 import { heroContent } from "@/data/mockDatas";
@@ -12,13 +12,13 @@ import { Playfair_Display } from "next/font/google";
 import { socialMedias } from "@/data/mockDatas";
 import NavigationButton from "./NavigationButton";
 
-type PageContent = {
-  mainTitle?: string;
-};
+// type PageContent = {
+//   mainTitle?: string;
+// };
 
-type PageResponse = {
-  content: Partial<Record<"en" | "az" | "ru", PageContent>>;
-};
+// type PageResponse = {
+//   content: Partial<Record<"en" | "az" | "ru", PageContent>>;
+// };
 
 const playfairDisplayFont600 = Playfair_Display({
   subsets: ["latin"],

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import HeaderTitle from "./HeaderTitle";
 import Image from "next/image";
 import aboutUsPhoto from "../public/assets/photos/aboutUsPhoto.jpeg";
 import SectionHeaderTitle from "./SectionHeaderTitle";

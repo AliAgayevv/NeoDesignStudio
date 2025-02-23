@@ -7,7 +7,7 @@ import wellDoneIcon from "@/public/assets/icons/wellDoneIcon.svg";
 import { useEffect, useRef, useState } from "react";
 import useBreakpoint from "@/utils/hooks/useBreakpoint";
 import useOutsideClick from "@/utils/hooks/useOutsideClick";
-import Link from "next/link";
+// import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { setLanguage, selectLanguage } from "@/store/services/languageSlice";
