@@ -11,6 +11,8 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.1",
     "next": "15.1.7",
+    "next-fonts": "^1.5.1",
+    "next-video": "^2.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",

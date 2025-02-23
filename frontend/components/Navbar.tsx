@@ -12,9 +12,20 @@ import { usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { setLanguage, selectLanguage } from "@/store/services/languageSlice";
 
+import { Montserrat } from "next/font/google";
+
+// import { Outfit } from "next/font/google";
+// const outfitFontNormal = Outfit({ subsets: ["latin"], weight: "400" });
+{
+  /* <div
+        className={`w-11/12 mx-auto text-white ${outfitFontNormal.className}`}
+      ></div> */
+}
+
 import { handleGoSomewhere } from "@/utils/handleGoSomewhere";
 
 import { dropdownItems } from "@/data/mockDatas";
+const montserratFont600 = Montserrat({ subsets: ["latin"], weight: "600" });
 
 const Navbar = () => {
   const [isDropdownMenuOpen, setIsDropdownMenu] = useState(false);
@@ -45,7 +56,10 @@ const Navbar = () => {
   }, [dispatch]);
 
   return (
-    <nav className="bg-transparent w-full fixed top-0 z-20" role="navigation">
+    <nav
+      className={`bg-black md:bg-transparent w-full fixed top-0 z-20 ${montserratFont600.className}`}
+      role="navigation"
+    >
       <div className="w-11/12 flex justify-between md:justify-normal mx-auto p-4 min-h-24">
         <Image
           src={languageIcon}
@@ -64,7 +78,7 @@ const Navbar = () => {
               {["EN", "AZ", "RU"].map((lang) => (
                 <p
                   key={lang}
-                  className={` text-lg py-4 px-6 cursor-pointer flex justify-between bg-[#646060] text-[#F3F1F1] transition-all duration-300 ease-in rounded-lg ${
+                  className={` text-lg py-4 px-6 cursor-pointer flex justify-between bg-[#646060] text-[#F3F1F1] transition-all duration-300 ease-in  rounded-lg ${
                     language.toUpperCase() === lang
                       ? "font-bold bg-white text-[#646060]"
                       : "hover:bg-white hover:text-[#646060] hover:scale-125 "

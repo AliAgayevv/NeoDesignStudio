@@ -4,13 +4,22 @@ import React from "react";
 import HeaderTitle from "./HeaderTitle";
 import Image from "next/image";
 import aboutUsPhoto from "../public/assets/photos/aboutUsPhoto.jpeg";
+import SectionHeaderTitle from "./SectionHeaderTitle";
+import { Playfair } from "next/font/google";
+
+const playfairDisplayFont600 = Playfair({
+  subsets: ["latin"],
+  weight: "600",
+});
 
 const About = () => {
   const [isLearnMoreOpen, setIsLearnMoreOpen] = React.useState(false);
   return (
-    <div className="w-11/12 mx-auto mt-32 h-screen ">
-      <HeaderTitle>About</HeaderTitle>
-      <div className="flex flex-col md:flex-row justify-between w-full gap-8">
+    <div className="w-11/12 mx-auto mt-6 md:mt-32 h-screen">
+      <SectionHeaderTitle>About</SectionHeaderTitle>
+      <div
+        className={` ${playfairDisplayFont600.className} flex flex-col-reverse  md:flex-row justify-between w-full gap-8 mt-6 tracking-wide`}
+      >
         <div className="flex flex-col gap-5 text-[#E7E7E6] text-xl md:w-2/3">
           <h2 className="text-3xl font-semibold">How we can help</h2>
           <p className="text-lg text-right">
@@ -21,7 +30,7 @@ const About = () => {
           </p>
           {isLearnMoreOpen && (
             <div>
-              <p className="text-lg">
+              <p className="text-lg text-left w-3/4">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 Assumenda dolorem, at obcaecati modi fugiat itaque ad odit
                 quidem porro! Officiis reiciendis exercitationem minima, quas
@@ -36,8 +45,8 @@ const About = () => {
             Learn More
           </p>
         </div>
-        <div className="w-full md:w-1/2 relative overflow-hidden md:overflow-visible">
-          <div className="absolute bottom-6 left-4 md:bottom-12 md:left-10 z-0 w-full h-full border border-[#955C22] rounded-lg shadow-md  overflow-hidden " />
+        <div className="w-full md:w-1/2 relative  md:overflow-visible">
+          <div className="absolute bottom-6 -translate-x-6 md:-translate-x-4 left-8 md:bottom-12 md:left-10 z-0 w-full h-full border border-[#955C22] rounded-lg shadow-md  " />
 
           <Image
             alt="Learn More Image"
