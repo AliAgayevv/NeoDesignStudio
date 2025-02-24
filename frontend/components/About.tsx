@@ -6,12 +6,23 @@ import aboutUsPhoto from '../public/assets/photos/aboutUsPhoto.jpeg'
 import SectionHeaderTitle from './SectionHeaderTitle'
 import { Playfair } from 'next/font/google'
 
+import { useSelector } from 'react-redux'
+import { selectLanguage } from '@/store/services/languageSlice'
+
+const headearTitle = {
+  en: 'About',
+  az: 'Haqqımızda',
+  ru: 'О нас',
+}
+
+
 const playfairDisplayFont600 = Playfair({
   subsets: ['latin'],
   weight: '600',
 })
 
 const About = () => {
+  const lang = useSelector(selectLanguage)
   const [isLearnMoreOpen, setIsLearnMoreOpen] = React.useState(false)
   return (
     <div
@@ -19,7 +30,9 @@ const About = () => {
         isLearnMoreOpen ? 'mb-40 md:mb-0' : 'mb-0 md:mb-0'
       }`}
     >
-      <SectionHeaderTitle>About</SectionHeaderTitle>
+      <SectionHeaderTitle>
+        {headearTitle[lang]}
+      </SectionHeaderTitle>
       <div
         className={` ${playfairDisplayFont600.className} mt-6 flex w-full flex-col-reverse justify-between gap-8 tracking-wide md:flex-row`}
       >
