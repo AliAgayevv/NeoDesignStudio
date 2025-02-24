@@ -1,18 +1,18 @@
 // pageApi.ts (Page API Slice - TypeScript)
-import { apiSlice } from "./apiSlice";
+import { apiSlice } from './apiSlice'
 
 type PageContent = {
-  tr: object;
-  en: object;
-  ru: object;
-  mainTitle: string;
-};
+  tr: object
+  en: object
+  ru: object
+  mainTitle: string
+}
 
 type Page = {
-  page: string;
-  pageType: string;
-  content: PageContent;
-};
+  page: string
+  pageType: string
+  content: PageContent
+}
 
 export const pageApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -21,20 +21,19 @@ export const pageApi = apiSlice.injectEndpoints({
     }),
     createPage: builder.mutation<void, Page>({
       query: (newPage) => ({
-        url: "/page",
-        method: "POST",
+        url: '/page',
+        method: 'POST',
         body: newPage,
       }),
     }),
     updatePage: builder.mutation<void, { page: string; content: PageContent }>({
       query: ({ page, content }) => ({
         url: `/page/${page}`,
-        method: "PUT",
+        method: 'PUT',
         body: { content },
       }),
     }),
   }),
-});
+})
 
-export const { useGetPageQuery, useCreatePageMutation, useUpdatePageMutation } =
-  pageApi;
+export const { useGetPageQuery, useCreatePageMutation, useUpdatePageMutation } = pageApi
