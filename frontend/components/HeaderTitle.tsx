@@ -3,6 +3,7 @@ import { Playfair_Display } from "next/font/google";
 
 interface HeaderTitleProps {
   children: React.ReactNode;
+  classname: string;
 }
 
 const playfairDisplayFont600 = Playfair_Display({
@@ -10,11 +11,14 @@ const playfairDisplayFont600 = Playfair_Display({
   weight: "600",
 });
 
-const HeaderTitle: React.FC<HeaderTitleProps> = ({ children }) => {
+const HeaderTitle: React.FC<HeaderTitleProps> = ({
+  children,
+  classname = "",
+}) => {
   // Global css de header_text ucun clamp ile olcu yarat, jasper website ornekden bax
   return (
     <h1
-      className={`font-[600] header_text ${playfairDisplayFont600.className}`}
+      className={`font-[600] text-4xl ${classname}  ${playfairDisplayFont600.className}`}
     >
       {children}
     </h1>

@@ -5,12 +5,13 @@ type PageContent = {
   tr: object;
   en: object;
   ru: object;
+  mainTitle: string;
 };
 
 type Page = {
   page: string;
   pageType: string;
-  content: PageContent[];
+  content: PageContent;
 };
 
 export const pageApi = apiSlice.injectEndpoints({

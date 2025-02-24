@@ -5,22 +5,39 @@ exports.getPage = async (req, res) => {
     const { page } = req.params;
     const { lang } = req.query;
 
-    // Veritabanından sayfa verisini çek
+    if (!lang) {
+      return res
+        .status(400)
+        .json({ message: "Language parameter is required." });
+    }
+
+    if (!["az", "en", "ru", "tr"].includes(lang)) {
+      return res.status(400).json({ message: "Invalid language parameter." });
+    }
+
+    console.log("🔍 Searching for page:", page); // Debugging log
+
+    // List all pages to check available entries
+    const allPages = await Page.find({}, { page: 1, _id: 0 });
+    console.log("📂 Available pages in DB:", allPages);
+
+    // Query MongoDB by `page`
     const pageData = await Page.findOne({ page });
 
     if (!pageData) {
       return res.status(404).json({ message: "Page not found" });
     }
 
-    // Dil kontrolü
-    if (!["az", "en", "ru"].includes(lang)) {
-      return res.status(400).json({ message: "Invalid language parameter." });
+    // Ensure `content` exists for the requested language
+    if (!pageData.content || !pageData.content[lang]) {
+      return res
+        .status(404)
+        .json({ message: `Content not found for language: ${lang}` });
     }
 
-    // İstenen dilde içerik döndür
-    const content = pageData.content[lang];
-    res.json({ page, content });
+    res.json({ page: pageData.page, content: pageData.content[lang] });
   } catch (err) {
+    console.error("❌ Error fetching page:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
