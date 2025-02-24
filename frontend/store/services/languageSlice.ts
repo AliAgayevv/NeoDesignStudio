@@ -6,11 +6,7 @@ type LanguageState = {
 };
 
 const initialState: LanguageState = {
-  language:
-    ((typeof window !== "undefined" && localStorage.getItem("language")) as
-      | "en"
-      | "az"
-      | "ru") || "en",
+  language: "en", // Varsayılan olarak 'en'
 };
 
 export const languageSlice = createSlice({

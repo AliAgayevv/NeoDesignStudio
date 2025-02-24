@@ -7,3 +7,21 @@
 {
     font-size: clamp(4rem, 8vw, 100rem);
 }
+
+
+/* .swiper-pagination-bullet {
+    background-color: #36210D !important;
+    width: 11px !important;
+    height: 11px !important;
+} */
+
+
+.swiper-pagination > .swiper-pagination-bullet {
+    opacity: 1;
+    background-color: #36210D;
+    width: 11px;
+    height: 11px;
+}
+.swiper-pagination > .swiper-pagination-bullet-active {
+    background-color: #9D9D9D;
+}

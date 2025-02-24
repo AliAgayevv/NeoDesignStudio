@@ -14,7 +14,11 @@ const playfairDisplayFont600 = Playfair({
 const About = () => {
   const [isLearnMoreOpen, setIsLearnMoreOpen] = React.useState(false);
   return (
-    <div className="w-11/12 mx-auto mt-6 md:mt-32 h-screen">
+    <div
+      className={`w-11/12 mx-auto mt-6 md:mt-32 h-screen ${
+        isLearnMoreOpen ? "mb-40 md:mb-0" : "mb-0 md:mb-0"
+      }`}
+    >
       <SectionHeaderTitle>About</SectionHeaderTitle>
       <div
         className={` ${playfairDisplayFont600.className} flex flex-col-reverse  md:flex-row justify-between w-full gap-8 mt-6 tracking-wide`}

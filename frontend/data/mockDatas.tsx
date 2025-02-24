@@ -76,3 +76,38 @@ export const dropdownItems = [
     path: false,
   },
 ];
+
+import servicesExamplePhoto from "@/public/assets/photos/servicesExamplePhoto.png";
+
+export const servicesCardContent = [
+  {
+    id: 1,
+    img: servicesExamplePhoto,
+    isReversed: false,
+    text: {
+      en: "Interior",
+      az: "Interyer",
+      ru: "интерьера",
+    },
+  },
+  {
+    id: 2,
+    img: servicesExamplePhoto,
+    isReversed: true,
+    text: {
+      en: "Exterior",
+      az: "Eksteryer",
+      ru: "экстерьера",
+    },
+  },
+  {
+    id: 3,
+    img: servicesExamplePhoto,
+    isReversed: false,
+    text: {
+      en: "Business",
+      az: "Biznes",
+      ru: "Бизнес",
+    },
+  },
+];

@@ -14,14 +14,6 @@ import { setLanguage, selectLanguage } from "@/store/services/languageSlice";
 
 import { Montserrat } from "next/font/google";
 
-// import { Outfit } from "next/font/google";
-// const outfitFontNormal = Outfit({ subsets: ["latin"], weight: "400" });
-{
-  /* <div
-        className={`w-11/12 mx-auto text-white ${outfitFontNormal.className}`}
-      ></div> */
-}
-
 import { handleGoSomewhere } from "@/utils/handleGoSomewhere";
 
 import { dropdownItems } from "@/data/mockDatas";

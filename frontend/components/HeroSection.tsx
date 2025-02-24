@@ -2,23 +2,23 @@
 
 import Image from "next/image";
 import landingPhoto from "@/public/assets/photos/landingPhoto.png";
-// import { useGetPageQuery } from "@/store/services/pageApi";
+import { useGetPageQuery } from "@/store/services/pageApi";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
-import { heroContent } from "@/data/mockDatas";
+// import { heroContent } from "@/data/mockDatas";
 
 import { Playfair_Display } from "next/font/google";
 
 import { socialMedias } from "@/data/mockDatas";
 import NavigationButton from "./NavigationButton";
 
-// type PageContent = {
-//   mainTitle?: string;
-// };
+type PageContent = {
+  mainTitle?: string;
+};
 
-// type PageResponse = {
-//   content: Partial<Record<"en" | "az" | "ru", PageContent>>;
-// };
+type PageResponse = {
+  content: Partial<Record<"en" | "az" | "ru", PageContent>>;
+};
 
 const playfairDisplayFont600 = Playfair_Display({
   subsets: ["latin"],
@@ -27,13 +27,13 @@ const playfairDisplayFont600 = Playfair_Display({
 
 const HeroSection = () => {
   const lang = useSelector(selectLanguage);
-  // const { data, isLoading, error } = useGetPageQuery({
-  //   page: "hero",
-  //   lang,
-  // });
+  const { data, isLoading, error } = useGetPageQuery({
+    page: "hero",
+    lang,
+  });
 
-  // if (isLoading) return <p>Loading...</p>;
-  // if (error) return <p>Failed to load data</p>;
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Failed to load data</p>;
 
   return (
     <section className="relative z-0 h-full md:h-[100vh] w-full bg-black md:bg-none">
@@ -56,9 +56,9 @@ const HeroSection = () => {
       </div>
 
       <h1
-        className={`text-black md:text-white text-xl md:text-4xl font-bold text-center absolute top-32 right-10  md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 ${playfairDisplayFont600.className}`}
+        className={`text-black md:text-white text-right md:text-center text-xl md:text-4xl font-bold  absolute top-32 right-9  md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 ${playfairDisplayFont600.className}`}
       >
-        {heroContent[lang].mainTitle}
+        {data?.content?.mainTitle}
       </h1>
       <div className="  absolute -translate-y-16 left-12 md:translate-y-0 md:bottom-28 md:left-8  z-10 w-40">
         <NavigationButton
