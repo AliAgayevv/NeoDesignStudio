@@ -12,6 +12,8 @@
     "@reduxjs/toolkit": "^2.5.1",
     "@splidejs/react-splide": "^0.7.12",
     "@splidejs/splide-extension-auto-scroll": "^0.5.3",
+    "framer-motion": "^12.4.7",
+    "motion": "^12.4.7",
     "next": "15.1.7",
     "next-fonts": "^1.5.1",
     "next-video": "^2.1.0",

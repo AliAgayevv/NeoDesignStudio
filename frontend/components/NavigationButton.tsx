@@ -1,6 +1,7 @@
 import React from "react";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { Playfair_Display } from "next/font/google";
+import { motion } from "framer-motion";
 
 interface NavigationButtonProps {
   children: React.ReactNode;
@@ -19,19 +20,28 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({
 }) => {
   return (
     <button
-      className={`w-full flex items-center gap-0 text-white rounded-3xl p-0.5 ${playfairDisplayFont800.className}`}
-      type="button"
+      className={`group relative flex h-12 w-full max-w-[280px] items-center rounded-full p-1 ${playfairDisplayFont800.className} `}
       style={{ backgroundColor }}
+      type="button"
     >
-      <p
-        className="w-40 h-full flex items-center justify-center rounded-3xl p-2 text-sm"
+      <motion.div
+        initial={{ width: "75%" }}
+        whileHover={{ width: "100%" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="flex h-full rounded-full justify-center items-center text-sm text-white"
         style={{ backgroundColor: textBackgroundColor }}
       >
         {children}
-      </p>
-      <span style={{ color: textBackgroundColor }}>
-        <MdOutlineKeyboardArrowRight size={32} />
-      </span>
+      </motion.div>
+      <div
+        className="absolute right-1 flex h-10 w-10 items-center justify-center rounded-full"
+        style={{ color: textBackgroundColor }}
+      >
+        <MdOutlineKeyboardArrowRight
+          className="text-white transition-transform group-hover:translate-x-0.5"
+          size={24}
+        />
+      </div>
     </button>
   );
 };
