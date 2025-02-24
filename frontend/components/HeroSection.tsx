@@ -20,6 +20,12 @@ import NavigationButton from './NavigationButton'
 //   content: Partial<Record<"en" | "az" | "ru", PageContent>>;
 // };
 
+const navigationButtonInner = {
+  en: 'Get a quote',
+  az: 'Təklif alın',
+  ru: 'Получить предложение',
+}
+
 const playfairDisplayFont600 = Playfair_Display({
   subsets: ['latin'],
   weight: '600',
@@ -62,7 +68,7 @@ const HeroSection = () => {
       </h1>
       <div className='absolute left-12 z-10 w-60 -translate-y-16 md:bottom-28 md:left-8 md:translate-y-0'>
         <NavigationButton backgroundColor='#9C9C9C' textBackgroundColor='#646060'>
-          Get a quote
+          {navigationButtonInner[lang]}
         </NavigationButton>
       </div>
       {/* Social media links */}
