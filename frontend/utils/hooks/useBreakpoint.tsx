@@ -1,26 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react'
 
 const useBreakpoint = (breakpoint = 768) => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < breakpoint);
-    };
+      setIsMobile(window.innerWidth < breakpoint)
+    }
 
-    if (typeof window !== "undefined") {
-      checkScreenSize();
-      window.addEventListener("resize", checkScreenSize);
+    if (typeof window !== 'undefined') {
+      checkScreenSize()
+      window.addEventListener('resize', checkScreenSize)
     }
 
     return () => {
-      if (typeof window !== "undefined") {
-        window.removeEventListener("resize", checkScreenSize);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', checkScreenSize)
       }
-    };
-  }, [breakpoint]);
+    }
+  }, [breakpoint])
 
-  return isMobile;
-};
+  return isMobile
+}
 
-export default useBreakpoint;
+export default useBreakpoint

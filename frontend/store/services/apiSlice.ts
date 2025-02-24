@@ -1,9 +1,9 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const apiSlice = createApi({
-  reducerPath: "api",
+  reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://neodesignstudio.onrender.com/api",
+    baseUrl: 'https://neodesignstudio.onrender.com/api',
   }),
   endpoints: () => ({}),
-});
+})

@@ -1,22 +1,20 @@
-import React from "react";
-import { Montserrat } from "next/font/google";
+import React from 'react'
+import { Montserrat } from 'next/font/google'
 
 interface SectionHeaderTitleProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
-const montserratFont700 = Montserrat({ subsets: ["latin"], weight: "700" });
+const montserratFont700 = Montserrat({ subsets: ['latin'], weight: '700' })
 
-const SectionHeaderTitle: React.FC<SectionHeaderTitleProps> = ({
-  children,
-}) => {
+const SectionHeaderTitle: React.FC<SectionHeaderTitleProps> = ({ children }) => {
   return (
     <h1
-      className={`font-[600] tracking-wider uppercase header_text ${montserratFont700.className}`}
+      className={`header_text font-[600] uppercase tracking-wider ${montserratFont700.className}`}
     >
       {children}
     </h1>
-  );
-};
+  )
+}
 
-export default SectionHeaderTitle;
+export default SectionHeaderTitle
