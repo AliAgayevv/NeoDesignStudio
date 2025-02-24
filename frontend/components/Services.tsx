@@ -55,9 +55,8 @@ const images = [
   },
 ];
 
-SwiperCore.use([Pagination]);
-
 const Services = () => {
+  SwiperCore.use([Pagination]);
   const language = useSelector(selectLanguage);
   const dispatch = useDispatch();
 
