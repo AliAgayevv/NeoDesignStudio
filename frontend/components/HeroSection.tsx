@@ -12,13 +12,13 @@ import { Playfair_Display } from "next/font/google";
 import { socialMedias } from "@/data/mockDatas";
 import NavigationButton from "./NavigationButton";
 
-type PageContent = {
-  mainTitle?: string;
-};
+// type PageContent = {
+//   mainTitle?: string;
+// };
 
-type PageResponse = {
-  content: Partial<Record<"en" | "az" | "ru", PageContent>>;
-};
+// type PageResponse = {
+//   content: Partial<Record<"en" | "az" | "ru", PageContent>>;
+// };
 
 const playfairDisplayFont600 = Playfair_Display({
   subsets: ["latin"],
