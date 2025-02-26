@@ -12,6 +12,7 @@
     "@reduxjs/toolkit": "^2.5.1",
     "@splidejs/react-splide": "^0.7.12",
     "@splidejs/splide-extension-auto-scroll": "^0.5.3",
+    "formik": "^2.4.6",
     "framer-motion": "^12.4.7",
     "motion": "^12.4.7",
     "next": "15.1.7",
@@ -23,7 +24,8 @@
     "react-redux": "^9.2.0",
     "react-slick": "^0.30.3",
     "slick-carousel": "^1.8.1",
-    "swiper": "^11.2.4"
+    "swiper": "^11.2.4",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

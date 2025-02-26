@@ -6,6 +6,10 @@
   font-size: clamp(4rem, 8vw, 100rem);
 }
 
+.subheader_text{
+ font-size: clamp(2rem, 2.5vw, 100rem);
+}
+
 /* .swiper-pagination-bullet {
     background-color: #36210D !important;
     width: 11px !important;
