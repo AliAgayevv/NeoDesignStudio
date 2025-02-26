@@ -26,9 +26,9 @@ const playfairDisplayFont800 = Playfair_Display({
 })
 
 const headerTitle = {
-    az: 'Xidmətlər',
-    en: 'Services',
-    ru: 'Услуги',
+  az: 'Xidmətlər',
+  en: 'Services',
+  ru: 'Услуги',
 }
 const images = [
   {
@@ -73,10 +73,8 @@ const Services = () => {
   }, [dispatch])
 
   return (
-    <section className='mx-auto h-[900000px] w-11/12'>
-      <SectionHeaderTitle>
-        {headerTitle[language]}
-      </SectionHeaderTitle>
+    <section className='mx-auto h-full w-11/12' id='services'>
+      <SectionHeaderTitle>{headerTitle[language]}</SectionHeaderTitle>
       <div className='hidden w-full items-center justify-between md:flex'>
         {servicesCardContent.map(({ id, img, isReversed, text }) => (
           <ServicesCard key={id} img={img} isReversed={isReversed} text={text[language]} />
