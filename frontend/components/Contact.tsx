@@ -138,7 +138,7 @@ const Contact = () => {
   });
 
   return (
-    <div className="mx-auto h-[90000px] w-11/12">
+    <div className="mx-auto h-full w-11/12">
       <SectionHeaderTitle>{contactElement[lang].title}</SectionHeaderTitle>
       <div
         className={`flex w-full flex-col justify-between md:flex-row ${montserratFont600.className}`}
