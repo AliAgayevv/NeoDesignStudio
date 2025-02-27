@@ -112,6 +112,8 @@ const Contact = () => {
     validationSchema,
     onSubmit: async (values) => {
       try {
+        console.log("Submitting values: ", values); // Debug: Log form data
+
         const response = await fetch("http://localhost:4000/api/contact", {
           method: "POST",
           headers: {
@@ -121,15 +123,16 @@ const Contact = () => {
         });
 
         if (response.ok) {
-          alert("Form submitted !");
+          alert("Form submitted!");
           formik.resetForm();
         } else {
-          alert("Form submission failed !");
-          console.log(response);
+          const responseText = await response.text(); // Get response text for debugging
+          alert("Form submission failed!");
+          console.log("Response: ", responseText);
           console.log("Values: ", values);
         }
       } catch (error) {
-        console.log(error);
+        console.error("Error submitting form:", error);
       }
     },
   });
