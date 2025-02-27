@@ -4,19 +4,19 @@ const Contact = require("../models/Contact");
 
 router.post("/", async (req, res) => {
   try {
-    const { name, surname, email, phone, message } = req.body;
+    const { firstName, surname, email, phoneNumber, message } = req.body;
 
     // Verilerin kontrolü
-    if (!name || !surname || !email || !phone || !message) {
+    if (!firstName || !surname || !email || !phoneNumber || !message) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
     // Veritabanına kaydetme
     const newContact = new Contact({
-      name,
+      firstName,
       surname,
       email,
-      phone,
+      phoneNumber,
       message,
     });
 
