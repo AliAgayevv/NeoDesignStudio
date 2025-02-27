@@ -1,16 +1,16 @@
-'use client'
+"use client";
 
-import Image from 'next/image'
-import landingPhoto from '@/public/assets/photos/landingPhoto.png'
-import { useGetPageQuery } from '@/store/services/pageApi'
-import { useSelector } from 'react-redux'
-import { selectLanguage } from '@/store/services/languageSlice'
+import Image from "next/image";
+import landingPhoto from "@/public/assets/photos/landingPhoto.png";
+import { useGetPageQuery } from "@/store/services/pageApi";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "@/store/services/languageSlice";
 // import { heroContent } from "@/data/mockDatas";
 
-import { Playfair_Display } from 'next/font/google'
+import { Playfair_Display } from "next/font/google";
 
-import { socialMedias } from '@/data/mockDatas'
-import NavigationButton from './NavigationButton'
+import { socialMedias } from "@/data/mockDatas";
+import NavigationButton from "./NavigationButton";
 
 // type PageContent = {
 //   mainTitle?: string;
@@ -21,66 +21,75 @@ import NavigationButton from './NavigationButton'
 // };
 
 const navigationButtonInner = {
-  en: 'Get a quote',
-  az: 'Təklif alın',
-  ru: 'Получить предложение',
-}
+  en: "Get a quote",
+  az: "Təklif alın",
+  ru: "Получить предложение",
+};
 
 const playfairDisplayFont600 = Playfair_Display({
-  subsets: ['latin'],
-  weight: '600',
-})
+  subsets: ["latin"],
+  weight: "600",
+});
 
 const HeroSection = () => {
-  const lang = useSelector(selectLanguage)
+  const lang = useSelector(selectLanguage);
   const { data, isLoading, error } = useGetPageQuery({
-    page: 'hero',
+    page: "hero",
     lang,
-  })
+  });
 
-  if (isLoading) return <p>Loading...</p>
-  if (error) return <p>Failed to load data</p>
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Failed to load data</p>;
 
   return (
-    <section className='relative z-0 h-full w-full bg-black md:h-[100vh] md:bg-none'>
+    <section className="relative z-0 h-full w-full bg-black md:h-[100vh] md:bg-none">
       <Image
         src={landingPhoto}
-        alt='Exterior Photo'
-        className='hidden h-full w-full object-cover md:flex'
+        alt="Exterior Photo"
+        className="hidden h-full w-full object-cover md:flex"
       />
       {/* <video src={exampleLandingVideo}></video> */}
-      <div className='relative mx-auto flex h-auto w-[90%] rounded-3xl object-cover pt-28 md:hidden'>
+      <div className="relative mx-auto flex h-auto w-[90%] rounded-3xl object-cover pt-28 md:hidden">
         <video
+          playsInline
           autoPlay
           loop
           muted
-          className='rounded-3xl'
+          className="rounded-3xl"
           // NAVIGATION BUTTON FALAN HAMSIN TELEFONA UYUMLU
         >
-          <source src='/assets/exampleLandingVideo.mp4' type='video/mp4' />
+          <source src="/assets/exampleLandingVideo.mp4" type="video/mp4" />
         </video>
       </div>
 
       <h1
-        className={`absolute right-9 top-32 text-right text-xl font-bold text-black md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:text-center md:text-4xl md:text-white ${playfairDisplayFont600.className}`}
+        className={`absolute right-[10%] w-3/4 top-32 text-right text-xl font-bold text-black md:left-1/2 md:top-1/2  md:-translate-x-1/2 md:-translate-y-1/2 md:text-center md:text-4xl md:text-white ${playfairDisplayFont600.className}`}
       >
         {data?.content?.mainTitle}
       </h1>
-      <div className='absolute left-12 z-10 w-60 -translate-y-16 md:bottom-28 md:left-8 md:translate-y-0'>
-        <NavigationButton backgroundColor='#9C9C9C' textBackgroundColor='#646060'>
+      <div className="absolute left-12 z-10 w-60 -translate-y-16 md:bottom-28 md:left-8 md:translate-y-0">
+        <NavigationButton
+          backgroundColor="#9C9C9C"
+          textBackgroundColor="#646060"
+        >
           {navigationButtonInner[lang]}
         </NavigationButton>
       </div>
       {/* Social media links */}
-      <div className='absolute bottom-8 left-8 z-10 hidden gap-4 md:flex'>
+      <div className="absolute bottom-8 left-8 z-10 hidden gap-4 md:flex">
         {socialMedias.map((socialMedia) => (
-          <a target='_blank' href={socialMedia.url} key={socialMedia.name} className='text-white'>
+          <a
+            target="_blank"
+            href={socialMedia.url}
+            key={socialMedia.name}
+            className="text-white"
+          >
             {socialMedia.icon}
           </a>
         ))}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default HeroSection
+export default HeroSection;
