@@ -110,8 +110,27 @@ const Contact = () => {
       message: "",
     },
     validationSchema,
-    onSubmit: (values) => {
-      console.log("Form submitted", values);
+    onSubmit: async (values) => {
+      try {
+        const response = await fetch("http://localhost:4000/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
+
+        if (response.ok) {
+          alert("Form submitted !");
+          formik.resetForm();
+        } else {
+          alert("Form submission failed !");
+          console.log(response);
+          console.log("Values: ", values);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 
