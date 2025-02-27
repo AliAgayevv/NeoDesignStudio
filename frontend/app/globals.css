@@ -3,11 +3,16 @@
 @tailwind utilities;
 
 .header_text {
-  font-size: clamp(4rem, 8vw, 100rem);
+  font-size: clamp(2.2rem, 8vw, 10rem);
 }
 
 .subheader_text{
  font-size: clamp(2rem, 2.5vw, 100rem);
+}
+
+.landing_bottom_text{
+  font-size: clamp(18px, 5vw + 16px, 76px);
+
 }
 
 /* .swiper-pagination-bullet {
@@ -15,7 +20,11 @@
     width: 11px !important;
     height: 11px !important;
 } */
+.landing_sub_bottom_text
+{
+  font-size: clamp(12px, 2vw + 16px, 31px);
 
+}
 .swiper-pagination > .swiper-pagination-bullet {
   opacity: 1;
   background-color: #36210d;
