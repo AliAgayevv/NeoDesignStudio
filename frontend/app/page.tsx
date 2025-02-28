@@ -19,7 +19,7 @@ export default function Home() {
       <Services />
       <div className="w-full bg-black md:h-[400px]"></div>
       <Contact />
-      <div className="h-[9000px] w-full mt-40 bg-black mx-auto hidden md:block">
+      <div className="h-full w-full mt-40 bg-black mx-auto hidden md:block">
         <div className="flex items-center mx-auto w-full gap-10">
           <hr className="w-[45%] h-2" />
           <Image src={desingBeyondLimits} alt="design beyond limits" />
@@ -31,12 +31,13 @@ export default function Home() {
           Design Beyond Limits!
         </h1>
         <h3
-          className={`${playfairDisplayFont600.className} text-[#E7E7E6] landing_sub_bottom_text text-center w-3/4 mt-7 mx-auto tracking-widest opacity-75`}
+          className={`${playfairDisplayFont600.className} text-light_gray landing_sub_bottom_text text-center w-3/4 mt-7 mx-auto tracking-widest opacity-75`}
         >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, do eiusmod
           tempor incididunt ut labore et dolore mag
         </h3>
       </div>
+      <div className="bg-black w-screen h-[200px] hidden md:block"></div>
     </div>
   );
 }

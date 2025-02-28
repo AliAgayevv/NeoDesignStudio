@@ -80,7 +80,7 @@ interface subheaderTitleProps {
 }
 
 const SubheaderTitle: React.FC<subheaderTitleProps> = ({ children }) => {
-  return <h3 className="subheader_text text-[#e7e7e6]">{children}</h3>;
+  return <h3 className="subheader_text text-light_gray">{children}</h3>;
 };
 
 const Contact = () => {
@@ -95,7 +95,7 @@ const Contact = () => {
     phoneNumber: Yup.string()
       .matches(
         /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{2})[-. ]?([0-9]{2})$/,
-        "070-123-45-67"
+        "070-123-45-67",
       )
       .required(contactElement[lang].phoneNumberError),
     message: Yup.string().required(contactElement[lang].messageError),
@@ -265,6 +265,7 @@ const Contact = () => {
           </button>
         </form>
       </div>
+      <div className="block md:hidden bg-black w-screen h-[100px]"></div>
     </div>
   );
 };
