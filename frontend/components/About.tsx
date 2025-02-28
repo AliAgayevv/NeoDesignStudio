@@ -33,7 +33,7 @@ const About = () => {
       <div
         className={` ${playfairDisplayFont600.className} mt-6 flex w-full flex-col-reverse justify-between gap-8 tracking-wide md:flex-row`}
       >
-        <div className="flex flex-col gap-5 text-xl text-[#E7E7E6] md:w-2/3">
+        <div className="flex flex-col gap-5 text-xl text-light_gray md:w-2/3">
           <h2 className="text-3xl font-semibold">How we can help</h2>
           <p className="text-right text-lg">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Assumenda
