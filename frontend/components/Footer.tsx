@@ -5,7 +5,7 @@ import React from "react";
 import { Playfair_Display } from "next/font/google";
 import { FaCaretRight } from "react-icons/fa6";
 import { Montserrat } from "next/font/google";
-import logoWhite from "@/public/logoWhite.png";
+// import logoWhite from "@/public/logoWhite.png";
 import logoBlack from "@/public/logoBlack.png";
 import Image from "next/image";
 
