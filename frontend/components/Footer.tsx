@@ -103,67 +103,66 @@ interface FooterLinkProps {
   subTitles: { title: string; link: string }[];
 }
 
-const FooterLink: React.FC<FooterLinkProps> = ({ mainTitle, subTitles }) => {
-  return (
-    <div>
-      <h1
-        className={`hidden md:flex mb-5  footer_text ${playfairDisplayFont600.className} `}
-      >
-        {mainTitle}
-      </h1>
-      <h1
-        className={`flex md:hidden mb-5 justify-center items-center footer_text ${montserratFont600.className} `}
-      >
-        {mainTitle}
-      </h1>
-      <hr className="flex md:hidden border-1 border-[#867F7F]" />
-      <ul
-        className={`flex-col gap-5 hidden md:flex ${montserratFont700.className}`}
-      >
-        {subTitles.map((subTitle) => (
-          <li key={subTitle.title} className="flex items-center gap-2">
-            <FaCaretRight />
-            {subTitle.link.startsWith("/") ? (
-              <Link href={subTitle.link}>{subTitle.title}</Link>
-            ) : subTitle.link.startsWith("touchEmail") ? (
-              <a
-                target="_blank"
-                href={`mailto:${subTitle.title}?subject=Interior Design&body=Hello.%20I%20want%20to%20design%20my%20house%20.`}
-              >
-                {subTitle.title}
-              </a>
-            ) : subTitle.link.startsWith("touchPhone") ? (
-              <a href={`tel:${subTitle.title}`}>{subTitle.title}</a>
-            ) : (
-              <p
-                className="hover:cursor-pointer"
-                onClick={() => {
-                  const element = document.getElementById(subTitle.link);
-                  if (element) {
-                    const elementTopPosition =
-                      window.pageYOffset + element.getBoundingClientRect().top;
-                    window.scrollTo({
-                      top: elementTopPosition,
-                      behavior: "smooth",
-                    });
-                  }
-                }}
-              >
-                {subTitle.title}
-              </p>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+const FooterLink: React.FC<FooterLinkProps> = ({ mainTitle, subTitles }) => (
+  <div>
+    <h1
+      className={`hidden md:flex mb-5  footer_text ${playfairDisplayFont600.className} `}
+    >
+      {mainTitle}
+    </h1>
+    <h1
+      className={`flex md:hidden mb-5 justify-center items-center footer_text ${montserratFont600.className} `}
+    >
+      {mainTitle}
+    </h1>
+    <hr className="flex md:hidden border-1 border-[#867F7F]" />
+    <ul
+      className={`flex-col gap-5 hidden md:flex ${montserratFont700.className}`}
+    >
+      {/*  DONT ASK ME ANYTHIN ABOUT THIS PIECE OF CODE*/}
+      {subTitles.map((subTitle) => (
+        <li key={subTitle.title} className="flex items-center gap-2">
+          <FaCaretRight />
+          {subTitle.link.startsWith("/") ? (
+            <Link href={subTitle.link}>{subTitle.title}</Link>
+          ) : subTitle.link.startsWith("touchEmail") ? (
+            <a
+              target="_blank"
+              href={`mailto:${subTitle.title}?subject=Interior Design&body=Hello.%20I%20want%20to%20design%20my%20house%20.`}
+            >
+              {subTitle.title}
+            </a>
+          ) : subTitle.link.startsWith("touchPhone") ? (
+            <a href={`tel:${subTitle.title}`}>{subTitle.title}</a>
+          ) : (
+            <p
+              className="hover:cursor-pointer"
+              onClick={() => {
+                const element = document.getElementById(subTitle.link);
+                if (element) {
+                  const elementTopPosition =
+                    window.pageYOffset + element.getBoundingClientRect().top;
+                  window.scrollTo({
+                    top: elementTopPosition,
+                    behavior: "smooth",
+                  });
+                }
+              }}
+            >
+              {subTitle.title}
+            </p>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+);
 
 const footerElements = [
   {
     id: 1,
     title: "Instagram",
-    link: "https://www.instagram.com/",
+    link: "https://www.behance.net/orxanagayev",
   },
   {
     id: 2,
@@ -173,12 +172,12 @@ const footerElements = [
   {
     id: 3,
     title: "Behance",
-    link: "https://www.behance.net/",
+    link: "https://www.behance.net/orxanagayev",
   },
   {
     id: 4,
     title: "Whatsapp",
-    link: "https://www.whatsapp.com/",
+    link: "https://wa.link/r5l5jc",
   },
 ];
 
