@@ -25,6 +25,7 @@ const About = () => {
   const [isLearnMoreOpen, setIsLearnMoreOpen] = React.useState(false);
   return (
     <div
+      id="about"
       className={`mx-auto mt-6 h-screen w-11/12 md:mt-32 ${
         isLearnMoreOpen ? "mb-40 md:mb-0" : "mb-0 md:mb-0"
       }`}

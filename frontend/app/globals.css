@@ -12,6 +12,10 @@
 
 .landing_bottom_text{
   font-size: clamp(18px, 5vw + 16px, 76px);
+}
+
+.footer_text{
+  font-size: clamp(16px, 4vw + 10px, 24px);
 
 }
 
