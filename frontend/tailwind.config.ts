@@ -15,6 +15,7 @@ export default {
         soft_white: "#F3F1F1",
         deep_brown: "#463A28",
         light_gray: "#E7E7E6",
+        off_white: "#F6F4F4",
       },
     },
   },

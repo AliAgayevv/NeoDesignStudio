@@ -52,13 +52,13 @@ const Navbar = () => {
       className={`fixed top-0 z-20 w-full bg-black md:bg-transparent ${montserratFont600.className}`}
       role="navigation"
     >
-      <div className="mx-auto flex min-h-24 w-11/12 justify-between p-4 md:justify-normal">
+      <div className="mx-auto flex min-h-24 w-11/12 justify-between p-4 md:justify-normal ">
         <Image
           src={languageIcon}
           alt="Language Icon"
           width={32}
           height={32}
-          className="relative cursor-pointer"
+          className="relative cursor-pointer "
           onClick={() => setIsLanguageDropdown((prev) => !prev)}
         />
         {isLangugageDropdownOpen && (
