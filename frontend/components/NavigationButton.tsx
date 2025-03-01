@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { Playfair_Display } from "next/font/google";
