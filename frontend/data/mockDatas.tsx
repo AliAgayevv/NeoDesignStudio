@@ -1,83 +1,83 @@
-import { FaInstagram, FaBehance, FaPinterest } from 'react-icons/fa'
+import { FaInstagram, FaBehance, FaPinterest } from "react-icons/fa";
 
 export const socialMedias = [
   {
-    name: 'Instagram',
-    url: 'https://www.facebook.com/',
+    name: "Instagram",
+    url: "https://www.facebook.com/",
     icon: <FaInstagram size={24} />,
   },
   {
-    name: 'Behance',
-    url: 'https://www.instagram.com/',
+    name: "Behance",
+    url: "https://www.instagram.com/",
     icon: <FaBehance size={24} />,
   },
   {
-    name: 'Pinterest',
-    url: 'https://twitter.com/',
+    name: "Pinterest",
+    url: "https://twitter.com/",
     icon: <FaPinterest size={24} />,
   },
-]
+];
 
 export const heroContent = {
   en: {
-    mainTitle: 'Welcome to Our Website',
+    mainTitle: "Welcome to Our Website",
   },
   az: {
-    mainTitle: 'Saytımıza Xoş Gəlmisiniz',
+    mainTitle: "Saytımıza Xoş Gəlmisiniz",
   },
   ru: {
-    mainTitle: 'Добро пожаловать на наш сайт',
+    mainTitle: "Добро пожаловать на наш сайт",
   },
-}
+};
 
 export const dropdownItems = [
   {
     id: 1,
     title: {
-      en: 'Home',
-      az: 'Ana Səhifə',
-      ru: 'Главная',
+      en: "Home",
+      az: "Ana Səhifə",
+      ru: "Главная",
     },
     isNewPage: true,
     element: null,
-    path: '/',
+    path: "/",
   },
   {
     id: 2,
     title: {
-      en: 'Projects',
-      az: 'Layihələr',
-      ru: 'Проекты',
+      en: "Projects",
+      az: "Layihələr",
+      ru: "Проекты",
     },
     isNewPage: true,
     element: null,
-    path: '/projects',
+    path: "/projects",
   },
   {
     id: 3,
     title: {
-      en: 'Services',
-      az: 'Xidmətlər',
-      ru: 'Услуги',
+      en: "Services",
+      az: "Xidmətlər",
+      ru: "Услуги",
     },
     isNewPage: false,
-    element: 'services',
+    element: "services",
     path: null,
   },
   {
     id: 4,
     title: {
-      en: 'Contact',
-      az: 'Əlaqə',
-      ru: 'Конт',
+      en: "Contact",
+      az: "Əlaqə",
+      ru: "Конт",
     },
     isNewPage: false,
-    element: 'contact',
+    element: "contact",
     path: false,
   },
-]
+];
 
-import servicesExamplePhoto from '@/public/assets/photos/servicesExamplePhoto.png'
+import servicesExamplePhoto from "@/public/assets/photos/servicesExamplePhoto.png";
 
 export const servicesCardContent = [
   {
@@ -85,9 +85,9 @@ export const servicesCardContent = [
     img: servicesExamplePhoto,
     isReversed: false,
     text: {
-      en: 'Interior',
-      az: 'Interyer',
-      ru: 'интерьера',
+      en: "Interior",
+      az: "Interyer",
+      ru: "интерьера",
     },
   },
   {
@@ -95,9 +95,9 @@ export const servicesCardContent = [
     img: servicesExamplePhoto,
     isReversed: true,
     text: {
-      en: 'Exterior',
-      az: 'Eksteryer',
-      ru: 'экстерьера',
+      en: "Exterior",
+      az: "Eksteryer",
+      ru: "экстерьера",
     },
   },
   {
@@ -105,9 +105,9 @@ export const servicesCardContent = [
     img: servicesExamplePhoto,
     isReversed: false,
     text: {
-      en: 'Business',
-      az: 'Biznes',
-      ru: 'Бизнес',
+      en: "Business",
+      az: "Biznes",
+      ru: "Бизнес",
     },
   },
-]
+];

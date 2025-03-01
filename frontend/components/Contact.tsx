@@ -49,7 +49,7 @@ const contactElement = {
     message: "Message",
     messageError: "Message is required",
     messageInner: "Leave us a message...",
-    submit: "Submit",
+    submit: "Send",
   },
   ru: {
     title: "Контакт",
@@ -138,7 +138,7 @@ const Contact = () => {
   });
 
   return (
-    <div className="mx-auto h-full w-11/12">
+    <div className="mx-auto h-full w-11/12" id="contact">
       <SectionHeaderTitle>{contactElement[lang].title}</SectionHeaderTitle>
       <div
         className={`flex w-full flex-col justify-between md:flex-row ${montserratFont600.className}`}
@@ -158,14 +158,14 @@ const Contact = () => {
               Speak to ur friendly team via live chat
             </p>
           </div>
-          <div className="flex flex-col gap-3 pt-0 text-[#E7E7E6] md:pt-10">
-            <h3 className="uppercase underline underline-offset-4">
+          <div className="flex flex-col gap-3 pt-0 text-[#E7E7E6] md:pt-10 ">
+            <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 cursor-pointer">
               {contactElement[lang].sendMessageViaEmail}
             </h3>
-            <h3 className="uppercase underline underline-offset-4">
+            <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 cursor-pointer">
               {contactElement[lang].sendMessageViaInstagram}
             </h3>
-            <h3 className="uppercase underline underline-offset-4">
+            <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 cursor-pointer">
               {contactElement[lang].sendMessageViaWhatsapp}
             </h3>
           </div>

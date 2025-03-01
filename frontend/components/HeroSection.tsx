@@ -82,9 +82,9 @@ const HeroSection = () => {
             target="_blank"
             href={socialMedia.url}
             key={socialMedia.name}
-            className="text-white"
+            className="text-white bg-none md:hover:text-deep_brown md:hover:bg-white rounded-full"
           >
-            {socialMedia.icon}
+            <div className="p-1">{socialMedia.icon}</div>
           </a>
         ))}
       </div>

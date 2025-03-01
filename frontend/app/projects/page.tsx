@@ -11,7 +11,7 @@ const headerTitle = {
   az: "Portfel",
 };
 
-const page = () => {
+const Page = () => {
   const lang = useSelector(selectLanguage);
   return (
     <div className="w-screen h-[99999px] bg-black relative z-0 text-white text-7xl">
@@ -24,4 +24,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
