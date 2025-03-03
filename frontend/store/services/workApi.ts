@@ -1,50 +1,57 @@
-import { apiSlice } from './apiSlice'
+import { apiSlice } from "./apiSlice";
 
+// Updated WorkContent and Work types
 type WorkContent = {
-  tr: object
-  en: object
-  ru: object
-}
+  az: { title: string; [key: string]: any };
+  en: { title: string; [key: string]: any };
+  ru: { title: string; [key: string]: any };
+};
 
 type Work = {
-  projectId: string
-  page: string
-  pageType: string
-  images: string[]
-  content: WorkContent
-}
+  projectId: string;
+  images: string[];
+  content: WorkContent;
+};
 
 export const workApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getWorkById: builder.query<Work, { id: string; lang: string }>({
-      query: ({ id, lang }) => `/work/${id}?lang=${lang}`,
+    getAllWorks: builder.query<Work[], void>({
+      query: () => "/portfolio",
     }),
-    createWork: builder.mutation<void, Work>({
-      query: (newWork) => ({
-        url: '/work',
-        method: 'POST',
-        body: newWork,
+    getWorkById: builder.query<Work, { id: string; lang: string }>({
+      query: ({ id, lang }) => `portfolio/${id}?lang=${lang}`,
+    }),
+    createWork: builder.mutation<void, FormData>({
+      query: (formData) => ({
+        url: "portfolio",
+        method: "POST",
+        body: formData,
+        headers: {
+          // FormData kullanırken bu header'ı elle eklemene gerek yok
+        },
       }),
     }),
+
     updateWork: builder.mutation<void, { id: string; content: WorkContent }>({
       query: ({ id, content }) => ({
-        url: `/work/${id}`,
-        method: 'PUT',
+        url: `portfolio/${id}`,
+        method: "PUT",
         body: { content },
       }),
     }),
     deleteWork: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/work/${id}`,
-        method: 'DELETE',
+        url: `portfolio/${id}`,
+        method: "DELETE",
       }),
     }),
   }),
-})
+});
 
 export const {
+  useGetAllWorksQuery,
   useGetWorkByIdQuery,
   useCreateWorkMutation,
   useUpdateWorkMutation,
   useDeleteWorkMutation,
-} = workApi
+} = workApi;
