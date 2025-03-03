@@ -20,7 +20,9 @@ const BACKEND_URL =
 const Page = () => {
   const lang = useSelector(selectLanguage);
   const { data, isLoading, error } = useGetAllWorksQuery();
-  const [imageLoadError, setImageLoadError] = useState({});
+  const [imageLoadError, setImageLoadError] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Failed to load data</p>;
@@ -28,7 +30,7 @@ const Page = () => {
   console.log("Portfolio data:", data);
 
   // Function to handle image URL formatting
-  const getImageUrl = (imagePath) => {
+  const getImageUrl = (imagePath: any) => {
     // Check if the path already starts with http
     if (imagePath.startsWith("http")) {
       return imagePath;
@@ -44,7 +46,7 @@ const Page = () => {
   };
 
   // Function to handle image load errors
-  const handleImageError = (id) => {
+  const handleImageError = (id: any) => {
     setImageLoadError((prev) => ({ ...prev, [id]: true }));
     console.error(`Failed to load image for project ${id}`);
   };
