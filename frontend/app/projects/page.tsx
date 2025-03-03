@@ -19,23 +19,6 @@ const headerTitle = {
   az: "Portfel",
 };
 
-const FirstImage = ({ imagePath }: any) => {
-  return (
-    <div className="relative w-5/12 h-1/2 rounded-2xl overflow-hidden">
-      <Image src={imagePath} alt="" className=" rounded-[50px]" />
-      <div className="absolute top-0 right-0 w-1/4 h-1/4 bg-black rounded-bl-[50px] "></div>
-    </div>
-  );
-};
-const SecondImage = ({ imagePath }: any) => {
-  return (
-    <div className="relative w-5/12 h-1/2 rounded-2xl overflow-hidden">
-      <Image src={imagePath} alt="" className=" rounded-[50px]" />
-      <div className="absolute top-0 left-0 w-1/4 h-1/4 bg-black rounded-tl-[50px] "></div>
-    </div>
-  );
-};
-
 const images = [
   project1,
   project2,

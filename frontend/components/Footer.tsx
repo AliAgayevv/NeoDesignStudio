@@ -181,6 +181,8 @@ const footerElements = [
   },
 ];
 
+// TODO : TELEFONDA COMPANY USTUNDEKI INSATGARM FALAN BUTTONLARI PARTLIYIR
+
 const Footer = () => {
   return (
     <div className="bg-[#F6F4F4] w-full h-auto py-10">
