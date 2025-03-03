@@ -22,7 +22,7 @@ const Page = () => {
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Failed to load data</p>;
 
-  console.log("Portfolio data:", data); // Add this to debug
+  console.log("Portfolio data:", data); // Add this to debug\
 
   return (
     <div className="w-screen h-auto min-h-screen bg-black relative z-0 text-white">
