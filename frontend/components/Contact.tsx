@@ -274,7 +274,7 @@ const Contact = () => {
           </button>
         </form>
       </div>
-      <div className="block md:hidden bg-black w-screen h-[100px]"></div>
+      <div className="block md:hidden bg-black w-full h-[100px]"></div>
     </div>
   );
 };

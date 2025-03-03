@@ -125,7 +125,7 @@ const Navbar = () => {
           </div>
         )}
 
-        <div className="hidden h-full items-center justify-between rounded-[32px] bg-[#64606054] p-0 md:ml-[20%] md:flex md:w-4/6 md:p-4">
+        <div className="hidden h-full items-center justify-between rounded-full bg-[#64606054] p-0 md:mx-auto  md:flex md:w-4/6 md:p-4">
           {dropdownItems.map((item) => (
             <p
               key={item.id}
@@ -136,9 +136,9 @@ const Navbar = () => {
                   handleGoSomewhere(item.element);
                 }
               }}
-              className={`cursor-pointer px-4 text-lg text-white ${
+              className={`cursor-pointer md:px-4 lg:px-12 w-full text-center text-lg text-white ${
                 pathname === item.path
-                  ? "rounded-3xl bg-dark_gray px-16 py-2.5"
+                  ? "rounded-full bg-dark_gray px-16 py-2.5"
                   : ""
               } `}
             >
