@@ -38,7 +38,6 @@ exports.createWork = async (req, res) => {
     const { projectId, content } = req.body;
 
     // Collect the uploaded image file paths
-    // Each file object has `path`, `filename`, etc.
     let uploadedImages = [];
     if (req.files && req.files.length > 0) {
       uploadedImages = req.files.map((file) => file.path);
