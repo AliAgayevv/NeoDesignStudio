@@ -34,16 +34,42 @@ exports.getWorkById = async (req, res) => {
 
 exports.createWork = async (req, res) => {
   try {
+    console.log("Request body:", req.body);
+    console.log("Request files:", req.files ? req.files.length : "No files");
+
     // Destructure text fields from the body
     const { projectId, content } = req.body;
+
+    console.log("Project ID:", projectId);
+    console.log("Content received:", content);
+
+    // Try parsing content if it's a string
+    let parsedContent = content;
+    if (typeof content === "string") {
+      try {
+        parsedContent = JSON.parse(content);
+        console.log("Parsed content:", parsedContent);
+      } catch (error) {
+        console.error("Error parsing content:", error);
+        return res.status(400).json({ message: "Invalid content format" });
+      }
+    }
 
     // Collect the uploaded image file paths
     let uploadedImages = [];
     if (req.files && req.files.length > 0) {
       uploadedImages = req.files.map((file) => file.path);
+      console.log("Uploaded images:", uploadedImages);
     }
 
-    if (!content || !content.az || !content.en || !content.ru) {
+    // Validate content structure
+    if (
+      !parsedContent ||
+      !parsedContent.az ||
+      !parsedContent.en ||
+      !parsedContent.ru
+    ) {
+      console.error("Missing language content:", parsedContent);
       return res
         .status(400)
         .json({ message: "All languages (az, en, ru) must be provided." });
@@ -52,6 +78,7 @@ exports.createWork = async (req, res) => {
     // Check if projectId already exists
     const existingProject = await Work.findOne({ projectId });
     if (existingProject) {
+      console.log("Project ID already exists:", projectId);
       return res.status(400).json({ message: "Work ID already exists." });
     }
 
@@ -60,12 +87,20 @@ exports.createWork = async (req, res) => {
       projectId,
       // use the file paths from Multer
       images: uploadedImages,
-      content,
+      content: parsedContent,
+    });
+
+    console.log("Saving project:", {
+      projectId: newProject.projectId,
+      imageCount: newProject.images.length,
+      contentKeys: Object.keys(newProject.content),
     });
 
     await newProject.save();
+    console.log("Project saved successfully");
     res.status(201).json({ message: "Work created successfully", newProject });
   } catch (err) {
+    console.error("Server error in createWork:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
