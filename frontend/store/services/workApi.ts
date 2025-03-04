@@ -1,47 +1,41 @@
 import { apiSlice } from "./apiSlice";
 
-// Updated WorkContent and Work types
 type WorkContent = {
-  az: { title: string; [key: string]: any };
-  en: { title: string; [key: string]: any };
-  ru: { title: string; [key: string]: any };
+  tr: object;
+  en: object;
+  ru: object;
 };
 
 type Work = {
   projectId: string;
+  page: string;
+  pageType: string;
   images: string[];
   content: WorkContent;
 };
 
 export const workApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllWorks: builder.query<Work[], void>({
-      query: () => "/portfolio",
-    }),
     getWorkById: builder.query<Work, { id: string; lang: string }>({
-      query: ({ id, lang }) => `portfolio/${id}?lang=${lang}`,
+      query: ({ id, lang }) => `/work/${id}?lang=${lang}`,
     }),
-    createWork: builder.mutation<void, FormData>({
-      query: (formData) => ({
-        url: "portfolio",
+    createWork: builder.mutation<void, Work>({
+      query: (newWork) => ({
+        url: "/work",
         method: "POST",
-        body: formData,
-        headers: {
-          // FormData kullanırken bu header'ı elle eklemene gerek yok
-        },
+        body: newWork,
       }),
     }),
-
     updateWork: builder.mutation<void, { id: string; content: WorkContent }>({
       query: ({ id, content }) => ({
-        url: `portfolio/${id}`,
+        url: `/work/${id}`,
         method: "PUT",
         body: { content },
       }),
     }),
     deleteWork: builder.mutation<void, string>({
       query: (id) => ({
-        url: `portfolio/${id}`,
+        url: `/work/${id}`,
         method: "DELETE",
       }),
     }),
@@ -49,7 +43,6 @@ export const workApi = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetAllWorksQuery,
   useGetWorkByIdQuery,
   useCreateWorkMutation,
   useUpdateWorkMutation,

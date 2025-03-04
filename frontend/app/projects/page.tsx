@@ -1,64 +1,58 @@
 "use client";
+
 import SectionHeaderTitle from "@/components/SectionHeaderTitle";
 import React from "react";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
-<<<<<<< HEAD
 import Image from "next/image";
-import { useGetAllWorksQuery } from "@/store/services/workApi";
-=======
->>>>>>> parent of 80df2fc ( I DONT HAVE ANY IDEA)
+import project1 from "@/public/projectsPhotos/project1.jpeg";
+import project2 from "@/public/projectsPhotos/project2.jpeg";
+import project3 from "@/public/projectsPhotos/project3.jpeg";
+import project4 from "@/public/projectsPhotos/project4.jpeg";
+import project5 from "@/public/projectsPhotos/project5.png";
+import project6 from "@/public/projectsPhotos/project6.jpeg";
+import project7 from "@/public/projectsPhotos/project7.jpeg";
 
 const headerTitle = {
   en: "Portfolio",
-  ru: "Портфолио",
+  ru: "Портфол",
   az: "Portfel",
 };
 
-<<<<<<< HEAD
-// Update this to match your backend URL
-const BACKEND_URL = "https://neodesignstudio.onrender.com";
+const FirstImage = ({ imagePath }: any) => {
+  return (
+    <div className="relative w-5/12 h-1/2 rounded-2xl overflow-hidden">
+      <Image src={imagePath} alt="" className=" rounded-[50px]" />
+      <div className="absolute top-0 right-0 w-1/4 h-1/4 bg-black rounded-bl-[50px] "></div>
+    </div>
+  );
+};
+const SecondImage = ({ imagePath }: any) => {
+  return (
+    <div className="relative w-5/12 h-1/2 rounded-2xl overflow-hidden">
+      <Image src={imagePath} alt="" className=" rounded-[50px]" />
+      <div className="absolute top-0 left-0 w-1/4 h-1/4 bg-black rounded-tl-[50px] "></div>
+    </div>
+  );
+};
 
-=======
->>>>>>> parent of 80df2fc ( I DONT HAVE ANY IDEA)
+const images = [
+  project1,
+  project2,
+  project3,
+  project4,
+  project5,
+  project6,
+  project7,
+];
+
 const Page = () => {
   const lang = useSelector(selectLanguage);
-  const { data, isLoading, error } = useGetAllWorksQuery();
-
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Failed to load data</p>;
-
-  console.log("Portfolio data:", data); // Add this to debug\
-
   return (
-    <div className="w-screen h-auto min-h-screen bg-black relative z-0 text-white">
+    <div className="w-screen h-[99999px] bg-black relative z-0 text-white text-7xl">
       <div className="w-11/12 mx-auto">
         <div className="pt-48">
           <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
-        </div>
-        <div className="py-12">
-          {data?.map((work) => (
-            <div
-              key={work.projectId}
-              className="w-full h-[400px] relative my-8 rounded-lg overflow-hidden"
-            >
-              {work.images && work.images.length > 0 && (
-                <Image
-                  src={`${BACKEND_URL}/${work.images[0]}`}
-                  width={1920}
-                  height={1080}
-                  alt={work.content[lang]?.title || "Project image"}
-                  className="w-full h-full object-cover"
-                />
-              )}
-              <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-60 flex flex-col items-center justify-center p-6">
-                <h1 className="text-4xl mb-4">{work.content[lang]?.title}</h1>
-                <p className="text-xl text-center max-w-3xl">
-                  {work.content[lang]?.description}
-                </p>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </div>
