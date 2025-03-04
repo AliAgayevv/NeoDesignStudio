@@ -4,14 +4,14 @@ import SectionHeaderTitle from "@/components/SectionHeaderTitle";
 import React from "react";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
-// import Image from "next/image";
-// import project1 from "@/public/projectsPhotos/project1.jpeg";
-// import project2 from "@/public/projectsPhotos/project2.jpeg";
-// import project3 from "@/public/projectsPhotos/project3.jpeg";
-// import project4 from "@/public/projectsPhotos/project4.jpeg";
-// import project5 from "@/public/projectsPhotos/project5.png";
-// import project6 from "@/public/projectsPhotos/project6.jpeg";
-// import project7 from "@/public/projectsPhotos/project7.jpeg";
+import images1 from "@/public/projectsPhotos/project1.jpeg";
+import images2 from "@/public/projectsPhotos/project2.jpeg";
+import images3 from "@/public/projectsPhotos/project3.jpeg";
+import images4 from "@/public/projectsPhotos/project4.jpeg";
+import images5 from "@/public/projectsPhotos/project5.png";
+import images6 from "@/public/projectsPhotos/project6.jpeg";
+import images7 from "@/public/projectsPhotos/project7.jpeg";
+import Image from "next/image";
 
 const headerTitle = {
   en: "Portfolio",
@@ -19,32 +19,38 @@ const headerTitle = {
   az: "Portfel",
 };
 
-// const FirstImage = ({ imagePath }: any) => {
-//   return (
-//     <div className="relative w-5/12 h-1/2 rounded-2xl overflow-hidden">
-//       <Image src={imagePath} alt="" className=" rounded-[50px]" />
-//       <div className="absolute top-0 right-0 w-1/4 h-1/4 bg-black rounded-bl-[50px] "></div>
-//     </div>
-//   );
-// };
-// const SecondImage = ({ imagePath }: any) => {
-//   return (
-//     <div className="relative w-5/12 h-1/2 rounded-2xl overflow-hidden">
-//       <Image src={imagePath} alt="" className=" rounded-[50px]" />
-//       <div className="absolute top-0 left-0 w-1/4 h-1/4 bg-black rounded-tl-[50px] "></div>
-//     </div>
-//   );
-// };
+interface IRender7ImagesProps {
+  images: any[];
+}
 
-// const images = [
-//   project1,
-//   project2,
-//   project3,
-//   project4,
-//   project5,
-//   project6,
-//   project7,
-// ];
+const images = [images1, images2, images3, images4, images5, images6, images7];
+
+const Render7Images: React.FC<IRender7ImagesProps> = ({ images }) => {
+  let count = 0;
+  return (
+    <div>
+      {count === 6 ? (
+        <Render7Images images={images.slice(count, count + 6)} />
+      ) : (
+        images.map((image) => {
+          count++;
+          return (
+            <div key={count} className="w-full h-[400px] bg-black">
+              <Image
+                src={image}
+                alt="project"
+                className="w-full h-full object-cover relative"
+              />
+              <div className="inset-0 absolute top-1/2 left-1/2">
+                <h1 className="text-black text-5xl">Project {count}</h1>
+              </div>
+            </div>
+          );
+        })
+      )}
+    </div>
+  );
+};
 
 const Page = () => {
   const lang = useSelector(selectLanguage);
@@ -55,6 +61,7 @@ const Page = () => {
           <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
         </div>
       </div>
+      <Render7Images images={images} />
     </div>
   );
 };
