@@ -3,8 +3,11 @@ import SectionHeaderTitle from "@/components/SectionHeaderTitle";
 import React from "react";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
+<<<<<<< HEAD
 import Image from "next/image";
 import { useGetAllWorksQuery } from "@/store/services/workApi";
+=======
+>>>>>>> parent of 80df2fc ( I DONT HAVE ANY IDEA)
 
 const headerTitle = {
   en: "Portfolio",
@@ -12,9 +15,12 @@ const headerTitle = {
   az: "Portfel",
 };
 
+<<<<<<< HEAD
 // Update this to match your backend URL
 const BACKEND_URL = "https://neodesignstudio.onrender.com";
 
+=======
+>>>>>>> parent of 80df2fc ( I DONT HAVE ANY IDEA)
 const Page = () => {
   const lang = useSelector(selectLanguage);
   const { data, isLoading, error } = useGetAllWorksQuery();

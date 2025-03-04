@@ -151,7 +151,7 @@ const Contact = () => {
             </p>
             <p className="my-5 flex items-center gap-1.5">
               <IoCallOutline />
-              <span>051 897 01 15</span>
+              <span>077711655</span>
             </p>
             <SubheaderTitle>{contactElement[lang].chatWithUs}</SubheaderTitle>
             <p className="mb-5 text-[#e7e7e6]/50">
@@ -160,22 +160,13 @@ const Contact = () => {
           </div>
           <div className="flex flex-col gap-3 pt-0 text-[#E7E7E6] md:pt-10 ">
             <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 cursor-pointer">
-              <a
-                target="_blank"
-                href="mailto:neodesignstudio2019@gmail.com?subject=Interior Design&body=Hello.%20I%20want%20to%20design%20my%20house%20."
-              >
-                {contactElement[lang].sendMessageViaEmail}
-              </a>
+              {contactElement[lang].sendMessageViaEmail}
             </h3>
             <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 cursor-pointer">
-              <a target="_blank" href="https://ig.me/m/neodesign_studio">
-                {contactElement[lang].sendMessageViaInstagram}
-              </a>
+              {contactElement[lang].sendMessageViaInstagram}
             </h3>
             <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 cursor-pointer">
-              <a href="https://wa.link/r5l5jc" target="_blank">
-                {contactElement[lang].sendMessageViaWhatsapp}
-              </a>
+              {contactElement[lang].sendMessageViaWhatsapp}
             </h3>
           </div>
         </div>
