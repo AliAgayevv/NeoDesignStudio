@@ -34,40 +34,75 @@ exports.getWorkById = async (req, res) => {
 
 exports.createWork = async (req, res) => {
   try {
-    // Destructure text fields from the body
     const { projectId, content } = req.body;
 
-    // Collect the uploaded image file paths
-    // Each file object has `path`, `filename`, etc.
-    let uploadedImages = [];
-    if (req.files && req.files.length > 0) {
-      uploadedImages = req.files.map((file) => file.path);
-    }
-
+    // Validate content for all languages
     if (!content || !content.az || !content.en || !content.ru) {
-      return res
-        .status(400)
-        .json({ message: "All languages (az, en, ru) must be provided." });
+      // Clean up any uploaded files if validation fails
+      if (req.files) {
+        req.files.forEach((file) => {
+          fs.unlinkSync(file.path);
+        });
+      }
+      return res.status(400).json({
+        message: "All languages (az, en, ru) must be provided.",
+      });
     }
 
     // Check if projectId already exists
     const existingProject = await Work.findOne({ projectId });
     if (existingProject) {
-      return res.status(400).json({ message: "Work ID already exists." });
+      // Clean up any uploaded files
+      if (req.files) {
+        req.files.forEach((file) => {
+          fs.unlinkSync(file.path);
+        });
+      }
+      return res.status(400).json({
+        message: "Work ID already exists.",
+      });
+    }
+
+    // Collect the uploaded image file paths
+    let uploadedImages = [];
+    if (req.files && req.files.length > 0) {
+      uploadedImages = req.files.map((file) => {
+        // Convert to relative path for storage
+        return file.path
+          .replace(path.join(__dirname, ".."), "")
+          .replace(/\\/g, "/");
+      });
     }
 
     // Create the new document in MongoDB
     const newProject = new Work({
       projectId,
-      // use the file paths from Multer
       images: uploadedImages,
       content,
     });
 
     await newProject.save();
-    res.status(201).json({ message: "Work created successfully", newProject });
+
+    res.status(201).json({
+      message: "Work created successfully",
+      newProject,
+    });
   } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
+    // Clean up any uploaded files in case of server error
+    if (req.files) {
+      req.files.forEach((file) => {
+        try {
+          fs.unlinkSync(file.path);
+        } catch (unlinkErr) {
+          console.error("Error deleting file:", unlinkErr);
+        }
+      });
+    }
+
+    res.status(500).json({
+      message: "Server error",
+      error: err.message,
+    });
   }
 };
 
