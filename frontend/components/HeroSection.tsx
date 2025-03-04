@@ -33,6 +33,7 @@ const playfairDisplayFont600 = Playfair_Display({
 
 const HeroSection = () => {
   const lang = useSelector(selectLanguage);
+  // localda en var
   const { data, isLoading, error } = useGetPageQuery({
     page: "hero",
     lang,
