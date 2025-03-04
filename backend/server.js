@@ -7,6 +7,9 @@ const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
 
+// Import the Multer upload middleware
+const upload = require("./middlewares/upload");
+
 // Initialize Express
 const app = express();
 
