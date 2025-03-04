@@ -4,6 +4,7 @@ const pageRoutes = require("./routes/pageRoutes");
 const workRoutes = require("./routes/workRoutes");
 const contactRoute = require("./routes/contact");
 const cors = require("cors");
+const uploads = require("./middlewares/upload");
 
 const app = express();
 
