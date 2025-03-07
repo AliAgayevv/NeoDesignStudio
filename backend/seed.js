@@ -1,73 +1,65 @@
-const axios = require("axios");
-const faker = require("faker");
+const mongoose = require("mongoose");
+const Work = require("./models/Work"); // Adjust the path if needed
 const fs = require("fs");
+const path = require("path");
 
-// Function to generate a random number of dummy images for a project
-function generateDummyImages() {
-  const images = [];
-  const numImages = faker.datatype.number({ min: 1, max: 5 }); // Random number of images (1-5)
+// Dummy data for seed
+const sampleWorks = [
+  {
+    projectId: "work1",
+    content: {
+      az: { title: "Az Work 1", description: "Az description for work 1" },
+      en: {
+        title: "English Work 1",
+        description: "Description for work 1 in English",
+      },
+      ru: {
+        title: "Russian Work 1",
+        description: "Описание работы 1 на русском",
+      },
+    },
+    images: ["dummy-images/project1.jpeg", "dummy-images/project2.jpeg"],
+  },
+  {
+    projectId: "work2",
+    content: {
+      az: { title: "Az Work 2", description: "Az description for work 2" },
+      en: {
+        title: "English Work 2",
+        description: "Description for work 2 in English",
+      },
+      ru: {
+        title: "Russian Work 2",
+        description: "Описание работы 2 на русском",
+      },
+    },
+    images: ["dummy-images/project3.jpeg", "dummy-images/project4.jpeg"],
+  },
+  // Add more projects as needed
+];
 
-  for (let i = 0; i < numImages; i++) {
-    // Generate random dummy image URLs (for testing purposes, you could change this logic)
-    images.push(`https://via.placeholder.com/150?text=Image+${i + 1}`);
+const seedDatabase = async () => {
+  try {
+    // Connect to MongoDB
+    await mongoose.connect("mongodb://localhost:27017/neoDesign", {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    // Remove all existing data
+    await Work.deleteMany({});
+
+    // Insert sample works into the database
+    await Work.insertMany(sampleWorks);
+
+    console.log("Dummy data inserted successfully!");
+  } catch (error) {
+    console.error("Error seeding the database:", error.message);
+  } finally {
+    // Close the MongoDB connection
+    mongoose.connection.close();
   }
+};
 
-  return images;
-}
-
-// Function to create dummy content for each language
-function generateDummyContent() {
-  return {
-    az: {
-      title: faker.company.companyName(),
-      description: faker.lorem.paragraph(),
-    },
-    en: {
-      title: faker.company.companyName(),
-      description: faker.lorem.paragraph(),
-    },
-    ru: {
-      title: faker.company.companyName(),
-      description: faker.lorem.paragraph(),
-    },
-  };
-}
-
-// Main function to post dummy data to your API
-async function seedData() {
-  const numberOfProjects = 10; // Number of dummy projects to post
-
-  for (let i = 0; i < numberOfProjects; i++) {
-    const projectId = faker.datatype.uuid();
-    const content = generateDummyContent();
-    const images = generateDummyImages();
-
-    const newProject = {
-      projectId,
-      content,
-      images, // Include the image URLs
-    };
-
-    try {
-      const response = await axios.post(
-        "https://neodesignstudio.onrender.com/api/portfolio",
-        newProject,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log(`Project ${projectId} created successfully:`, response.data);
-    } catch (error) {
-      console.error(
-        `Error creating project ${projectId}:`,
-        error.response ? error.response.data : error.message
-      );
-    }
-  }
-}
-
-// Run the seed function
-seedData();
+// Call the function to seed the database
+seedDatabase();
