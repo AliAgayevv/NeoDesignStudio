@@ -5,6 +5,7 @@ const {
   updateWork,
   createWork,
   getWorkById,
+  getAllWorks,
 } = require("../controllers/workController");
 
 // Import Multer middleware
@@ -15,6 +16,8 @@ router.post("/", upload.array("images", 10), createWork);
 
 // Get work by ID
 router.get("/:id", getWorkById);
+
+router.get("/", getAllWorks);
 
 // Delete work by ID
 router.delete("/:id", deleteWork);

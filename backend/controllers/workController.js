@@ -130,3 +130,12 @@ exports.updateWork = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+
+exports.getAllWorks = async (req, res) => {
+  try {
+    const projects = await Work.find();
+    res.json(projects);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
