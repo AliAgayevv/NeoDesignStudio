@@ -34,16 +34,19 @@ exports.getWorkById = async (req, res) => {
 
 exports.createWork = async (req, res) => {
   try {
-    // Destructure text fields from the body
+    // Log incoming data for debugging
+    console.log("Files:", req.files);
+    console.log("Body:", req.body);
+
     const { projectId, content } = req.body;
 
-    // Collect the uploaded image file paths
+    // Collect uploaded images
     let uploadedImages = [];
     if (req.files && req.files.length > 0) {
-      uploadedImages = req.files.map((file) => file.path);
+      uploadedImages = req.files.map((file) => file.path); // Save file paths
     }
 
-    // Validate the content object
+    // Validate the content
     if (!content || !content.az || !content.en || !content.ru) {
       return res
         .status(400)
@@ -63,7 +66,7 @@ exports.createWork = async (req, res) => {
       return res.status(400).json({ message: "Work ID already exists." });
     }
 
-    // Create the new document in MongoDB
+    // Create a new project in MongoDB
     const newProject = new Work({
       projectId,
       images: uploadedImages,
@@ -74,6 +77,7 @@ exports.createWork = async (req, res) => {
 
     res.status(201).json({ message: "Work created successfully", newProject });
   } catch (err) {
+    console.error(err); // Log the full error details
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
