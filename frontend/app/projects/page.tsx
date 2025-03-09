@@ -1,17 +1,18 @@
 "use client";
 
 import SectionHeaderTitle from "@/components/SectionHeaderTitle";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
-import images1 from "@/public/projectsPhotos/project1.jpeg";
-import images2 from "@/public/projectsPhotos/project2.jpeg";
-import images3 from "@/public/projectsPhotos/project3.jpeg";
-import images4 from "@/public/projectsPhotos/project4.jpeg";
-import images5 from "@/public/projectsPhotos/project5.png";
-import images6 from "@/public/projectsPhotos/project6.jpeg";
-import images7 from "@/public/projectsPhotos/project7.jpeg";
-import Image from "next/image";
+// import images1 from "@/public/projectsPhotos/project1.jpeg";
+// import images2 from "@/public/projectsPhotos/project2.jpeg";
+// import images3 from "@/public/projectsPhotos/project3.jpeg";
+// import images4 from "@/public/projectsPhotos/project4.jpeg";
+// import images5 from "@/public/projectsPhotos/project5.png";
+// import images6 from "@/public/projectsPhotos/project6.jpeg";
+// import images7 from "@/public/projectsPhotos/project7.jpeg";
+// import Image from "next/image";
+// import { useGetAllWorksQuery } from "@/store/services/workApi";
 
 const headerTitle = {
   en: "Portfolio",
@@ -19,49 +20,102 @@ const headerTitle = {
   az: "Portfel",
 };
 
-interface IRender7ImagesProps {
-  images: any[];
-}
+// interface IRender7ImagesProps {
+//   images: any[];
+// }
 
-const images = [images1, images2, images3, images4, images5, images6, images7];
+// const images = [images1, images2, images3, images4, images5, images6, images7];
 
-const Render7Images: React.FC<IRender7ImagesProps> = ({ images }) => {
-  let count = 0;
+// const Render7Images: React.FC<IRender7ImagesProps> = ({ images }) => {
+//   let count = 0;
+//   return (
+//     <div>
+//       {count === 6 ? (
+//         <Render7Images images={images.slice(count, count + 6)} />
+//       ) : (
+//         images.map((image) => {
+//           count++;
+//           return (
+//             <div key={count} className="w-full h-[400px] bg-black">
+//               <Image
+//                 src={image}
+//                 alt="project"
+//                 className="w-full h-full object-cover relative"
+//               />
+//               <div className="inset-0 absolute top-1/2 left-1/2">
+//                 <h1 className="text-black text-5xl">Project {count}</h1>
+//               </div>
+//             </div>
+//           );
+//         })
+//       )}
+//     </div>
+//   );
+// };
+
+const Page = () => {
+  const [data, setData] = React.useState([]);
+  // const { data, isLoading, error } = useGetAllWorksQuery();
+  const lang = useSelector(selectLanguage);
+
+  // if (isLoading) return <p>Loading...</p>;
+  // if (error) return <p>Failed to load data</p>;
+  useEffect(() => {
+    fetch("http://localhost:4000/api/portfolio")
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+      });
+  }, []);
+
+  console.log(data);
+
   return (
-    <div>
-      {count === 6 ? (
-        <Render7Images images={images.slice(count, count + 6)} />
-      ) : (
-        images.map((image) => {
-          count++;
+    <div className="w-screen h-[99999px] bg-black relative z-0 text-white text-5xl">
+      <div className="w-11/12 mx-auto">
+        <div className="pt-40">
+          <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
+        </div>
+
+        {/* {data.map((work, index) => {
+          const imageUrl = `http://localhost:4000/uploads/${work.images[0]}`; // Replace with actual server URL in production
+
           return (
-            <div key={count} className="w-full h-[400px] bg-black">
+            <div key={index} className="w-full h-[400px] bg-black">
               <Image
-                src={image}
-                alt="project"
+                alt=""
+                width={1920}
+                height={1080}
+                src={imageUrl}
                 className="w-full h-full object-cover relative"
               />
               <div className="inset-0 absolute top-1/2 left-1/2">
-                <h1 className="text-black text-5xl">Project {count}</h1>
+                <h1 className="text-white text-5xl"></h1>
               </div>
             </div>
           );
-        })
-      )}
-    </div>
-  );
-};
-
-const Page = () => {
-  const lang = useSelector(selectLanguage);
-  return (
-    <div className="w-screen h-[99999px] bg-black relative z-0 text-white text-7xl">
-      <div className="w-11/12 mx-auto">
-        <div className="pt-48">
-          <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
-        </div>
+        })} */}
+        {/* <Image alt="" src={""} /> */}
+        {/* <div className="pt-10">
+          {data?.map((work, index) => {
+            return (
+              <div key={index} className="w-full h-[400px] bg-black">
+                <Image
+                  alt=""
+                  width={1920}
+                  height={1080}
+                  src={work.images[0]}
+                  className="w-full h-full object-cover relative"
+                />
+                <div className="inset-0 absolute top-1/2 left-1/2">
+                  <h1 className="text-white text-5xl"></h1>
+                </div>
+              </div>
+            );
+          })}
+        </div> */}
       </div>
-      <Render7Images images={images} />
+      {/* <Render7Images images={images} /> */}
     </div>
   );
 };
