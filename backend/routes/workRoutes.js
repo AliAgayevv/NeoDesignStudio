@@ -12,7 +12,7 @@ const {
 const upload = require("../middlewares/upload");
 
 // Create a new work/project (with multiple file uploads)
-router.post("/", upload.array("images", 10), createWork);
+router.post("/", upload.array("images", 25), createWork);
 
 // Get work by ID
 router.get("/:id", getWorkById);

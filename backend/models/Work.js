@@ -1,21 +1,53 @@
 const mongoose = require("mongoose");
 
 const ProjectSchema = new mongoose.Schema({
-  projectId: { type: String, required: true, unique: true }, // Benzersiz proje ID'si
-  images: { type: [String], default: [] }, // Fotoğraf URL'leri (dillerden bağımsız)
-  content: {
+  projectId: { type: String, required: true, unique: true },
+  images: { type: [String], default: [] },
+  description: {
     az: {
-      type: Object,
+      type: String,
       required: true,
     },
     en: {
-      type: Object,
+      type: String,
       required: true,
     },
     ru: {
-      type: Object,
+      type: String,
       required: true,
     },
+  },
+  title: {
+    az: {
+      type: String,
+      required: true,
+    },
+    en: {
+      type: String,
+      required: true,
+    },
+    ru: {
+      type: String,
+      required: true,
+    },
+  },
+  location: {
+    az: {
+      type: String,
+      required: true,
+    },
+    en: {
+      type: String,
+      required: true,
+    },
+    ru: {
+      type: String,
+      required: true,
+    },
+  },
+  area: {
+    type: Number,
+    required: true,
   },
 });
 
