@@ -11,8 +11,8 @@ import { selectLanguage } from "@/store/services/languageSlice";
 // import images5 from "@/public/projectsPhotos/project5.png";
 // import images6 from "@/public/projectsPhotos/project6.jpeg";
 // import images7 from "@/public/projectsPhotos/project7.jpeg";
-// import Image from "next/image";
-// import { useGetAllWorksQuery } from "@/store/services/workApi";
+import Image from "next/image";
+import { useGetAllWorksQuery } from "@/store/services/workApi";
 
 const headerTitle = {
   en: "Portfolio",
@@ -54,19 +54,12 @@ const headerTitle = {
 // };
 
 const Page = () => {
-  const [data, setData] = React.useState([]);
-  // const { data, isLoading, error } = useGetAllWorksQuery();
+  // const [data, setData] = React.useState([/]);
+  const { data, isLoading, error } = useGetAllWorksQuery();
   const lang = useSelector(selectLanguage);
 
-  // if (isLoading) return <p>Loading...</p>;
-  // if (error) return <p>Failed to load data</p>;
-  useEffect(() => {
-    fetch("http://localhost:4000/api/portfolio")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-      });
-  }, []);
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Failed to load data</p>;
 
   console.log(data);
 
@@ -77,43 +70,17 @@ const Page = () => {
           <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
         </div>
 
-        {/* {data.map((work, index) => {
-          const imageUrl = `http://localhost:4000/uploads/${work.images[0]}`; // Replace with actual server URL in production
-
-          return (
-            <div key={index} className="w-full h-[400px] bg-black">
-              <Image
-                alt=""
-                width={1920}
-                height={1080}
-                src={imageUrl}
-                className="w-full h-full object-cover relative"
-              />
-              <div className="inset-0 absolute top-1/2 left-1/2">
-                <h1 className="text-white text-5xl"></h1>
-              </div>
-            </div>
-          );
-        })} */}
-        {/* <Image alt="" src={""} /> */}
-        {/* <div className="pt-10">
-          {data?.map((work, index) => {
-            return (
-              <div key={index} className="w-full h-[400px] bg-black">
-                <Image
-                  alt=""
-                  width={1920}
-                  height={1080}
-                  src={work.images[0]}
-                  className="w-full h-full object-cover relative"
-                />
-                <div className="inset-0 absolute top-1/2 left-1/2">
-                  <h1 className="text-white text-5xl"></h1>
-                </div>
-              </div>
-            );
-          })}
-        </div> */}
+        <div>
+          {data?.map((item) => (
+            <Image
+              key={item.projectId}
+              src={`https://neodesignstudio.onrender.com${item.images[2]}`}
+              width={400}
+              height={400}
+              alt={item.title[lang]}
+            />
+          ))}
+        </div>
       </div>
       {/* <Render7Images images={images} /> */}
     </div>
