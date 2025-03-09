@@ -34,13 +34,30 @@ exports.getWorkById = async (req, res) => {
 
 exports.createWork = async (req, res) => {
   try {
-    // Log incoming data for debugging
-    console.log("Files:", req.files);
-    console.log("Body:", req.body);
+    const { projectId, description, title, location, area } = req.body;
 
-    const { projectId, content } = req.body;
+    if (!description || !description.az || !description.en || !description.ru) {
+      return res.status(400).json({
+        message: "All languages (az, en, ru) for description must be provided.",
+      });
+    }
 
-    // Collect uploaded images and adjust path for static access
+    if (!title || !title.az || !title.en || !title.ru) {
+      return res.status(400).json({
+        message: "All languages (az, en, ru) for title must be provided.",
+      });
+    }
+
+    if (!location || !location.az || !location.en || !location.ru) {
+      return res.status(400).json({
+        message: "All languages (az, en, ru) for location must be provided.",
+      });
+    }
+
+    if (!area) {
+      return res.status(400).json({ message: "Area must be provided." });
+    }
+
     let uploadedImages = [];
     if (req.files && req.files.length > 0) {
       // Just use the filename, not the full path
@@ -48,14 +65,6 @@ exports.createWork = async (req, res) => {
         (file) => `/uploads/${file.filename || file.originalname}`
       );
     }
-
-    // Validate the content (az, en, ru)
-    if (!content || !content.az || !content.en || !content.ru) {
-      return res
-        .status(400)
-        .json({ message: "All languages (az, en, ru) must be provided." });
-    }
-
     // Validate that images were uploaded
     if (uploadedImages.length === 0) {
       return res
@@ -63,7 +72,6 @@ exports.createWork = async (req, res) => {
         .json({ message: "At least one image must be uploaded." });
     }
 
-    // Check if projectId already exists in the database
     const existingProject = await Work.findOne({ projectId });
     if (existingProject) {
       return res.status(400).json({ message: "Work ID already exists." });
@@ -73,13 +81,15 @@ exports.createWork = async (req, res) => {
     const newProject = new Work({
       projectId,
       images: uploadedImages,
-      content,
+      description,
+      title,
+      location,
+      area,
     });
-
     await newProject.save();
     res.status(201).json({ message: "Work created successfully", newProject });
   } catch (err) {
-    console.error(err); // Log the full error details
+    console.error(err); // Hata detaylarını logla
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
