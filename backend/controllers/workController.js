@@ -40,13 +40,16 @@ exports.createWork = async (req, res) => {
 
     const { projectId, content } = req.body;
 
-    // Collect uploaded images
+    // Collect uploaded images and adjust path for static access
     let uploadedImages = [];
     if (req.files && req.files.length > 0) {
-      uploadedImages = req.files.map((file) => file.path); // Save file paths
+      // Just use the filename, not the full path
+      uploadedImages = req.files.map(
+        (file) => `/uploads/${file.filename || file.originalname}`
+      );
     }
 
-    // Validate the content
+    // Validate the content (az, en, ru)
     if (!content || !content.az || !content.en || !content.ru) {
       return res
         .status(400)
@@ -60,7 +63,7 @@ exports.createWork = async (req, res) => {
         .json({ message: "At least one image must be uploaded." });
     }
 
-    // Check if projectId already exists
+    // Check if projectId already exists in the database
     const existingProject = await Work.findOne({ projectId });
     if (existingProject) {
       return res.status(400).json({ message: "Work ID already exists." });
@@ -74,7 +77,6 @@ exports.createWork = async (req, res) => {
     });
 
     await newProject.save();
-
     res.status(201).json({ message: "Work created successfully", newProject });
   } catch (err) {
     console.error(err); // Log the full error details

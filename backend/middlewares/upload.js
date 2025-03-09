@@ -1,23 +1,29 @@
-const fs = require("fs");
+const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
-// Ensure the 'uploads' directory exists
-const uploadDir = path.join(__dirname, "uploads");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
+// Use absolute path to create uploads directory
+const uploadDirectory = path.resolve(__dirname, "../public/uploads");
+console.log("Upload directory set to:", uploadDirectory);
+
+// Check if the directory exists, and create it if it doesn't
+if (!fs.existsSync(uploadDirectory)) {
+  console.log("Creating upload directory:", uploadDirectory);
+  fs.mkdirSync(uploadDirectory, { recursive: true });
 }
 
-// Multer setup
-const multer = require("multer");
+// Set up storage engine with the correct directory and filename
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir); // Use absolute path to 'uploads'
+  destination: function (req, file, cb) {
+    console.log("Saving file to:", uploadDirectory);
+    cb(null, uploadDirectory);
   },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+  filename: function (req, file, cb) {
+    const uniqueFilename = `${Date.now()}_${file.originalname}`;
+    console.log("Generated filename:", uniqueFilename);
+    cb(null, uniqueFilename);
   },
 });
 
-const upload = multer({ storage: storage });
-
+const upload = multer({ storage });
 module.exports = upload;
