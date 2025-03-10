@@ -21,6 +21,8 @@ const RenderImage = ({ project, aspectRatio }: any) => {
         alt={project.projectId}
         width={648}
         height={543}
+        decoding="async"
+        priority
         className="object-cover rounded-2xl w-full h-full transition-transform duration-500 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-center justify-center">
@@ -36,6 +38,8 @@ const RenderImageGrid = ({ items }: any) => {
 
   console.log(firstSevenItems);
 
+  // PRODUCTION:  /_next/image?url=https%3A%2F%2Fneodesignstudio.onrender.com%2Fuploads%2F1741621366058_WhatsApp%20Image%202025-03-09%20at%2022.55.06.jpeg&w=1920&q=75
+  // LOCAL:       /_next/image?url=https%3A%2F%2Fneodesignstudio.onrender.com%2Fuploads%2F1741621366058_WhatsApp%20Image%202025-03-09%20at%2022.55.06.jpeg&w=1920&q=75
   // Grid layout configurations based on your requirements
   const gridConfig = [
     { width: "w-1/2", aspectRatio: "aspect-[1/1]" }, // 1. Half width, 1 height
