@@ -30,7 +30,7 @@ type Work = {
 
 export const workApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getWorkById: builder.query<Work, { id: string; lang: string }>({
+    getWorkById: builder.query<Work, { id: string | number; lang: string }>({
       query: ({ id, lang }) => `/portfolio/${id}?lang=${lang}`,
     }),
     getAllWorks: builder.query<Work[], void>({
