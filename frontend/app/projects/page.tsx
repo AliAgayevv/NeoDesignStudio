@@ -34,6 +34,8 @@ const RenderImageGrid = ({ items }: any) => {
   // First 7 items with specific layout
   const firstSevenItems = items.slice(0, 7);
 
+  console.log(firstSevenItems);
+
   // Grid layout configurations based on your requirements
   const gridConfig = [
     { width: "w-1/2", aspectRatio: "aspect-[1/1]" }, // 1. Half width, 1 height
