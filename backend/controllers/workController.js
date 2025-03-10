@@ -7,21 +7,24 @@ exports.getWorkById = async (req, res) => {
 
     // Find the project by projectId
     const project = await Work.findOne({ projectId: id });
+
     if (!project) {
       return res.status(404).json({ message: "Project not found." });
     }
 
     // If a language query param is provided, return only that language's content
     if (lang) {
-      if (!project.content[lang]) {
-        return res
-          .status(400)
-          .json({ message: "Content not available in this language." });
+      if (!["az", "en", "ru"].includes(lang)) {
+        return res.status(400).json({ message: "Language not supported." });
       }
+
       return res.json({
         projectId: project.projectId,
         images: project.images,
-        content: project.content[lang],
+        area: project.area,
+        description: project.description[lang],
+        title: project.title[lang],
+        location: project.location[lang],
       });
     }
 
