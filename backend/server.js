@@ -14,6 +14,8 @@ app.use(
     origin: [
       "http://localhost:3000", // Frontend development server
       "https://demo-neodesignstudio.vercel.app", // Production URL
+      "http://localhost:3000/admin",
+      "http://localhost:3000/admin/dashboard",
     ],
   })
 );
