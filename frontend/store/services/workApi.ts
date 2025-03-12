@@ -20,12 +20,20 @@ type Location = {
 };
 
 type Work = {
-  projectId: string; // Proje ID'si
-  description: Description; // Açıklama (Her dilde)
-  title: Title; // Başlık (Her dilde)
-  location: Location; // Konum (Her dilde)
-  area: string; // Alan, genelde şehir adı gibi string olur
-  images: string[]; // Görsellerin URL'leri
+  projectId: string;
+  description: Description;
+  title: Title;
+  location: Location;
+  area: string | number;
+  images: string[];
+};
+
+type UploadWork = {
+  projectId: string;
+  description: Description;
+  title: Title;
+  location: Location;
+  area: string | number;
 };
 
 export const workApi = apiSlice.injectEndpoints({
@@ -37,14 +45,16 @@ export const workApi = apiSlice.injectEndpoints({
       // Type the response to be an array of `Work` objects
       query: () => "/portfolio",
     }),
-    createWork: builder.mutation<void, Work>({
-      query: (newWork) => ({
+    createWork: builder.mutation<void, FormData>({
+      query: (formData) => ({
         url: "/portfolio",
         method: "POST",
-        body: newWork,
+        body: formData,
+        // Don't set Content-Type header here, the browser will set it correctly
+        formData: true, // This tells RTK Query that you're sending FormData
       }),
     }),
-    updateWork: builder.mutation<void, { id: string; content: Work }>({
+    updateWork: builder.mutation<void, { id: string; content: UploadWork }>({
       query: ({ id, content }) => ({
         url: `/portfolio/${id}`,
         method: "PUT",
