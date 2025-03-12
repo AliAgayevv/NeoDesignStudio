@@ -121,31 +121,36 @@ exports.updateWork = async (req, res) => {
       return res.status(404).json({ message: "Project not found." });
     }
 
-    // Handle newly uploaded images
-    // Decide if you want to REPLACE or APPEND
-    // (Below, we REPLACE the existing images array entirely)
-    if (req.files && req.files.length > 0) {
-      const newImages = req.files.map((file) => file.path);
-      project.images = newImages;
-    }
-
-    // If your request body has "images" as an array of direct URLs,
-    // you could handle that here too. For example:
-    // if (req.body.images) {
-    //   project.images = req.body.images;
-    // }
-
-    // Update content if provided
+    // Update content (description, title, location, and area) if provided
     if (content) {
-      // Option 1: Merge into existing content
-      project.content = { ...project.content, ...content };
-      // Option 2: Completely overwrite
-      // project.content = content;
+      if (content.description) {
+        project.description = {
+          ...project.description,
+          ...content.description, // Merge with existing description
+        };
+      }
+      if (content.title) {
+        project.title = {
+          ...project.title,
+          ...content.title, // Merge with existing title
+        };
+      }
+      if (content.location) {
+        project.location = {
+          ...project.location,
+          ...content.location, // Merge with existing location
+        };
+      }
+      if (content.area) {
+        project.area = content.area; // Update area if provided
+      }
     }
 
+    // Save the project with updated content
     await project.save();
     res.json({ message: "Project updated successfully", project });
   } catch (err) {
+    console.error("Error updating project:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
