@@ -17,14 +17,6 @@ const ProjectDetail = () => {
     error,
     isLoading,
   } = useGetWorkByIdQuery({ id: id as string, lang });
-  const [imageLimit, setImageLimit] = useState(2);
-
-  // Function to show more images
-  const handleShowMoreImages = () => {
-    setImageLimit(imageLimit + 7);
-  };
-
-  // Function to go back to projects
 
   // Gallery layout component
   const GalleryLayout = ({ images }: { images: string[] }) => {
@@ -153,14 +145,12 @@ const ProjectDetail = () => {
           </div>
 
           {/* Gallery Section */}
-          {project && project.images && project.images.length > 0 && (
+          {project && project.images && project.images.length > 1 && (
             <div className="mt-20">
               {/* Divide images into groups of 6 for the gallery layout */}
               {Array.from(
                 {
-                  length: Math.ceil(
-                    Math.min(imageLimit, project.images.length) / 6,
-                  ),
+                  length: Math.ceil((project.images.length - 1) / 6),
                 },
                 (_, index) => (
                   <div key={index} className={index > 0 ? "mt-10" : ""}>
@@ -176,21 +166,12 @@ const ProjectDetail = () => {
 
               {/* Button Section */}
               <div className="flex justify-center mt-10">
-                {imageLimit < project.images.length ? (
-                  <button
-                    onClick={handleShowMoreImages}
-                    className="px-8 py-3 border border-white text-white hover:bg-white hover:text-black transition-colors duration-300"
-                  >
-                    More
-                  </button>
-                ) : (
-                  <Link
-                    href="/projects"
-                    className="px-8 py-3 border border-white text-white hover:bg-white hover:text-black transition-colors duration-300"
-                  >
-                    Back to Projects
-                  </Link>
-                )}
+                <Link
+                  href="/projects"
+                  className="px-8 py-3 border border-white text-white hover:bg-white hover:text-black transition-colors duration-300"
+                >
+                  Back to Projects
+                </Link>
               </div>
             </div>
           )}
