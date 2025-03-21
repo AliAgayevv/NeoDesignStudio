@@ -46,6 +46,18 @@ const Navbar = () => {
       dispatch(setLanguage(savedLanguage));
     }
   }, [dispatch]);
+  useEffect(() => {
+    // Check if there's a saved element to navigate to
+    const savedElement = sessionStorage.getItem("navigateToElement");
+
+    if (savedElement) {
+      // Clear the storage
+      sessionStorage.removeItem("navigateToElement");
+
+      // Call the navigation function
+      handleGoSomewhere(savedElement);
+    }
+  }, []);
 
   return (
     <nav
@@ -70,10 +82,10 @@ const Navbar = () => {
               {["EN", "AZ", "RU"].map((lang) => (
                 <p
                   key={lang}
-                  className={`flex cursor-pointer justify-between rounded-lg bg-dark_gray px-6 py-4 text-lg text-soft_white transition-all duration-300 ease-in ${
+                  className={`flex cursor-pointer justify-between rounded-lg bg-dark_gray px-5 py-2.5 text-lg  transition-all duration-300 ease-in ${
                     language.toUpperCase() === lang
-                      ? "bg-white font-bold text-dark_gray"
-                      : "hover:scale-125 hover:bg-white hover:text-dark_gray"
+                      ? "bg-white font-bold text-[#646060] border-dark_gray border-2"
+                      : "hover:scale-125 hover:bg-white hover:text-dark_gray text-soft_white"
                   }`}
                   onClick={() => {
                     dispatch(
@@ -108,11 +120,27 @@ const Navbar = () => {
             >
               {dropdownItems.map((item) => (
                 <div
-                  onClick={() => {
+                  onClick={(e) => {
                     if (item.isNewPage) {
                       window.location.href = "" + item.path;
                     } else {
-                      handleGoSomewhere(item.element);
+                      // Check if we're not on the home page
+                      if (window.location.pathname !== "/") {
+                        // Save the element to navigate to after redirection
+                        const elementToNavigate = item.element;
+
+                        // First navigate to home page
+                        window.location.href = "/";
+
+                        // Store the target element in sessionStorage to use after redirect
+                        sessionStorage.setItem(
+                          "navigateToElement",
+                          elementToNavigate as string,
+                        );
+                      } else {
+                        // If already on home page, just call handleGoSomewhere directly
+                        handleGoSomewhere(item.element);
+                      }
                     }
                   }}
                   className="mx-auto block px-6 py-4 text-center text-lg font-[600] text-deep_brown transition-all duration-200 active:bg-deep_brown active:text-light_gray"
@@ -129,11 +157,28 @@ const Navbar = () => {
           {dropdownItems.map((item) => (
             <p
               key={item.id}
-              onClick={() => {
+              // Modify the onClick function to handle the conditional navigation
+              onClick={(e) => {
                 if (item.isNewPage) {
                   window.location.href = "" + item.path;
                 } else {
-                  handleGoSomewhere(item.element);
+                  // Check if we're not on the home page
+                  if (window.location.pathname !== "/") {
+                    // Save the element to navigate to after redirection
+                    const elementToNavigate = item.element;
+
+                    // First navigate to home page
+                    window.location.href = "/";
+
+                    // Store the target element in sessionStorage to use after redirect
+                    sessionStorage.setItem(
+                      "navigateToElement",
+                      elementToNavigate as string,
+                    );
+                  } else {
+                    // If already on home page, just call handleGoSomewhere directly
+                    handleGoSomewhere(item.element);
+                  }
                 }
               }}
               className={`cursor-pointer md:px-4 lg:px-12 w-full text-center text-lg text-white ${

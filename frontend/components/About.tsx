@@ -36,7 +36,7 @@ const About = () => {
       >
         <div className="flex flex-col gap-5 text-xl text-light_gray md:w-2/3">
           <h2 className="text-3xl font-semibold">How we can help</h2>
-          <p className="text-right text-lg">
+          <p className="text-right text-xl">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Assumenda
             dolorem, at obcaecati modi fugiat itaque ad odit quidem porro!
             Officiis reiciendis exercitationem minima, quas cumque consequatur

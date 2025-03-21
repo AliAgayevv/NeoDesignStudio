@@ -1,11 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { Playfair_Display } from "next/font/google";
-import { FaCaretRight } from "react-icons/fa6";
+import { FaCaretRight, FaChevronDown, FaChevronUp } from "react-icons/fa6";
 import { Montserrat } from "next/font/google";
-// import logoWhite from "@/public/logoWhite.png";
 import logoBlack from "@/public/logoBlack.png";
 import Image from "next/image";
 
@@ -18,10 +17,12 @@ const montserratFont600 = Montserrat({
   subsets: ["latin"],
   weight: "600",
 });
+
 const montserratFont700 = Montserrat({
   subsets: ["latin"],
   weight: "700",
 });
+
 interface FooterComponentProps {
   children: React.ReactNode;
   link: string;
@@ -103,20 +104,88 @@ interface FooterLinkProps {
   subTitles: { title: string; link: string }[];
 }
 
-const FooterLink: React.FC<FooterLinkProps> = ({ mainTitle, subTitles }) => {
+// Modified mobile version with expand/collapse functionality
+const MobileFooterLink: React.FC<
+  FooterLinkProps & { isOpen: boolean; onToggle: () => void }
+> = ({ mainTitle, subTitles, isOpen, onToggle }) => {
+  return (
+    <div className="w-full mb-4">
+      <div
+        className="flex justify-between items-center cursor-pointer"
+        onClick={onToggle}
+      >
+        <h1
+          className={`text-gray-500 text-2xl ${montserratFont600.className} bg-gradient-to-r from-gray-500 to-gray-500 text-transparent bg-clip-text mx-auto`}
+        >
+          {mainTitle.toUpperCase()}
+        </h1>
+        <div>{isOpen ? <FaChevronUp /> : <FaChevronDown />}</div>
+      </div>
+      <hr className="border-1 border-[#867F7F] mt-2" />
+
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-96 mt-4" : "max-h-0"}`}
+      >
+        <ul className={`flex-col gap-5 flex ${montserratFont700.className}`}>
+          {subTitles.map((subTitle) => (
+            <li key={subTitle.title} className="flex items-center gap-2">
+              <FaCaretRight className="text-gray-500" />
+              {subTitle.link.startsWith("/") ? (
+                <Link href={subTitle.link} className="text-gray-600">
+                  {subTitle.title}
+                </Link>
+              ) : subTitle.link.startsWith("touchEmail") ? (
+                <a
+                  target="_blank"
+                  href={`mailto:${subTitle.title}?subject=Interior Design&body=Hello.%20I%20want%20to%20design%20my%20house%20.`}
+                  className="text-gray-600"
+                >
+                  {subTitle.title}
+                </a>
+              ) : subTitle.link.startsWith("touchPhone") ? (
+                <a href={`tel:${subTitle.title}`} className="text-gray-600">
+                  {subTitle.title}
+                </a>
+              ) : (
+                <p
+                  className="hover:cursor-pointer text-gray-600"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const element = document.getElementById(subTitle.link);
+                    if (element) {
+                      const elementTopPosition =
+                        window.pageYOffset +
+                        element.getBoundingClientRect().top;
+                      window.scrollTo({
+                        top: elementTopPosition,
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                >
+                  {subTitle.title}
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+// Original desktop version
+const DesktopFooterLink: React.FC<FooterLinkProps> = ({
+  mainTitle,
+  subTitles,
+}) => {
   return (
     <div>
       <h1
-        className={`hidden md:flex mb-5  footer_text ${playfairDisplayFont600.className} `}
+        className={`hidden md:flex mb-5 footer_text ${playfairDisplayFont600.className} `}
       >
         {mainTitle}
       </h1>
-      <h1
-        className={`flex md:hidden mb-5 justify-center items-center footer_text ${montserratFont600.className} `}
-      >
-        {mainTitle}
-      </h1>
-      <hr className="flex md:hidden border-1 border-[#867F7F]" />
       <ul
         className={`flex-col gap-5 hidden md:flex ${montserratFont700.className}`}
       >
@@ -182,9 +251,17 @@ const footerElements = [
   },
 ];
 
-// TODO : TELEFONDA COMPANY USTUNDEKI INSATGARM FALAN BUTTONLARI PARTLIYIR
-
 const Footer = () => {
+  const [openSection, setOpenSection] = useState<number | null>(null);
+
+  const toggleSection = (id: number) => {
+    if (openSection === id) {
+      setOpenSection(null);
+    } else {
+      setOpenSection(id);
+    }
+  };
+
   return (
     <div className="bg-[#F6F4F4] w-full h-auto py-10">
       <footer className="w-11/12 mx-auto text-[#867F7F]">
@@ -195,14 +272,24 @@ const Footer = () => {
             </FooterComponent>
           ))}
         </div>
-        <div className="flex flex-col ">
-          <div className="flex flex-col md:flex-row justify-between mt-5 md:mt-20">
-            <div className=" md:flex-col text-[#867F7F]  md:text-left hidden md:flex md:w-2/6 mx-auto md:mx-0">
-              <h1
-                className={`mb-5 footer_text ${playfairDisplayFont600.className}`}
-              >
-                Header Ttile
-              </h1>
+        <div className="flex flex-col">
+          {/* Mobile Footer (Only visible on mobile) */}
+          <div className="flex flex-col md:hidden mt-5 space-y-2">
+            {footerLinks.map((footerLink) => (
+              <MobileFooterLink
+                key={footerLink.id}
+                mainTitle={footerLink.mainTitle}
+                subTitles={footerLink.subTitles}
+                isOpen={openSection === footerLink.id}
+                onToggle={() => toggleSection(footerLink.id)}
+              />
+            ))}
+          </div>
+
+          {/* Desktop Footer (Preserved as original) */}
+          <div className="hidden md:flex md:flex-row justify-between mt-20">
+            <div className="md:flex-col text-[#867F7F] md:text-left md:flex md:w-2/6 mx-auto md:mx-0">
+              <Image src={logoBlack} alt="" className="w-28 mb-5" />
               <p className={`${montserratFont600.className}`}>
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
                 corporis sed amet reiciendis, dolore recusandae excepturi odit,
@@ -211,16 +298,15 @@ const Footer = () => {
               </p>
             </div>
             {footerLinks.map((footerLink) => (
-              <FooterLink
+              <DesktopFooterLink
                 mainTitle={footerLink.mainTitle}
                 subTitles={footerLink.subTitles}
                 key={footerLink.id}
               />
             ))}
           </div>
-          <hr className="hidden md:flex mt-10 border-1  border-[#131313]" />
-          <div className="hidden md:flex justify-between mt-5">
-            <Image src={logoBlack} alt="" className="w-28" />
+          <hr className="hidden md:flex mt-10 border-1 border-[#131313]" />
+          <div className="hidden md:flex justify-end mt-5">
             <button
               className={`rounded-full border-dark_gray bg-light_gray border text-dark_gray py-2.5 px-6 ${montserratFont700.className}`}
             >

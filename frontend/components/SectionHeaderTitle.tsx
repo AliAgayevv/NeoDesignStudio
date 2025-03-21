@@ -12,7 +12,10 @@ const SectionHeaderTitle: React.FC<SectionHeaderTitleProps> = ({
 }) => {
   return (
     <h1
-      className={`header_text  text-clip font-[600] break-words uppercase tracking-wider ${montserratFont700.className}`}
+      className={`header_text text-clip font-[600] break-words uppercase tracking-wider ${montserratFont700.className}
+        md:bg-gradient-to-r md:from-white  md:to-black md:text-transparent bg-clip-text
+        
+      `}
     >
       {children}
     </h1>
