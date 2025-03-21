@@ -120,7 +120,7 @@ const Navbar = () => {
             >
               {dropdownItems.map((item) => (
                 <div
-                  onClick={(e) => {
+                  onClick={() => {
                     if (item.isNewPage) {
                       window.location.href = "" + item.path;
                     } else {
@@ -158,7 +158,7 @@ const Navbar = () => {
             <p
               key={item.id}
               // Modify the onClick function to handle the conditional navigation
-              onClick={(e) => {
+              onClick={() => {
                 if (item.isNewPage) {
                   window.location.href = "" + item.path;
                 } else {
