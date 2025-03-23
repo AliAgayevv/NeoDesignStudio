@@ -11,6 +11,7 @@ import { Playfair_Display } from "next/font/google";
 
 import { socialMedias } from "@/data/mockDatas";
 import NavigationButton from "./NavigationButton";
+import { handleGoSomewhere } from "@/utils/handleGoSomewhere";
 
 // type PageContent = {
 //   mainTitle?: string;
@@ -68,7 +69,10 @@ const HeroSection = () => {
       >
         {data?.content?.mainTitle}
       </h1>
-      <div className="absolute left-12 z-10 w-60 -translate-y-16 md:bottom-28 md:left-8 md:translate-y-0">
+      <div
+        className="absolute left-12 z-10 w-60 -translate-y-16 md:bottom-28 md:left-8 md:translate-y-0"
+        onClick={() => handleGoSomewhere("contact")}
+      >
         <NavigationButton
           backgroundColor="#9C9C9C"
           textBackgroundColor="#646060"
