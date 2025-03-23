@@ -31,7 +31,6 @@ const RenderImage = ({
   project: any;
   aspectRatio: string;
 }) => {
-  console.log(project);
   const language = useSelector(selectLanguage);
 
   // If no project is provided, don't render anything
@@ -42,35 +41,49 @@ const RenderImage = ({
   return (
     <Link href={`/projects/${project.projectId}`}>
       <div className={`relative w-full overflow-hidden group ${aspectRatio}`}>
-        {/* Main image with blur effect on hover */}
-        <Image
-          src={`https://neodesignstudio.onrender.com${project.images[0]}`}
-          alt={project.projectId}
-          width={648}
-          height={543}
-          decoding="async"
-          priority
-          className="object-cover rounded-[12px] md:rounded-[50px] md:group-hover:rounded-[50px] w-full h-full transition-all duration-500  md:group-hover:blur-sm"
-        />
+        {/* Main image with improved blur effect on hover */}
+        <div className="w-full h-full">
+          <Image
+            src={`https://neodesignstudio.onrender.com${project.images[0]}`}
+            alt={project.projectId}
+            width={648}
+            height={543}
+            decoding="async"
+            priority
+            className="object-cover rounded-[12px] md:rounded-[50px] transition-all duration-300 w-full h-full md:group-hover:blur-sm "
+          />
 
-        {/* Content overlay that appears on hover */}
+          {/* Subtle overlay gradient to enhance blur effect */}
+          <div
+            className="absolute inset-0 opacity-0 bg-black/20 rounded-[12px] md:rounded-[50px] 
+                         md:group-hover:opacity-100 transition-all duration-500"
+          ></div>
+        </div>
+
+        {/* Content overlay that appears on hover with improved visibility */}
         <div
-          className={`hidden md:flex absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-[50px]  flex-col items-center justify-center ${cormarantGaramondFont700.className}`}
+          className={`hidden md:flex absolute inset-0 opacity-0 group-hover:opacity-100 
+                     transition-all duration-500 rounded-[50px] flex-col items-center justify-center 
+                     ${cormarantGaramondFont700.className} z-10`}
         >
           <h3
-            className={`text-white text-5xl font-light uppercase tracking-wider mb-8 drop-shadow-lg `}
+            className={`text-white text-5xl font-light uppercase tracking-wider mb-8 
+                      drop-shadow-md transform transition-transform duration-500 
+                      translate-y-4 group-hover:translate-y-0`}
           >
             {project.title[language]}
           </h3>
-
-          <div className="flex items-center justify-center gap-8 text-white">
+          <div
+            className="flex items-center justify-center gap-8 text-white 
+                        transform transition-transform duration-500 
+                        translate-y-4 group-hover:translate-y-0"
+          >
             <div className="flex items-center">
               <div className="mr-2">
-                <Image src={areaSVG} alt="area" width={24} height={24} />
+                <Image src={areaSVG} alt="area" width={32} height={32} />
               </div>
               <span className="text-3xl drop-shadow-lg">{project.area} м²</span>
             </div>
-
             <div className="flex items-center">
               <div className="mr-2">
                 <svg
@@ -300,12 +313,14 @@ const Page = () => {
           <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
         </div>
 
-        <div className="pt-20 relative">
+        <div className="mt-20 relative overflow-hidden">
+          {/* Background image for the entire projects section */}
           <Image
             src={projectsBG}
             alt="Projects Background"
-            className="w-full  opacity-50 absolute"
+            className="w-full opacity-50 absolute top-0 left-0 h-full object-cover z-0"
           />
+
           {projectGroups.slice(0, visibleGroups).map((group, index) => (
             <RenderImageGrid
               key={`group-${index}`}

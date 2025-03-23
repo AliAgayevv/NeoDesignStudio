@@ -147,10 +147,10 @@ const Contact = () => {
     <div className="mx-auto h-full w-11/12" id="contact">
       <SectionHeaderTitle>{contactElement[lang].title}</SectionHeaderTitle>
       <div
-        className={`flex w-full flex-col justify-between md:flex-row ${montserratFont600.className}`}
+        className={`flex w-full flex-col justify-between items-start md:flex-row ${montserratFont600.className}`}
       >
         <div className="w-full  md:w-6/12">
-          <div className="gap- flex w-full flex-col">
+          <div className="gap- flex w-full flex-col items-start mt-10">
             <SubheaderTitle>{contactElement[lang].callUs}</SubheaderTitle>
             <p className="text-[#e7e7e6]/50"></p>
             <p className="my-5 flex items-center gap-1.5">
