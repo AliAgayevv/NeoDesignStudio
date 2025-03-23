@@ -8,12 +8,19 @@ import LoadingAnimation from "@/components/LoadingAnimation";
 import SectionHeaderTitle from "@/components/SectionHeaderTitle";
 import areaSVG from "../../public/assets/icons/areaSVG.svg";
 import Link from "next/link";
+import projectsBG from "@/public/assets/projectsBg.svg";
+import { Cormorant_Garamond } from "next/font/google";
 
 const headerTitle = {
   en: "Portfolio",
   ru: "Портфолио",
   az: "Portfel",
 };
+
+const cormarantGaramondFont700 = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: "700",
+});
 
 let isFirstTour = true;
 
@@ -43,12 +50,16 @@ const RenderImage = ({
           height={543}
           decoding="async"
           priority
-          className="object-cover rounded-[12px] md:rounded-[50px] md:group-hover:rounded-[50px] w-full h-full transition-all duration-500 md:group-hover:scale-105 md:group-hover:blur-sm"
+          className="object-cover rounded-[12px] md:rounded-[50px] md:group-hover:rounded-[50px] w-full h-full transition-all duration-500  md:group-hover:blur-sm"
         />
 
         {/* Content overlay that appears on hover */}
-        <div className="hidden md:flex absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-[50px]  flex-col items-center justify-center">
-          <h3 className="text-white text-3xl font-light uppercase tracking-wider mb-8 drop-shadow-lg">
+        <div
+          className={`hidden md:flex absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-[50px]  flex-col items-center justify-center ${cormarantGaramondFont700.className}`}
+        >
+          <h3
+            className={`text-white text-5xl font-light uppercase tracking-wider mb-8 drop-shadow-lg `}
+          >
             {project.title[language]}
           </h3>
 
@@ -57,7 +68,7 @@ const RenderImage = ({
               <div className="mr-2">
                 <Image src={areaSVG} alt="area" width={24} height={24} />
               </div>
-              <span className="text-xl drop-shadow-lg">{project.area} м²</span>
+              <span className="text-3xl drop-shadow-lg">{project.area} м²</span>
             </div>
 
             <div className="flex items-center">
@@ -77,7 +88,7 @@ const RenderImage = ({
                   <circle cx="12" cy="10" r="3"></circle>
                 </svg>
               </div>
-              <span className="text-xl drop-shadow-lg">
+              <span className="text-3xl drop-shadow-lg">
                 {project.location[language]}
               </span>
             </div>
@@ -289,7 +300,12 @@ const Page = () => {
           <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
         </div>
 
-        <div className="pt-20">
+        <div className="pt-20 relative">
+          <Image
+            src={projectsBG}
+            alt="Projects Background"
+            className="w-full  opacity-50 absolute"
+          />
           {projectGroups.slice(0, visibleGroups).map((group, index) => (
             <RenderImageGrid
               key={`group-${index}`}

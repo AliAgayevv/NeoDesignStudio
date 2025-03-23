@@ -14,6 +14,8 @@ const contactElement = {
   az: {
     title: "Əlaqə",
     callUs: "Zəng edin",
+    callUsDetailed:
+      "Komandamız həftənin bütün günləri saat 12:00-dan 22:00-dək zəngləriniz üçün əlçatandır.",
     chatWithUs: "Bizim ilə söhbət edin",
     sendMessageViaEmail: "Bizə e-poçt göndərin",
     sendMessageViaInstagram: "Bizə İnstagramda mesaj göndərin",
@@ -34,6 +36,8 @@ const contactElement = {
   en: {
     title: "Contact",
     callUs: "Call us",
+    callUsDetailed:
+      "Our team is available for calls seven days a week from 12:00 PM to 10:00 PM.",
     chatWithUs: "Chat with us",
     sendMessageViaEmail: "Shoot us an email",
     sendMessageViaInstagram: "Message us on instagram",
@@ -54,6 +58,8 @@ const contactElement = {
   ru: {
     title: "Контакт",
     callUs: "Позвоните нам",
+    callUsDetailed:
+      "Наша команда доступна для звонков все дни недели с 12:00 до 22:00.",
     chatWithUs: "Поговорите с нами",
     sendMessageViaEmail: "Отправьте нам электронное письмо",
     sendMessageViaInstagram: "Отправьте нам сообщение в Instagram",
@@ -143,29 +149,30 @@ const Contact = () => {
       <div
         className={`flex w-full flex-col justify-between md:flex-row ${montserratFont600.className}`}
       >
-        <div className="w-6/12">
+        <div className="w-full  md:w-6/12">
           <div className="gap- flex w-full flex-col">
             <SubheaderTitle>{contactElement[lang].callUs}</SubheaderTitle>
-            <p className="text-[#e7e7e6]/50">
-              Call our team Mon-fri from 10 am to 7pm
-            </p>
+            <p className="text-[#e7e7e6]/50"></p>
             <p className="my-5 flex items-center gap-1.5">
               <IoCallOutline />
-              <span>077711655</span>
+              <span>051 897 01 15</span>
+            </p>
+            <p className="text-[#e7e7e6]/50 w-full   md:w-3/4 mb-4">
+              {contactElement[lang].callUsDetailed}
             </p>
             <SubheaderTitle>{contactElement[lang].chatWithUs}</SubheaderTitle>
-            <p className="mb-5 text-[#e7e7e6]/50">
+            {/* <p className="mb-5 text-[#e7e7e6]/50">
               Speak to ur friendly team via live chat
-            </p>
+            </p> */}
           </div>
-          <div className="flex flex-col gap-3 pt-0 text-[#E7E7E6] md:pt-10 ">
-            <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 cursor-pointer">
+          <div className="flex flex-col gap-3 pt-0 text-[#E7E7E6] md:pt-2 ">
+            <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 md:hover:cursor-pointer">
               {contactElement[lang].sendMessageViaEmail}
             </h3>
-            <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 cursor-pointer">
+            <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 md:hover:cursor-pointer">
               {contactElement[lang].sendMessageViaInstagram}
             </h3>
-            <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 cursor-pointer">
+            <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 md:hover:cursor-pointer">
               {contactElement[lang].sendMessageViaWhatsapp}
             </h3>
           </div>
@@ -182,7 +189,7 @@ const Contact = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder={contactElement[lang].firstName}
-                className="rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6]"
+                className="rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6] focus:outline-none"
               />
               {formik.touched.firstName && formik.errors.firstName && (
                 <div className="text-red-500 text-sm">
@@ -199,7 +206,7 @@ const Contact = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder={contactElement[lang].surname}
-                className="rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6]"
+                className="rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6] focus:outline-none"
               />
               {formik.touched.surname && formik.errors.surname && (
                 <div className="text-red-500 text-sm">
@@ -217,7 +224,7 @@ const Contact = () => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               placeholder={contactElement[lang].email}
-              className="w-full rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6]"
+              className="w-full rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6] focus:outline-none"
             />
             {formik.touched.email && formik.errors.email && (
               <div className="text-red-500 text-sm">{formik.errors.email}</div>
@@ -232,7 +239,7 @@ const Contact = () => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               placeholder={contactElement[lang].phoneNumber}
-              className="w-full rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6]"
+              className="w-full rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6] focus:outline-none"
             />
             {formik.touched.phoneNumber && formik.errors.phoneNumber && (
               <div className="text-red-500 text-sm">
@@ -249,7 +256,7 @@ const Contact = () => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               placeholder={contactElement[lang].messageInner}
-              className="w-full rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6]"
+              className="w-full rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6] focus:outline-none"
             />
             {formik.touched.message && formik.errors.message && (
               <div className="text-red-500 text-sm">
