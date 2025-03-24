@@ -166,15 +166,26 @@ const Contact = () => {
             </p> */}
           </div>
           <div className="flex flex-col gap-3 pt-0 text-[#E7E7E6] md:pt-2 ">
-            <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 md:hover:cursor-pointer">
+            <a
+              href={`mailto:neodesignstudio2019@gmail.com?subject=Interior Design&body=Hello.%20I%20want%20to%20design%20my%20house%20.`}
+              className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 md:hover:cursor-pointer"
+            >
               {contactElement[lang].sendMessageViaEmail}
-            </h3>
-            <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 md:hover:cursor-pointer">
+            </a>
+            <a
+              href="https://www.instagram.com/neodesign_studio/"
+              target="_blank"
+              className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 md:hover:cursor-pointer"
+            >
               {contactElement[lang].sendMessageViaInstagram}
-            </h3>
-            <h3 className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 md:hover:cursor-pointer">
+            </a>
+            <a
+              target="_blank"
+              href="https://wa.link/r4z1i6"
+              className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 md:hover:cursor-pointer"
+            >
               {contactElement[lang].sendMessageViaWhatsapp}
-            </h3>
+            </a>
           </div>
         </div>
         <hr className="mx-auto mt-5 block" />

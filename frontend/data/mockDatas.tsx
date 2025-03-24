@@ -3,17 +3,17 @@ import { FaInstagram, FaBehance, FaPinterest } from "react-icons/fa";
 export const socialMedias = [
   {
     name: "Instagram",
-    url: "https://www.facebook.com/",
+    url: "https://www.instagram.com/neodesign_studio/",
     icon: <FaInstagram size={24} />,
   },
   {
     name: "Behance",
-    url: "https://www.instagram.com/",
+    url: "https://www.behance.net/orxanagayev",
     icon: <FaBehance size={24} />,
   },
   {
     name: "Pinterest",
-    url: "https://twitter.com/",
+    url: "https://www.pinterest.com/NeoDesign_Studio/",
     icon: <FaPinterest size={24} />,
   },
 ];
