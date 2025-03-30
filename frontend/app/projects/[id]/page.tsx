@@ -7,6 +7,8 @@ import { selectLanguage } from "@/store/services/languageSlice";
 import Image from "next/image";
 import areaSVG from "../../../public/assets/icons/areaSVG.svg";
 
+// TODO: FOTOLARDA SEHVLIK VAR, HAMSI GORUNMUR
+
 const ProjectDetail = () => {
   const params = useParams();
   const { id } = params;
@@ -27,7 +29,7 @@ const ProjectDetail = () => {
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-neutral-900">
             <Image
-              src={`https://neodesignstudio.onrender.com${images[0]}`}
+              src={`http://localhost:4000${images[0]}`}
               alt=""
               width={600}
               height={1000}
@@ -36,7 +38,7 @@ const ProjectDetail = () => {
           </div>
           <div className="bg-neutral-900">
             <Image
-              src={`https://neodesignstudio.onrender.com${images[1] || images[0]}`}
+              src={`http://localhost:4000${images[1] || images[0]}`}
               alt=""
               width={600}
               height={1000}
@@ -48,7 +50,7 @@ const ProjectDetail = () => {
         {/* Second row - full width */}
         <div className="h-96 bg-neutral-900">
           <Image
-            src={`https://neodesignstudio.onrender.com${images[2] || images[0]}`}
+            src={`http://localhost:4000${images[2] || images[0]}`}
             alt=""
             width={1200}
             height={600}
@@ -60,7 +62,7 @@ const ProjectDetail = () => {
         <div className="grid grid-cols-3 gap-4">
           <div className="bg-neutral-900">
             <Image
-              src={`https://neodesignstudio.onrender.com${images[3] || images[0]}`}
+              src={`http://localhost:4000${images[3] || images[0]}`}
               alt=""
               width={600}
               height={300}
@@ -69,7 +71,7 @@ const ProjectDetail = () => {
           </div>
           <div className="bg-neutral-900">
             <Image
-              src={`https://neodesignstudio.onrender.com${images[4] || images[1] || images[0]}`}
+              src={`http://localhost:4000${images[4] || images[1] || images[0]}`}
               alt=""
               width={1000}
               height={300}
@@ -78,7 +80,7 @@ const ProjectDetail = () => {
           </div>
           <div className="bg-neutral-900">
             <Image
-              src={`https://neodesignstudio.onrender.com${images[5] || images[2] || images[0]}`}
+              src={`http://localhost:4000${images[5] || images[2] || images[0]}`}
               alt=""
               width={1000}
               height={300}
@@ -98,7 +100,7 @@ const ProjectDetail = () => {
           {error && <p>Error loading project details</p>}
           {project && project.images && project.images.length > 0 && (
             <Image
-              src={`https://neodesignstudio.onrender.com${project.images[0]}`}
+              src={`http://localhost:4000${project.images[0]}`}
               alt=""
               width={648}
               height={543}

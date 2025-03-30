@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["neodesignstudio.onrender.com"],
+    domains: ["localhost", "localhost:4000", "example.com"],
   },
 };
 

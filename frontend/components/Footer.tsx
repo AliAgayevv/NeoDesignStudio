@@ -346,7 +346,7 @@ const Footer = () => {
             ))}
           </div>
           <hr className="hidden md:flex mt-10 border-1 border-[#131313]" />
-          <div className="hidden md:flex justify-between mt-5">
+          <div className="hidden md:flex justify-between mt-5 items-center">
             <a
               href="https://www.linkedin.com/in/nazrin-mahmudlu/"
               target="_blank"

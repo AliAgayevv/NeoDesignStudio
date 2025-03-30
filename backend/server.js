@@ -3,6 +3,7 @@ const connectDB = require("./db");
 const pageRoutes = require("./routes/pageRoutes");
 const workRoutes = require("./routes/workRoutes");
 const contactRoute = require("./routes/contact");
+const loginRoutes = require("./routes/login");
 const cors = require("cors");
 const uploads = require("./middlewares/upload");
 const path = require("path");
@@ -60,7 +61,7 @@ app.get("/debug/uploads", (req, res) => {
 // Utility endpoint to fix image paths in the database
 app.get("/fix-image-paths", async (req, res) => {
   try {
-    const Work = require("./models/Work"); // Make sure to import your Work model
+    const Work = require("./models/Work");
     const works = await Work.find({});
     for (const work of works) {
       const updatedImages = work.images.map((img) => {
@@ -77,13 +78,13 @@ app.get("/fix-image-paths", async (req, res) => {
   }
 });
 
-// Connect to MongoDB
 connectDB();
 
 // API Routes
 app.use("/api/contact", contactRoute);
 app.use("/api/pages", pageRoutes);
 app.use("/api/portfolio", workRoutes);
+app.use("/api/login", loginRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

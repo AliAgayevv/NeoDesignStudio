@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Formik, Form, FormikHelpers } from "formik";
 import {
   useCreateWorkMutation,
   useUpdateWorkMutation,
 } from "@/store/services/workApi";
 import { Project } from "./types";
+import useOutsideClick from "@/utils/hooks/useOutsideClick";
+import { GrFormClose } from "react-icons/gr";
 
 interface ProjectFormProps {
   onClose: () => void;
@@ -18,6 +20,11 @@ export default function ProjectForm({
   // Create and update mutations
   const [createWork] = useCreateWorkMutation();
   const [updateWork] = useUpdateWorkMutation();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(ref, () => {
+    onClose();
+  });
 
   // Default values for the form if no initial data is provided
   const initialData: Project = {
@@ -92,7 +99,10 @@ export default function ProjectForm({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div
+        className="bg-white p-6 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        ref={ref}
+      >
         <Formik
           initialValues={initialData}
           onSubmit={handleSubmit}
@@ -105,6 +115,12 @@ export default function ProjectForm({
         >
           {({ values, setFieldValue, touched, errors }) => (
             <Form className="space-y-4" encType="multipart/form-data">
+              <button
+                className="rounded-full p-2 ml-auto bg-blue-500 flex justify-center items-center"
+                onClick={() => onClose()}
+              >
+                <GrFormClose size={24} color="white" />
+              </button>
               {/* Project Details */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
