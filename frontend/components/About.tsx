@@ -47,7 +47,12 @@ const About = () => {
       >
         <div className="flex flex-col gap-5 text-xl text-light_gray md:w-2/3">
           <h2 className="text-3xl font-semibold">{howWeCanHelp[lang]}</h2>
-          <p className="text-right text-xl  md:text-2xl">{aboutUs[lang]}</p>
+          <p
+            className="text-left ml-20  text-xl  md:text-2xl"
+            style={{ lineHeight: "2.5rem" }}
+          >
+            {aboutUs[lang]}
+          </p>
         </div>
         <div className="relative w-full md:w-1/2 md:overflow-visible">
           <div className="absolute bottom-6 left-8 z-0 h-full w-full -translate-x-6 rounded-lg border border-[#955C22] shadow-md md:bottom-12 md:left-10 md:-translate-x-4" />

@@ -19,7 +19,7 @@ const Page = () => {
         <div key={work.projectId}>
           {/* <h3>{work.content.en}</h3> */}
           <Image
-            src={`https://neodesignstudio.onrender.com${work.images[0]}`}
+            src={`https://localhost:4000${work.images[0]}`}
             width={400}
             height={400}
             alt=""
@@ -28,7 +28,7 @@ const Page = () => {
           {/* {work.images.map((image, index) => (
             <Image
               key={index}
-              src={`https://neodesignstudio.onrender.com${image}`}
+              src={`https://localhost:4000${image}`}
               alt={`Project image ${index + 1}`}
               className="w-1/2 h-full"
               width={400}
