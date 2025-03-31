@@ -3,7 +3,7 @@ const router = express.Router();
 const Contact = require("../models/Contact");
 const process = require("process");
 
-// Function to delete old contact forms (older than 30 days)
+// middleware for delete contacts which are older than 30 days
 const deleteOldContacts = async () => {
   try {
     const thirtyDaysAgo = new Date();
@@ -22,14 +22,12 @@ router.post("/", async (req, res) => {
   try {
     const { firstName, surname, email, phoneNumber, message } = req.body;
 
-    // Check for required fields
     if (!firstName || !surname || !email || !phoneNumber || !message) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
     const sentedTime = new Date();
 
-    // Save to database
     const newContact = new Contact({
       firstName,
       surname,
@@ -44,7 +42,7 @@ router.post("/", async (req, res) => {
     // Run the cleanup function to delete old contacts every time a new form is submitted
     await deleteOldContacts();
 
-    // Send Telegram notification
+    //  Telegram notification
     const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
     const chatId = process.env.TELEGRAM_CHAT_ID;
     const messageText = `New contact form submission:\n\nName: ${firstName} ${surname}\nEmail: ${email}\nPhone Number: ${phoneNumber}\nMessage: ${message}`;
@@ -73,7 +71,7 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    // Run the cleanup function to delete old contacts every time the list is requested
+    // Cleanup old contacts before fetching
     await deleteOldContacts();
 
     const contacts = await Contact.find();
