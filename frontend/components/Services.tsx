@@ -1,10 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import SectionHeaderTitle from "./SectionHeaderTitle";
 import ServicesCard from "./ServicesCard";
 import { selectLanguage, setLanguage } from "@/store/services/languageSlice";
-import Image from "next/image";
 import imgExample from "@/public/assets/photos/aboutUsPhoto.jpeg";
 import imgExample2 from "@/public/assets/photos/servicesExamplePhoto.png";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -14,7 +13,7 @@ import "swiper/css/autoplay";
 import { Autoplay, Pagination } from "swiper/modules";
 import SwiperCore from "swiper/core";
 import { Playfair_Display } from "next/font/google";
-import { selectCategory, setCategory } from "@/store/services/categorySlice";
+import { setCategory } from "@/store/services/categorySlice";
 import { useGetWorkByCategoryQuery } from "@/store/services/workApi";
 import { useRouter } from "next/navigation";
 
@@ -65,7 +64,7 @@ const Services = () => {
   const language = useSelector(selectLanguage);
   const dispatch = useDispatch();
   const router = useRouter();
-  const category = useSelector(selectCategory);
+  // const category = useSelector(selectCategory);
 
   // Fetch project data for each category
   const { data: interiorData } = useGetWorkByCategoryQuery({

@@ -81,7 +81,7 @@ export default function ProjectForm({
   // Create and update mutations
   const [createWork] = useCreateWorkMutation();
   const [updateWork] = useUpdateWorkMutation();
-  const [deleteImage, { isLoading: isDeleting }] = useDeleteImageMutation();
+  const [deleteImage] = useDeleteImageMutation();
   const ref = useRef<HTMLDivElement>(null);
   const [hasNewImages, setHasNewImages] = useState(false);
 
