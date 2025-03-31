@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
 import Image from "next/image";
 import { useGetAllWorksQuery } from "@/store/services/workApi";
@@ -11,6 +11,7 @@ import Link from "next/link";
 import projectsBG from "@/public/assets/projectsBg.svg";
 import { Cormorant_Garamond } from "next/font/google";
 import { motion, AnimatePresence } from "framer-motion";
+import { selectCategory, setCategory } from "@/store/services/categorySlice";
 
 const headerTitle = {
   en: "Portfolio",
@@ -352,9 +353,15 @@ const Page = () => {
   const { data, isLoading, error } = useGetAllWorksQuery();
   const lang = useSelector(selectLanguage);
   const [visibleGroups, setVisibleGroups] = useState(1);
-  // Add types for typescript
-  const [activeCategory, setActiveCategory] = useState<categoryTypes>("all");
+  const dispatch = useDispatch();
+
+  const activeCategory = useSelector(selectCategory);
+
   const observerTarget = useRef(null);
+
+  const handleCategoryChange = (category: categoryTypes) => {
+    dispatch(setCategory(category));
+  };
 
   // Filter projects by category
   const filteredData = data
@@ -379,6 +386,21 @@ const Page = () => {
   }, [activeCategory]);
 
   // Set up infinite scroll
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedCategory = localStorage.getItem(
+        "category",
+      ) as CategoryType | null;
+      if (
+        savedCategory &&
+        ["all", "interior", "exterior", "business"].includes(savedCategory)
+      ) {
+        dispatch(setCategory(savedCategory as CategoryType));
+      }
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -434,7 +456,7 @@ const Page = () => {
 
         <CategoryFilter
           activeCategory={activeCategory}
-          setActiveCategory={setActiveCategory}
+          setActiveCategory={handleCategoryChange}
           lang={lang}
           categoryLabels={categoryLabels}
         />
@@ -475,7 +497,7 @@ const Page = () => {
                   <p className="text-xl">{`No ${activeCategory} projects found.`}</p>
                   <button
                     className="mt-4 bg-deep_brown px-6 py-2 rounded-full hover:bg-deep_brown/80 transition-colors"
-                    onClick={() => setActiveCategory("all")}
+                    onClick={() => handleCategoryChange("all")}
                   >
                     View all projects
                   </button>

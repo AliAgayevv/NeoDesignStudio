@@ -15,10 +15,7 @@ exports.getPage = async (req, res) => {
       return res.status(400).json({ message: "Invalid language parameter." });
     }
 
-    console.log("🔍 Searching for page:", page);
-
     const allPages = await Page.find({}, { page: 1, _id: 0 });
-    console.log("📂 Available pages in DB:", allPages);
 
     const pageData = await Page.findOne({ page });
 
