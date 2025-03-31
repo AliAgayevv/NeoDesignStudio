@@ -1,24 +1,22 @@
 "use client";
-
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import SectionHeaderTitle from "./SectionHeaderTitle";
-import { servicesCardContent } from "@/data/mockDatas";
 import ServicesCard from "./ServicesCard";
 import { selectLanguage, setLanguage } from "@/store/services/languageSlice";
-
 import Image from "next/image";
 import imgExample from "@/public/assets/photos/aboutUsPhoto.jpeg";
 import imgExample2 from "@/public/assets/photos/servicesExamplePhoto.png";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import { Autoplay, Pagination } from "swiper/modules";
 import SwiperCore from "swiper/core";
-
 import { Playfair_Display } from "next/font/google";
+import { selectCategory, setCategory } from "@/store/services/categorySlice";
+import { useGetWorkByCategoryQuery } from "@/store/services/workApi";
+import { useRouter } from "next/navigation";
 
 const playfairDisplayFont800 = Playfair_Display({
   subsets: ["latin"],
@@ -30,40 +28,99 @@ const headerTitle = {
   en: "Services",
   ru: "Услуги",
 };
-const images = [
-  {
+
+// Define categories and their translations
+const categoryInfo = {
+  interior: {
     id: 1,
-    img: imgExample,
+    isReversed: false,
     text: {
-      az: "Interyer",
       en: "Interior",
+      az: "Interyer",
       ru: "Интерьер",
     },
   },
-  {
+  exterior: {
     id: 2,
-    img: imgExample2,
+    isReversed: true,
     text: {
-      az: "Eksterer",
       en: "Exterior",
+      az: "Eksterer",
       ru: "Экстерьер",
     },
   },
-  {
+  business: {
     id: 3,
-    img: imgExample,
+    isReversed: false,
     text: {
-      az: "Biznes",
       en: "Business",
+      az: "Biznes",
       ru: "Бизнес",
     },
   },
-];
+};
 
 const Services = () => {
   SwiperCore.use([Pagination]);
   const language = useSelector(selectLanguage);
   const dispatch = useDispatch();
+  const router = useRouter();
+  const category = useSelector(selectCategory);
+
+  // Fetch project data for each category
+  const { data: interiorData } = useGetWorkByCategoryQuery({
+    category: "interior",
+  });
+
+  const { data: exteriorData } = useGetWorkByCategoryQuery({
+    category: "exterior",
+  });
+
+  const { data: businessData } = useGetWorkByCategoryQuery({
+    category: "business",
+  });
+
+  const serviceCards = [
+    {
+      ...categoryInfo.interior,
+      img:
+        interiorData &&
+        interiorData.length > 0 &&
+        interiorData[0]?.images?.length > 0
+          ? `http://localhost:4000${interiorData[0].images[0]}`
+          : imgExample,
+      category: "interior",
+    },
+    {
+      ...categoryInfo.exterior,
+      img:
+        exteriorData &&
+        exteriorData.length > 0 &&
+        exteriorData[0]?.images?.length > 0
+          ? `http://localhost:4000${exteriorData[0].images[0]}`
+          : imgExample2,
+      category: "exterior",
+    },
+    {
+      ...categoryInfo.business,
+      img:
+        businessData &&
+        businessData.length > 0 &&
+        businessData[0]?.images?.length > 0
+          ? `http://localhost:4000${businessData[0].images[0]}`
+          : imgExample,
+      category: "business",
+    },
+  ];
+
+  const handleCategoryChange = (
+    category: "all" | "interior" | "exterior" | "business",
+  ) => {
+    dispatch(setCategory(category));
+    localStorage.setItem("category", category);
+    // Navigate to projects page to see projects in this category
+    router.push("/projects");
+  };
 
   useEffect(() => {
     const storedLanguage = localStorage.getItem("language") as
@@ -75,19 +132,37 @@ const Services = () => {
     }
   }, [dispatch]);
 
+  // Debug log to see what's happening with the images
+  useEffect(() => {
+    if (interiorData || exteriorData || businessData) {
+      console.log("Interior data:", interiorData);
+      console.log("Exterior data:", exteriorData);
+      console.log("Business data:", businessData);
+    }
+  }, [interiorData, exteriorData, businessData]);
+
   return (
     <section className="mx-auto h-full w-11/12" id="services">
       <SectionHeaderTitle>{headerTitle[language]}</SectionHeaderTitle>
+
+      {/* Desktop view */}
       <div className="hidden w-full items-center justify-between md:flex">
-        {servicesCardContent.map(({ id, img, isReversed, text }) => (
-          <ServicesCard
+        {serviceCards.map(({ id, img, isReversed, text, category }) => (
+          <div
             key={id}
-            img={img}
-            isReversed={isReversed}
-            text={text[language]}
-          />
+            onClick={() => handleCategoryChange(category as any)}
+            className="cursor-pointer max-w-[30%]"
+          >
+            <ServicesCard
+              img={img}
+              isReversed={isReversed}
+              text={text[language]}
+            />
+          </div>
         ))}
       </div>
+
+      {/* Mobile view */}
       <div className="mx-auto block w-full md:hidden">
         <Swiper
           slidesPerView={1}
@@ -100,22 +175,28 @@ const Services = () => {
             clickable: true,
           }}
         >
-          {images.map((src, index) => (
-            <SwiperSlide key={index}>
+          {serviceCards.map((item, index) => (
+            <SwiperSlide
+              key={index}
+              onClick={() => handleCategoryChange(item.category as any)}
+              className="cursor-pointer"
+            >
               <div className="h-[46vh]">
                 <div className="relative h-[40vh] w-full">
                   <div
-                    className={`absolute bottom-1/2 left-10 z-40 translate-y-10 ${playfairDisplayFont800.className} text-3xl tracking-widest`}
+                    className={`absolute bottom-1/2 left-10 z-40 translate-y-10 ${playfairDisplayFont800.className} text-3xl tracking-widest text-white drop-shadow-md`}
                   >
-                    {src.text[language]}
+                    {item.text[language]}
                   </div>
-                  <Image
-                    src={src.img}
-                    alt={`Slide ${index}`}
-                    layout="fill"
-                    className="rounded-3xl"
-                    objectFit="cover"
-                  />
+                  <div className="w-full h-full rounded-3xl overflow-hidden">
+                    <img
+                      src={
+                        typeof item.img === "string" ? item.img : imgExample.src
+                      }
+                      alt={`${item.category} example`}
+                      className="w-full h-full object-cover rounded-3xl"
+                    />
+                  </div>
                 </div>
               </div>
             </SwiperSlide>

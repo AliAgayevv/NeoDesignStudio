@@ -7,6 +7,7 @@ const {
   getWorkById,
   getAllWorks,
   deleteImage,
+  getWorkByCategory,
 } = require("../controllers/workController");
 
 const upload = require("../middlewares/upload");
@@ -15,7 +16,13 @@ router.post("/", upload.array("images", 25), createWork);
 
 router.get("/:id", getWorkById);
 
-router.get("/", getAllWorks);
+router.get("/", (req, res) => {
+  if (req.query.category) {
+    return getWorkByCategory(req, res);
+  } else {
+    return getAllWorks(req, res);
+  }
+});
 
 router.delete("/:id", deleteWork);
 

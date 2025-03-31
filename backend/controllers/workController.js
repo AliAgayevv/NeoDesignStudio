@@ -232,3 +232,33 @@ exports.deleteImage = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+
+exports.getWorkByCategory = async (req, res) => {
+  const categoryTypes = ["interior", "exterior", "business", "all"];
+
+  try {
+    // Get category from query params
+    const { category } = req.query;
+
+    if (category && !categoryTypes.includes(category)) {
+      return res
+        .status(400)
+        .json({ message: "Category type is not supported" });
+    }
+
+    let projects;
+
+    if (!category || category === "all") {
+      // Get all projects
+      projects = await Work.find();
+    } else {
+      // Get projects by category
+      projects = await Work.find({ category });
+    }
+
+    // Send the filtered projects as response
+    return res.json(projects);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};

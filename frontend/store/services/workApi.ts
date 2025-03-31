@@ -47,6 +47,10 @@ export const workApi = apiSlice.injectEndpoints({
       query: () => "/portfolio",
     }),
 
+    getWorkByCategory: builder.query<Work[], { category: string }>({
+      query: ({ category }) => `/portfolio?category=${category}`,
+    }),
+
     createWork: builder.mutation<void, FormData>({
       query: (formData) => ({
         url: "/portfolio",
@@ -103,6 +107,7 @@ export const workApi = apiSlice.injectEndpoints({
 export const {
   useGetAllWorksQuery,
   useGetWorkByIdQuery,
+  useGetWorkByCategoryQuery,
   useCreateWorkMutation,
   useUpdateWorkMutation,
   useDeleteWorkMutation,
