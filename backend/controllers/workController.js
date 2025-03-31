@@ -5,14 +5,13 @@ exports.getWorkById = async (req, res) => {
     const { id } = req.params; // projectId
     const { lang } = req.query;
 
-    // Find the project by projectId
     const project = await Work.findOne({ projectId: id });
 
     if (!project) {
       return res.status(404).json({ message: "Project not found." });
     }
 
-    // If a language query param is provided, return only that language's content
+    // If there any lang query, return the project with the specified language, otheriwse return the entire project
     if (lang) {
       if (!["az", "en", "ru"].includes(lang)) {
         return res.status(400).json({ message: "Language not supported." });
@@ -28,7 +27,6 @@ exports.getWorkById = async (req, res) => {
       });
     }
 
-    // If no language param, return the entire project document
     return res.json(project);
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
@@ -63,12 +61,11 @@ exports.createWork = async (req, res) => {
 
     let uploadedImages = [];
     if (req.files && req.files.length > 0) {
-      // Just use the filename, not the full path
       uploadedImages = req.files.map(
         (file) => `/uploads/${file.filename || file.originalname}`
       );
     }
-    // Validate that images were uploaded
+    // Check if there at least 1 image uploaded
     if (uploadedImages.length === 0) {
       return res
         .status(400)
@@ -80,7 +77,7 @@ exports.createWork = async (req, res) => {
       return res.status(400).json({ message: "Work ID already exists." });
     }
 
-    // Create a new project in MongoDB
+    // Create on db
     const newProject = new Work({
       projectId,
       images: uploadedImages,
@@ -92,7 +89,7 @@ exports.createWork = async (req, res) => {
     await newProject.save();
     res.status(201).json({ message: "Work created successfully", newProject });
   } catch (err) {
-    console.error(err); // Hata detaylarını logla
+    console.error(err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
@@ -115,13 +112,14 @@ exports.updateWork = async (req, res) => {
     const { id } = req.params; // projectId
     const { content } = req.body;
 
-    // Find the existing project by ID
+    console.log("req.body", req.body);
+
     const project = await Work.findOne({ projectId: id });
     if (!project) {
       return res.status(404).json({ message: "Project not found." });
     }
 
-    // Update content (description, title, location, and area) if provided
+    // content = description, title, location, and area (if provided)
     if (content) {
       if (content.description) {
         project.description = {
@@ -146,7 +144,14 @@ exports.updateWork = async (req, res) => {
       }
     }
 
-    // Save the project with updated content
+    if (req.files && req.files.length > 0) {
+      const uploadedImages = req.files.map(
+        (file) => `/uploads/${file.filename || file.originalname}`
+      );
+      project.images = [...project.images, ...uploadedImages]; // Add new images to exisitng images array
+    }
+
+    // Save updated project with new content || images
     await project.save();
     res.json({ message: "Project updated successfully", project });
   } catch (err) {
@@ -160,6 +165,52 @@ exports.getAllWorks = async (req, res) => {
     const projects = await Work.find();
     res.json(projects);
   } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+exports.deleteImage = async (req, res) => {
+  try {
+    const { id } = req.params; // projectId
+    const { imagePath } = req.body;
+
+    if (!imagePath) {
+      return res.status(400).json({ message: "Image path is required" });
+    }
+
+    const project = await Work.findOne({ projectId: id });
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    // Check if the image exists in the project
+    const imageIndex = project.images.indexOf(imagePath);
+    if (imageIndex === -1) {
+      return res.status(404).json({ message: "Image not found in project" });
+    }
+
+    // Remove the image from the filesystem if it exists
+    try {
+      const rootDir = path.resolve(__dirname, "..");
+      const fullImagePath = path.join(rootDir, imagePath);
+
+      if (fs.existsSync(fullImagePath)) {
+        fs.unlinkSync(fullImagePath);
+      }
+    } catch (fsError) {
+      console.error(`Failed to delete image file: ${imagePath}`, fsError);
+    }
+
+    project.images.splice(imageIndex, 1);
+
+    await project.save();
+
+    res.json({
+      message: "Image deleted successfully",
+      remainingImages: project.images,
+    });
+  } catch (err) {
+    console.error("Error deleting image:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };

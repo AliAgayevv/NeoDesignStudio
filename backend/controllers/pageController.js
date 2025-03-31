@@ -15,20 +15,17 @@ exports.getPage = async (req, res) => {
       return res.status(400).json({ message: "Invalid language parameter." });
     }
 
-    console.log("🔍 Searching for page:", page); // Debugging log
+    console.log("🔍 Searching for page:", page);
 
-    // List all pages to check available entries
     const allPages = await Page.find({}, { page: 1, _id: 0 });
     console.log("📂 Available pages in DB:", allPages);
 
-    // Query MongoDB by `page`
     const pageData = await Page.findOne({ page });
 
     if (!pageData) {
       return res.status(404).json({ message: "Page not found" });
     }
 
-    // Ensure `content` exists for the requested language
     if (!pageData.content || !pageData.content[lang]) {
       return res
         .status(404)
@@ -52,7 +49,6 @@ exports.createPage = async (req, res) => {
         .json({ message: "All languages (az, en, ru) must be provided." });
     }
 
-    // Aynı sayfa daha önce eklenmiş mi?
     const existingPage = await Page.findOne({ page });
     if (existingPage) {
       return res.status(400).json({ message: "Page already exists" });

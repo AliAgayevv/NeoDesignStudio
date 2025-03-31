@@ -1,4 +1,3 @@
-import { NapiMiddleware } from "next/dist/build/swc/generated-native";
 import { apiSlice } from "./apiSlice";
 
 type Description = {
@@ -41,30 +40,59 @@ export const workApi = apiSlice.injectEndpoints({
     getWorkById: builder.query<Work, { id: string | number; lang: string }>({
       query: ({ id, lang }) => `/portfolio/${id}?lang=${lang}`,
     }),
+
     getAllWorks: builder.query<Work[], void>({
-      // Type the response to be an array of `Work` objects
       query: () => "/portfolio",
     }),
+
     createWork: builder.mutation<void, FormData>({
       query: (formData) => ({
         url: "/portfolio",
         method: "POST",
         body: formData,
-        // Don't set Content-Type header here, the browser will set it correctly
-        formData: true, // This tells RTK Query that you're sending FormData
+        formData: true,
       }),
     }),
-    updateWork: builder.mutation<void, { id: string; content: UploadWork }>({
-      query: ({ id, content }) => ({
-        url: `/portfolio/${id}`,
-        method: "PUT",
-        body: { content },
-      }),
+
+    updateWork: builder.mutation<
+      void,
+      { id: string; content: UploadWork; formData?: FormData }
+    >({
+      query: ({ id, content, formData }) => {
+        // If formData is provided, use it for image updates
+        if (formData) {
+          return {
+            url: `/portfolio/${id}`,
+            method: "PUT",
+            body: formData,
+            formData: true,
+          };
+        }
+
+        // Otherwise use regular JSON update
+        return {
+          url: `/portfolio/${id}`,
+          method: "PUT",
+          body: { content },
+        };
+      },
     }),
+
     deleteWork: builder.mutation<void, string>({
       query: (id) => ({
         url: `/portfolio/${id}`,
         method: "DELETE",
+      }),
+    }),
+
+    deleteImage: builder.mutation<
+      { message: string; remainingImages: string[] },
+      { projectId: string; imagePath: string }
+    >({
+      query: ({ projectId, imagePath }) => ({
+        url: `/portfolio/${projectId}/images`,
+        method: "DELETE",
+        body: { imagePath },
       }),
     }),
   }),
@@ -76,4 +104,5 @@ export const {
   useCreateWorkMutation,
   useUpdateWorkMutation,
   useDeleteWorkMutation,
+  useDeleteImageMutation,
 } = workApi;

@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const process = require("process");
-const jwt = require("jsonwebtoken"); // Add this for JWT support
+const jwt = require("jsonwebtoken");
 
-// Secret key for JWT signing (use a strong, random value in production)
 const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post("/", async (req, res) => {
@@ -14,7 +13,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    // Check credentials
+    // Check password & email
     if (
       email === process.env.ADMIN_LOGIN &&
       password === process.env.ADMIN_PASSWORD
@@ -27,7 +26,7 @@ router.post("/", async (req, res) => {
         },
       };
 
-      // Generate token with expiration (e.g., 1 hour)
+      // Generate token with expiration (1 hour)
       jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" }, (err, token) => {
         if (err) throw err;
         return res.status(200).json({
@@ -65,7 +64,7 @@ const authMiddleware = (req, res, next) => {
 };
 
 router.post("/verify", authMiddleware, (req, res) => {
-  // If token is valid, return user information
+  // If token is valid, return infos
   res.json({ user: req.user });
 });
 
