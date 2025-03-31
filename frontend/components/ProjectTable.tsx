@@ -24,6 +24,7 @@ export default function ProjectTable({
           title: work.title,
           location: work.location,
           area: work.area,
+          category: work.category,
         })),
       );
       console.log(data);
@@ -44,6 +45,7 @@ export default function ProjectTable({
             <th className="px-6 py-3 text-left">Title</th>
             <th className="px-6 py-3 text-left">Location </th>
             <th className="px-6 py-3 text-left">Area </th>
+            <th className="px-6 py-3 text-left">Category</th>
             <th className="px-6 py-3 text-left flex justify-end mr-10">
               Actions
             </th>
@@ -58,6 +60,13 @@ export default function ProjectTable({
               <td className="px-6 py-4">{project.location.en}</td>
               {/* Display the area in m² */}
               <td className="px-6 py-4">{project.area} m²</td>
+              <td className="px-6 py-4">
+                {project.category &&
+                  project.category
+                    .slice(0, 1)
+                    .toUpperCase()
+                    .concat(project.category.slice(1))}
+              </td>
               <td className="px-6 py-4 space-x-2 flex justify-end">
                 <button
                   onClick={() => onEdit(project)}

@@ -2,6 +2,7 @@ export interface Project {
   _id: string;
   projectId: string;
   images: string[];
+  category: string;
   description: {
     az: string;
     en: string;

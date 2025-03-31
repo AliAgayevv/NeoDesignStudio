@@ -25,6 +25,7 @@ type Work = {
   location: Location;
   area: string | number;
   images: string[];
+  category: string;
 };
 
 type UploadWork = {
@@ -33,6 +34,7 @@ type UploadWork = {
   title: Title;
   location: Location;
   area: string | number;
+  category: string;
 };
 
 export const workApi = apiSlice.injectEndpoints({
