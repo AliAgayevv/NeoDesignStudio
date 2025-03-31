@@ -10,11 +10,33 @@ import areaSVG from "../../public/assets/icons/areaSVG.svg";
 import Link from "next/link";
 import projectsBG from "@/public/assets/projectsBg.svg";
 import { Cormorant_Garamond } from "next/font/google";
+import { motion, AnimatePresence } from "framer-motion";
 
 const headerTitle = {
   en: "Portfolio",
   ru: "Портфолио",
   az: "Portfel",
+};
+
+const categoryLabels = {
+  en: {
+    all: "All",
+    interior: "Interior",
+    exterior: "Exterior",
+    business: "Business",
+  },
+  ru: {
+    all: "Все",
+    interior: "Интерьер",
+    exterior: "Экстерьер",
+    business: "Бизнес",
+  },
+  az: {
+    all: "Hamısı",
+    interior: "Interyer",
+    exterior: "Eksteryer",
+    business: "Biznes",
+  },
 };
 
 const cormarantGaramondFont700 = Cormorant_Garamond({
@@ -107,6 +129,8 @@ const RenderImage = ({
             </div>
           </div>
         </div>
+
+        {/* Category badge */}
       </div>
     </Link>
   );
@@ -214,11 +238,29 @@ interface Project {
   title: { [key: string]: string };
   area: number;
   location: { [key: string]: string };
+  category?: string;
 }
 
 interface ProjectGroup {
   items: Project[];
   index: number;
+}
+
+type CategoryLabels = {
+  [lang: string]: {
+    [category: string]: string;
+  };
+};
+
+// Define allowed categories
+type CategoryType = "all" | "interior" | "exterior" | "business";
+
+// Props interface for the component
+interface CategoryFilterProps {
+  activeCategory: CategoryType;
+  setActiveCategory: (category: CategoryType) => void;
+  lang: string;
+  categoryLabels: CategoryLabels;
 }
 
 const prepareProjectGroups = (projects: Project[]): Project[][] => {
@@ -246,18 +288,95 @@ const prepareProjectGroups = (projects: Project[]): Project[][] => {
   return groups;
 };
 
+const CategoryFilter: React.FC<CategoryFilterProps> = ({
+  activeCategory,
+  setActiveCategory,
+  lang,
+  categoryLabels,
+}) => {
+  const categories: CategoryType[] = [
+    "all",
+    "interior",
+    "exterior",
+    "business",
+  ];
+
+  return (
+    <motion.div
+      className="flex justify-center w-full overflow-x-auto py-2 md:justify-start mt-4 md:mt-8 mb-6 md:mb-12"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="bg-deep_brown rounded-full p-1 md:p-2 flex items-center min-w-fit mx-auto md:mx-0">
+        {categories.map((category) => (
+          <div
+            key={category}
+            className="relative mx-0.5 md:mx-1 px-0.5 md:px-1"
+            onClick={() => setActiveCategory(category)}
+          >
+            {activeCategory === category && (
+              <motion.div
+                className="absolute inset-0 bg-soft_white rounded-full"
+                layoutId="activeCategoryBackground"
+                initial={false}
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 30,
+                }}
+              />
+            )}
+            <motion.button
+              className={`relative z-10 px-2 py-1.5 md:px-4 md:py-2 rounded-full font-medium text-sm md:text-lg whitespace-nowrap transition-colors ${
+                activeCategory === category ? "text-black" : "text-white"
+              }`}
+              whileHover={{ scale: activeCategory !== category ? 1.05 : 1 }}
+              whileTap={{ scale: 0.95 }}
+              aria-pressed={activeCategory === category}
+              aria-label={`Filter by ${category}`}
+            >
+              {categoryLabels[lang]?.[category] || category}
+            </motion.button>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
+
+// Type for project categories
+type categoryTypes = "all" | "interior" | "exterior" | "business";
+
 const Page = () => {
   const { data, isLoading, error } = useGetAllWorksQuery();
   const lang = useSelector(selectLanguage);
   const [visibleGroups, setVisibleGroups] = useState(1);
+  // Add types for typescript
+  const [activeCategory, setActiveCategory] = useState<categoryTypes>("all");
   const observerTarget = useRef(null);
 
+  // Filter projects by category
+  const filteredData = data
+    ? activeCategory === "all"
+      ? data
+      : data.filter((project) => project.category === activeCategory)
+    : [];
+
   // Get project groups
-  const projectGroups = data
+  const projectGroups = filteredData
     ? prepareProjectGroups(
-        data.map((project) => ({ ...project, area: Number(project.area) })),
+        filteredData.map((project) => ({
+          ...project,
+          area: Number(project.area),
+        })),
       )
     : [];
+
+  // Reset visible groups when category changes
+  useEffect(() => {
+    setVisibleGroups(1);
+  }, [activeCategory]);
 
   // Set up infinite scroll
   useEffect(() => {
@@ -313,7 +432,14 @@ const Page = () => {
           <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
         </div>
 
-        <div className="mt-20 relative overflow-hidden">
+        <CategoryFilter
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
+          lang={lang}
+          categoryLabels={categoryLabels}
+        />
+
+        <div className="mt-8 relative overflow-hidden">
           {/* Background image for the entire projects section */}
           <Image
             src={projectsBG}
@@ -321,13 +447,42 @@ const Page = () => {
             className="w-full opacity-50 absolute top-0 left-0 h-full object-cover z-0"
           />
 
-          {projectGroups.slice(0, visibleGroups).map((group, index) => (
-            <RenderImageGrid
-              key={`group-${index}`}
-              items={group}
-              index={index}
-            />
-          ))}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeCategory}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
+              {projectGroups.length > 0 ? (
+                projectGroups
+                  .slice(0, visibleGroups)
+                  .map((group, index) => (
+                    <RenderImageGrid
+                      key={`group-${index}`}
+                      items={group}
+                      index={index}
+                    />
+                  ))
+              ) : (
+                <motion.div
+                  className="text-center py-20"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <p className="text-xl">{`No ${activeCategory} projects found.`}</p>
+                  <button
+                    className="mt-4 bg-deep_brown px-6 py-2 rounded-full hover:bg-deep_brown/80 transition-colors"
+                    onClick={() => setActiveCategory("all")}
+                  >
+                    View all projects
+                  </button>
+                </motion.div>
+              )}
+            </motion.div>
+          </AnimatePresence>
 
           {/* Loading indicator and observer target */}
           {visibleGroups < projectGroups.length && (

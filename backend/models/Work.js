@@ -3,6 +3,11 @@ const mongoose = require("mongoose");
 const ProjectSchema = new mongoose.Schema({
   projectId: { type: String, required: true, unique: true },
   images: { type: [String], default: [] },
+  category: {
+    type: String,
+    enum: ["interior", "exterior", "business"],
+    required: true,
+  },
   description: {
     az: {
       type: String,

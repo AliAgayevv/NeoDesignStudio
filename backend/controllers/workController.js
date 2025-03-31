@@ -35,7 +35,8 @@ exports.getWorkById = async (req, res) => {
 
 exports.createWork = async (req, res) => {
   try {
-    const { projectId, description, title, location, area } = req.body;
+    const { projectId, description, title, location, area, category } =
+      req.body;
 
     if (!description || !description.az || !description.en || !description.ru) {
       return res.status(400).json({
@@ -57,6 +58,10 @@ exports.createWork = async (req, res) => {
 
     if (!area) {
       return res.status(400).json({ message: "Area must be provided." });
+    }
+
+    if (!category) {
+      return res.status(400).json({ message: "Category must be provided." });
     }
 
     let uploadedImages = [];
@@ -85,6 +90,7 @@ exports.createWork = async (req, res) => {
       title,
       location,
       area,
+      category,
     });
     await newProject.save();
     res.status(201).json({ message: "Work created successfully", newProject });
@@ -142,6 +148,9 @@ exports.updateWork = async (req, res) => {
       if (content.area) {
         project.area = content.area; // Update area if provided
       }
+      if (content.category) {
+        project.category = content.category; // Update category if provided
+      }
     }
 
     if (req.files && req.files.length > 0) {
@@ -163,7 +172,9 @@ exports.updateWork = async (req, res) => {
 exports.getAllWorks = async (req, res) => {
   try {
     const projects = await Work.find();
-    res.json(projects);
+    // show projects with LIFO order
+    const sortedProjects = projects.reverse();
+    res.json(sortedProjects);
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -181,6 +192,13 @@ exports.deleteImage = async (req, res) => {
     const project = await Work.findOne({ projectId: id });
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
+    }
+
+    if (project.images.length === 1) {
+      // If the project has only one image, do not allow deletion
+      return res.status(400).json({
+        message: "Cannot delete the last image from the project",
+      });
     }
 
     // Check if the image exists in the project

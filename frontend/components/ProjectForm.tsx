@@ -105,6 +105,7 @@ export default function ProjectForm({
     images: [],
     ...initialValues,
     _id: initialValues?._id ? initialValues?._id : "",
+    category: initialValues?.category ? initialValues?.category : "",
   };
 
   const handleDeleteImage = (imagePath: string, index: number) => {
@@ -146,6 +147,7 @@ export default function ProjectForm({
       // Append simple fields
       formData.append("projectId", values.projectId);
       formData.append("area", values.area.toString());
+      formData.append("category", values.category);
 
       // Append nested objects (description, title, location) using bracket notation
       Object.entries(values.description).forEach(([lang, value]) => {
@@ -178,6 +180,7 @@ export default function ProjectForm({
               title: values.title,
               location: values.location,
               area: values.area,
+              category: values.category,
             },
             formData,
           });
@@ -191,6 +194,7 @@ export default function ProjectForm({
               title: values.title,
               location: values.location,
               area: values.area,
+              category: values.category,
             },
           });
         }
@@ -226,6 +230,7 @@ export default function ProjectForm({
             const errors: any = {};
             if (!values.projectId) errors.projectId = "Required";
             if (values.area <= 0) errors.area = "Must be greater than 0";
+            if (!values.category) errors.category = "Required";
             return errors;
           }}
         >
@@ -238,7 +243,7 @@ export default function ProjectForm({
                 <GrFormClose size={24} color="white" />
               </button>
               {/* Project Details */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label htmlFor="projectId" className="block mb-2">
                     Project ID
@@ -282,6 +287,30 @@ export default function ProjectForm({
                     }
                     className="w-full border rounded p-2"
                   />
+                </div>
+                <div>
+                  <label htmlFor="category" className="block mb-2">
+                    Category
+                    {touched.category && errors.category && (
+                      <span className="text-red-500 ml-2 text-sm">
+                        {errors.category}
+                      </span>
+                    )}
+                  </label>
+                  <select
+                    id="category"
+                    name="category"
+                    value={values.category || ""}
+                    onChange={(e) => setFieldValue("category", e.target.value)}
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="" disabled>
+                      Select a category
+                    </option>
+                    <option value="interior">Interior</option>
+                    <option value="exterior">Exterior</option>
+                    <option value="business">Business</option>
+                  </select>
                 </div>
               </div>
 
