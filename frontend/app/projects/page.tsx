@@ -67,7 +67,7 @@ const RenderImage = ({
         {/* Main image with improved blur effect on hover */}
         <div className="w-full h-full">
           <Image
-            src={`http://localhost:4000${project.images[0]}`}
+            src={`http://45.85.146.73:4000${project.images[0]}`}
             alt={project.projectId}
             width={648}
             height={543}
