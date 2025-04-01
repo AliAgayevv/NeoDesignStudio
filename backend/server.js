@@ -17,13 +17,13 @@ const app = express();
 //   "https://45.85.146.73:3000",
 // ];
 
-// app.use(
-//   cors({
-//     origin: allowedOrigins,
-//     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true,
+  })
+);
 
 // Add this middleware to prevent direct access
 // app.use((req, res, next) => {
