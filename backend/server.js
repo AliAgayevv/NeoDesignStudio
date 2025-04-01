@@ -62,7 +62,7 @@ app.use((req, res, next) => {
   });
 });
 
-const PORT = process.env.BACKEND_PORT;
+const PORT = 4000;
 
 // Middleware
 app.use(express.json());
@@ -86,6 +86,6 @@ app.use("/api/pages", pageRoutes);
 app.use("/api/portfolio", workRoutes);
 app.use("/api/login", loginRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(4000, () => {
+  console.log("Server running on port 4000");
 });
