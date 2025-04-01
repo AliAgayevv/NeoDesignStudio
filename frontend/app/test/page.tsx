@@ -19,7 +19,7 @@ const Page = () => {
         <div key={work.projectId}>
           {/* <h3>{work.content.en}</h3> */}
           <Image
-            src={`https://localhost:4000${work.images[0]}`}
+            src={`https://45.85.146.73:4000${work.images[0]}`}
             width={400}
             height={400}
             alt=""

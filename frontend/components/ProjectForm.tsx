@@ -47,7 +47,7 @@ const DeleteConfirmationModal = ({
 
         <div className="mb-6 flex justify-center">
           <img
-            src={`http://localhost:4000${imagePath}`}
+            src={`http://45.85.146.73:4000${imagePath}`}
             alt="Image to delete"
             className="max-h-40 object-contain"
           />
@@ -403,7 +403,7 @@ export default function ProjectForm({
                             }}
                           >
                             <img
-                              src={`http://localhost:4000${image}`}
+                              src={`http://45.85.146.73:4000${image}`}
                               className="w-full h-full object-cover group-hover:opacity-50 transition-opacity"
                               alt={`Project image ${index + 1}`}
                             />

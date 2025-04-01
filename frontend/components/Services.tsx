@@ -86,7 +86,7 @@ const Services = () => {
         interiorData &&
         interiorData.length > 0 &&
         interiorData[0]?.images?.length > 0
-          ? `http://localhost:4000${interiorData[0].images[0]}`
+          ? `http://45.85.146.73:4000${interiorData[0].images[0]}`
           : imgExample,
       category: "interior",
     },
@@ -96,7 +96,7 @@ const Services = () => {
         exteriorData &&
         exteriorData.length > 0 &&
         exteriorData[0]?.images?.length > 0
-          ? `http://localhost:4000${exteriorData[0].images[0]}`
+          ? `http://45.85.146.73:4000${exteriorData[0].images[0]}`
           : imgExample2,
       category: "exterior",
     },
@@ -106,7 +106,7 @@ const Services = () => {
         businessData &&
         businessData.length > 0 &&
         businessData[0]?.images?.length > 0
-          ? `http://localhost:4000${businessData[0].images[0]}`
+          ? `http://45.85.146.73:4000${businessData[0].images[0]}`
           : imgExample,
       category: "business",
     },

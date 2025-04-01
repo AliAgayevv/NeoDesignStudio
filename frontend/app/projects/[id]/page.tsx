@@ -34,7 +34,7 @@ const ProjectDetail = () => {
           <div className="bg-neutral-900">
             {uniqueImages[0] && (
               <Image
-                src={`http://localhost:4000${uniqueImages[0]}`}
+                src={`http://45.85.146.73:4000${uniqueImages[0]}`}
                 alt=""
                 width={600}
                 height={1000}
@@ -45,7 +45,7 @@ const ProjectDetail = () => {
           <div className="bg-neutral-900">
             {uniqueImages[1] && (
               <Image
-                src={`http://localhost:4000${uniqueImages[1]}`}
+                src={`http://45.85.146.73:4000${uniqueImages[1]}`}
                 alt=""
                 width={600}
                 height={1000}
@@ -59,7 +59,7 @@ const ProjectDetail = () => {
         {uniqueImages[2] && (
           <div className="h-96 bg-neutral-900">
             <Image
-              src={`http://localhost:4000${uniqueImages[2]}`}
+              src={`http://45.85.146.73:4000${uniqueImages[2]}`}
               alt=""
               width={1200}
               height={600}
@@ -74,7 +74,7 @@ const ProjectDetail = () => {
             {uniqueImages[3] && (
               <div className="bg-neutral-900">
                 <Image
-                  src={`http://localhost:4000${uniqueImages[3]}`}
+                  src={`http://45.85.146.73:4000${uniqueImages[3]}`}
                   alt=""
                   width={600}
                   height={300}
@@ -85,7 +85,7 @@ const ProjectDetail = () => {
             {uniqueImages[4] && (
               <div className="bg-neutral-900">
                 <Image
-                  src={`http://localhost:4000${uniqueImages[4]}`}
+                  src={`http://45.85.146.73:4000${uniqueImages[4]}`}
                   alt=""
                   width={1000}
                   height={300}
@@ -96,7 +96,7 @@ const ProjectDetail = () => {
             {uniqueImages[5] && (
               <div className="bg-neutral-900">
                 <Image
-                  src={`http://localhost:4000${uniqueImages[5]}`}
+                  src={`http://45.85.146.73:4000${uniqueImages[5]}`}
                   alt=""
                   width={1000}
                   height={300}
@@ -118,7 +118,7 @@ const ProjectDetail = () => {
           {error && <p>Error loading project details</p>}
           {project && project.images && project.images.length > 0 && (
             <Image
-              src={`http://localhost:4000${project.images[0]}`}
+              src={`http://45.85.146.73:4000${project.images[0]}`}
               alt=""
               width={648}
               height={543}
