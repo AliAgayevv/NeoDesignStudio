@@ -13,6 +13,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000",
   "https://demo-neodesignstudio.vercel.app",
+  "http://45.85.146.73:3000",
+  "https://45.85.146.73:3000",
 ];
 
 app.use(
