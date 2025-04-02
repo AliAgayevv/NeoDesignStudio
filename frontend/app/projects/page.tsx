@@ -12,6 +12,12 @@ import projectsBG from "@/public/assets/projectsBg.svg";
 import { Cormorant_Garamond } from "next/font/google";
 import { motion, AnimatePresence } from "framer-motion";
 import { selectCategory, setCategory } from "@/store/services/categorySlice";
+import { Montserrat } from "next/font/google";
+
+const montserrat700 = Montserrat({
+  subsets: ["latin"],
+  weight: "700",
+});
 
 const headerTitle = {
   en: "Portfolio",
@@ -246,24 +252,6 @@ interface ProjectGroup {
   items: Project[];
   index: number;
 }
-
-type CategoryLabels = {
-  [lang: string]: {
-    [category: string]: string;
-  };
-};
-
-// Define allowed categories
-type CategoryType = "all" | "interior" | "exterior" | "business";
-
-// Props interface for the component
-interface CategoryFilterProps {
-  activeCategory: CategoryType;
-  setActiveCategory: (category: CategoryType) => void;
-  lang: string;
-  categoryLabels: CategoryLabels;
-}
-
 const prepareProjectGroups = (projects: Project[]): Project[][] => {
   if (!projects || projects.length === 0) return [];
 
@@ -289,6 +277,31 @@ const prepareProjectGroups = (projects: Project[]): Project[][] => {
   return groups;
 };
 
+type CategoryType = "all" | "interior" | "exterior" | "business";
+
+// Category labels type
+type CategoryLabels = {
+  [lang: string]: {
+    [category in CategoryType]: string;
+  };
+};
+
+// Props interface for the component
+interface CategoryFilterProps {
+  activeCategory: CategoryType;
+  setActiveCategory: (category: CategoryType) => void;
+  lang: string;
+  categoryLabels: CategoryLabels;
+}
+
+// Props interface for the component
+interface CategoryFilterProps {
+  activeCategory: CategoryType;
+  setActiveCategory: (category: CategoryType) => void;
+  lang: string;
+  categoryLabels: CategoryLabels;
+}
+
 const CategoryFilter: React.FC<CategoryFilterProps> = ({
   activeCategory,
   setActiveCategory,
@@ -303,46 +316,36 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
   ];
 
   return (
-    <motion.div
-      className="flex justify-center w-full overflow-x-auto py-2 md:justify-start mt-4 md:mt-8 mb-6 md:mb-12"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="bg-deep_brown rounded-full p-1 md:p-2 flex items-center min-w-fit mx-auto md:mx-0">
+    <div className="w-full mt-8 mb-8 overflow-hidden">
+      <div className="ml-3 md:ml-3 flex space-x-5 md:space-x-16 relative">
         {categories.map((category) => (
           <div
             key={category}
-            className="relative mx-0.5 md:mx-1 px-0.5 md:px-1"
+            className="relative cursor-pointer"
             onClick={() => setActiveCategory(category)}
           >
+            {/* White underline only for active category */}
             {activeCategory === category && (
               <motion.div
-                className="absolute inset-0 bg-soft_white rounded-full"
-                layoutId="activeCategoryBackground"
-                initial={false}
-                transition={{
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 30,
-                }}
+                className={` absolute h-0.5 bg-white  bottom-0 ${activeCategory === "all" ? "-left-1 w-10" : "w-full"}`}
+                layoutId="activeUnderline"
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
               />
             )}
+
             <motion.button
-              className={`relative z-10 px-2 py-1.5 md:px-4 md:py-2 rounded-full font-medium text-sm md:text-lg whitespace-nowrap transition-colors ${
-                activeCategory === category ? "text-black" : "text-white"
-              }`}
-              whileHover={{ scale: activeCategory !== category ? 1.05 : 1 }}
+              className={`text-md md:text-xl font-semibold pb-2 text-off_white ${montserrat700.className}`}
               whileTap={{ scale: 0.95 }}
               aria-pressed={activeCategory === category}
               aria-label={`Filter by ${category}`}
             >
-              {categoryLabels[lang]?.[category] || category}
+              {categoryLabels[lang]?.[category] ||
+                category.charAt(0).toUpperCase() + category.slice(1)}
             </motion.button>
           </div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 };
 
