@@ -165,7 +165,9 @@ const SimpleMobileFooter: React.FC = () => {
   };
 
   return (
-    <div className="w-full bg-gray-100 rounded-t-3xl px-6 py-8 flex flex-col items-center text-[#555555]">
+    <div
+      className={`w-full bg-gray-100 rounded-t-3xl px-6 py-8 flex flex-col items-center text-[#555555] ${montserratFont700.className}`}
+    >
       <div className="mb-8">
         <svg
           width="24"
@@ -333,9 +335,7 @@ const Footer = () => {
           <div className="hidden md:flex md:flex-row justify-between mt-20">
             <div className="md:flex-col text-[#867F7F] md:text-left md:flex md:w-1/6 mx-auto md:mx-0">
               <Image src={logoBlack} alt="" className="w-40 mb-5 " />
-              <p className={`${playfairDisplayFont600.className}`}>
-                {motto[lang]}
-              </p>
+              <p className={`${montserratFont700.className}`}>{motto[lang]}</p>
             </div>
             {footerLinks.map((footerLink) => (
               <DesktopFooterLink

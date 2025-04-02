@@ -210,7 +210,7 @@ const Navbar = () => {
           alt="Language Icon"
           width={32}
           height={32}
-          className="relative cursor-pointer focus:outline-none"
+          className="relative cursor-pointer focus:outline-none md:hover:opacity-50 transition-all duration-300 ease-in"
           onClick={() => setIsLanguageDropdown((prev) => !prev)}
         />
         {isLangugageDropdownOpen && (

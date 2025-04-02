@@ -37,7 +37,7 @@ export default function Home() {
           tempor incididunt ut labore et dolore mag
         </h3>
       </div>
-      <div className="bg-black w-screen h-[200px] hidden md:block"></div>
+      <div className="bg-black w-full h-[200px] hidden md:block"></div>
     </div>
   );
 }

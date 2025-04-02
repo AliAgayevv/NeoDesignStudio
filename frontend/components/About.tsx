@@ -38,7 +38,7 @@ const About = () => {
   return (
     <div
       id="about"
-      className={`mx-auto mt-6 h-screen w-11/12 md:mt-32 mb-10 md:mb-20 lg:mb-40 xl:mb-20 2xl:mb-40
+      className={`mx-auto mt-6 h-screen w-11/12 md:mt-32 mb-52 md:mb-20 lg:mb-40 xl:mb-20 2xl:mb-40
       }`}
     >
       <SectionHeaderTitle>{headearTitle[lang]}</SectionHeaderTitle>

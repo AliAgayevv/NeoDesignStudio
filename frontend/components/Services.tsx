@@ -141,7 +141,7 @@ const Services = () => {
   }, [interiorData, exteriorData, businessData]);
 
   return (
-    <section className="mx-auto h-full w-11/12" id="services">
+    <section className="mx-auto h-full  w-11/12" id="services">
       <SectionHeaderTitle>{headerTitle[language]}</SectionHeaderTitle>
 
       {/* Desktop view */}
