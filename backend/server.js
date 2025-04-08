@@ -69,7 +69,9 @@ app.use((req, res, next) => {
 const PORT = 4000;
 
 // Middleware
-app.use(express.json());
+// Middleware
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // Static file serving (uploads folder)
 const uploadsPath = path.resolve(__dirname, "public/uploads");
