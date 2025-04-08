@@ -49,19 +49,16 @@ export default function Login() {
               setIsLoading(true);
               setError("");
 
-              const response = await fetch(
-                "http://45.85.146.73:4000/api/login",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    email: values.email,
-                    password: values.password,
-                  }),
+              const response = await fetch("/api/login", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
                 },
-              );
+                body: JSON.stringify({
+                  email: values.email,
+                  password: values.password,
+                }),
+              });
 
               const data = await response.json();
 
