@@ -18,12 +18,7 @@ const Page = () => {
       {data?.map((work) => (
         <div key={work.projectId}>
           {/* <h3>{work.content.en}</h3> */}
-          <Image
-            src={`https://45.85.146.73:4000${work.images[0]}`}
-            width={400}
-            height={400}
-            alt=""
-          />
+          <Image src={`${work.images[0]}`} width={400} height={400} alt="" />
 
           {/* {work.images.map((image, index) => (
             <Image
