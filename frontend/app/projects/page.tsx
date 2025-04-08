@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
-import Image from "next/image";
 import { useGetAllWorksQuery } from "@/store/services/workApi";
 import LoadingAnimation from "@/components/LoadingAnimation";
 import SectionHeaderTitle from "@/components/SectionHeaderTitle";
@@ -72,13 +71,9 @@ const RenderImage = ({
       <div className={`relative w-full overflow-hidden group ${aspectRatio}`}>
         {/* Main image with improved blur effect on hover */}
         <div className="w-full h-full">
-          <Image
+          <img
             src={`${project.images[0]}`}
             alt={project.projectId}
-            width={648}
-            height={543}
-            decoding="async"
-            priority
             className="object-cover rounded-[12px] md:rounded-[50px] transition-all duration-300 w-full h-full md:group-hover:blur-sm "
           />
 
@@ -109,7 +104,7 @@ const RenderImage = ({
           >
             <div className="flex items-center">
               <div className="mr-2">
-                <Image src={areaSVG} alt="area" width={32} height={32} />
+                <img src={areaSVG} alt="area" width={32} height={32} />
               </div>
               <span className="text-3xl drop-shadow-lg">{project.area} м²</span>
             </div>
@@ -466,7 +461,7 @@ const Page = () => {
 
         <div className="mt-8 relative overflow-hidden">
           {/* Background image for the entire projects section */}
-          <Image
+          <img
             src={projectsBG}
             alt="Projects Background"
             className="w-full opacity-50 absolute top-0 left-0 h-full object-cover z-0"
