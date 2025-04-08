@@ -27,6 +27,8 @@ const ProjectDetail = () => {
     // If we don't have enough images, don't render the gallery
     if (uniqueImages.length < 1) return null;
 
+    console.log("Unique images:", uniqueImages);
+
     return (
       <div className="w-full grid grid-cols-1 gap-4">
         {/* First row - two equal columns */}
@@ -34,7 +36,7 @@ const ProjectDetail = () => {
           <div className="bg-neutral-900">
             {uniqueImages[0] && (
               <Image
-                src={`${uniqueImages[0]}`}
+                src={`api/${uniqueImages[0]}`}
                 alt=""
                 width={600}
                 height={1000}
@@ -45,7 +47,7 @@ const ProjectDetail = () => {
           <div className="bg-neutral-900">
             {uniqueImages[1] && (
               <Image
-                src={`${uniqueImages[1]}`}
+                src={`api/${uniqueImages[1]}`}
                 alt=""
                 width={600}
                 height={1000}
