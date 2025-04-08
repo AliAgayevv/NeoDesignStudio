@@ -30,12 +30,6 @@ export default function Home() {
         >
           Design Beyond Limits!
         </h1>
-        <h3
-          className={`${playfairDisplayFont600.className} text-light_gray landing_sub_bottom_text text-center w-3/4 mt-7 mx-auto tracking-widest opacity-75`}
-        >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, do eiusmod
-          tempor incididunt ut labore et dolore mag
-        </h3>
       </div>
       <div className="bg-black w-full h-[200px] hidden md:block"></div>
     </div>
