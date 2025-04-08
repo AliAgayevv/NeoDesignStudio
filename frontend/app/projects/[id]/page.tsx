@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { useGetWorkByIdQuery } from "@/store/services/workApi";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
-import Image from "next/image";
 import areaSVG from "../../../public/assets/icons/areaSVG.svg";
 
 const ProjectDetail = () => {
