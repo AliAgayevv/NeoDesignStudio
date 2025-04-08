@@ -105,7 +105,7 @@ const RenderImage = ({
           >
             <div className="flex items-center">
               <div className="mr-2">
-                <img src={areaSVG} alt="area" width={32} height={32} />
+                <Image src={areaSVG} alt="area" width={32} height={32} />
               </div>
               <span className="text-3xl drop-shadow-lg">{project.area} м²</span>
             </div>
