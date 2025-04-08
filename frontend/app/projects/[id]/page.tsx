@@ -24,10 +24,10 @@ const ProjectDetail = () => {
     // Make sure we have exactly 6 unique images or fewer
     const uniqueImages = [...new Set(images)];
 
+    console.log("Unique images:", uniqueImages);
+
     // If we don't have enough images, don't render the gallery
     if (uniqueImages.length < 1) return null;
-
-    console.log("Unique images:", uniqueImages);
 
     return (
       <div className="w-full grid grid-cols-1 gap-4">
@@ -35,7 +35,7 @@ const ProjectDetail = () => {
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-neutral-900">
             {uniqueImages[0] && (
-              <Image
+              <img
                 src={`/api/uploads/${uniqueImages[0]}`}
                 alt=""
                 width={600}
@@ -46,7 +46,7 @@ const ProjectDetail = () => {
           </div>
           <div className="bg-neutral-900">
             {uniqueImages[1] && (
-              <Image
+              <img
                 src={`/api/uploads/${uniqueImages[1]}`}
                 alt=""
                 width={600}
@@ -60,7 +60,7 @@ const ProjectDetail = () => {
         {/* Second row - full width */}
         {uniqueImages[2] && (
           <div className="h-96 bg-neutral-900">
-            <Image
+            <img
               src={`/api/uploads/${uniqueImages[2]}`}
               alt=""
               width={1200}
@@ -75,7 +75,7 @@ const ProjectDetail = () => {
           <div className="grid grid-cols-3 gap-4">
             {uniqueImages[3] && (
               <div className="bg-neutral-900">
-                <Image
+                <img
                   src={`/api/uploads/${uniqueImages[3]}`}
                   alt=""
                   width={600}
@@ -86,7 +86,7 @@ const ProjectDetail = () => {
             )}
             {uniqueImages[4] && (
               <div className="bg-neutral-900">
-                <Image
+                <img
                   src={`/api/uploads/${uniqueImages[4]}`}
                   alt=""
                   width={1000}
@@ -97,7 +97,7 @@ const ProjectDetail = () => {
             )}
             {uniqueImages[5] && (
               <div className="bg-neutral-900">
-                <Image
+                <img
                   src={`/api/uploads/${uniqueImages[5]}`}
                   alt=""
                   width={1000}
@@ -119,13 +119,9 @@ const ProjectDetail = () => {
           {isLoading && <p>Loading...</p>}
           {error && <p>Error loading project details</p>}
           {project && project.images && project.images.length > 0 && (
-            <Image
+            <img
               src={`/api/uploads/${project.images[0]}`}
               alt=""
-              width={648}
-              height={543}
-              decoding="async"
-              priority
               className="object-cover w-full h-full md:h-[80vh]"
             />
           )}
@@ -152,7 +148,7 @@ const ProjectDetail = () => {
               </h1>
             </div>
             <div className="flex items-center gap-2">
-              <Image src={areaSVG} alt="area" width={32} height={32} />
+              <img src={areaSVG} alt="area" width={32} height={32} />
               <h1 className="text-4xl">{project && project.area} м²</h1>
             </div>
           </div>
