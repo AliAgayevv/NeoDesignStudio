@@ -12,6 +12,7 @@ import { Cormorant_Garamond } from "next/font/google";
 import { motion, AnimatePresence } from "framer-motion";
 import { selectCategory, setCategory } from "@/store/services/categorySlice";
 import { Montserrat } from "next/font/google";
+import Image from "next/image";
 
 const montserrat700 = Montserrat({
   subsets: ["latin"],
@@ -461,10 +462,12 @@ const Page = () => {
 
         <div className="mt-8 relative overflow-hidden">
           {/* Background image for the entire projects section */}
-          <img
+          <Image
             src={projectsBG}
             alt="Projects Background"
             className="w-full opacity-50 absolute top-0 left-0 h-full object-cover z-0"
+            width={1920}
+            height={1080}
           />
 
           <AnimatePresence mode="wait">

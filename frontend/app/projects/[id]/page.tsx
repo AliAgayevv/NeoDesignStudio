@@ -83,7 +83,7 @@ const ProjectDetail = () => {
                 src={image}
                 alt=""
                 width={600}
-                height={300}
+                height={600}
                 className="w-full h-full object-cover bg-neutral-900"
               />
             ))}
@@ -122,7 +122,7 @@ const ProjectDetail = () => {
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                 <circle cx="12" cy="10" r="3"></circle>
               </svg>
-              <h1 className="text-4xl">
+              <h1 className="text-2xl md:text-4xl">
                 {project &&
                   typeof project.location === "string" &&
                   project.location}
@@ -130,7 +130,9 @@ const ProjectDetail = () => {
             </div>
             <div className="flex items-center gap-2">
               <Image src={areaSVG} alt="area" width={32} height={32} />
-              <h1 className="text-4xl">{project && project.area} м²</h1>
+              <h1 className="text-2xl md:text-4xl">
+                {project && project.area} м²
+              </h1>
             </div>
           </div>
           <div className="w-11/12 h-full mx-auto mt-10 text-center">
