@@ -56,7 +56,7 @@ const ProjectDetail = () => {
             alt=""
             width={1200}
             height={600}
-            className="w-full h-96 object-cover bg-neutral-900"
+            className="w-full h-auto object-cover bg-neutral-900"
           />
         )}
 
