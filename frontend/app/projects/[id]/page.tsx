@@ -4,7 +4,8 @@ import { useParams } from "next/navigation";
 import { useGetWorkByIdQuery } from "@/store/services/workApi";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
-import areaSVG from "../../../public/assets/icons/areaSVG.svg";
+import Image from "next/image";
+import areaSVG from "@/public/assets/icons/areaSVG.svg";
 
 const ProjectDetail = () => {
   const params = useParams();
@@ -56,7 +57,7 @@ const ProjectDetail = () => {
             alt=""
             width={1200}
             height={600}
-            className="w-full h-auto object-cover bg-neutral-900"
+            className="w-full  h-96 md:h-auto object-cover bg-neutral-900"
           />
         )}
 
@@ -67,7 +68,7 @@ const ProjectDetail = () => {
             alt=""
             width={1200}
             height={600}
-            className="w-full h-96 object-cover bg-neutral-900"
+            className="w-full  h-96 md:h-auto object-cover bg-neutral-900"
           />
         )}
 
@@ -128,7 +129,7 @@ const ProjectDetail = () => {
               </h1>
             </div>
             <div className="flex items-center gap-2">
-              <img src={areaSVG} alt="area" width={32} height={32} />
+              <Image src={areaSVG} alt="area" width={32} height={32} />
               <h1 className="text-4xl">{project && project.area} м²</h1>
             </div>
           </div>
