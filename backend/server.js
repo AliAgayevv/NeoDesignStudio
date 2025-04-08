@@ -15,6 +15,10 @@ const allowedOrigins = [
   "https://demo-neodesignstudio.vercel.app",
   "http://45.85.146.73:3000",
   "https://45.85.146.73:3000",
+  "http://neodesignstudio.az",
+  "https://neodesignstudio.az",
+  "http://www.neodesignstudio.az",
+  "https://www.neodesignstudio.az",
 ];
 
 app.use(
