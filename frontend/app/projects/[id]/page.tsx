@@ -16,95 +16,76 @@ const ProjectDetail = () => {
     isLoading,
   } = useGetWorkByIdQuery({ id: id as string, lang });
 
-  // Gallery layout component
+  // Gallery layout component - improved to only show actual images
   const GalleryLayout = ({ images }: { images: string[] }) => {
     if (!images || images.length === 0) return null;
 
-    // Make sure we have exactly 6 unique images or fewer
+    // Make sure we have unique images
     const uniqueImages = [...new Set(images)];
 
-    console.log("Unique images:", uniqueImages);
-
-    // If we don't have enough images, don't render the gallery
+    // If we don't have any images, don't render the gallery
     if (uniqueImages.length < 1) return null;
 
+    // Dynamic gallery layout based on available images
     return (
       <div className="w-full grid grid-cols-1 gap-4">
-        {/* First row - two equal columns */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-neutral-900">
-            {uniqueImages[0] && (
-              <img
-                src={`${uniqueImages[0]}`}
-                alt=""
-                width={600}
-                height={1000}
-                className="w-full h-full object-cover"
-              />
-            )}
-          </div>
-          <div className="bg-neutral-900">
-            {uniqueImages[1] && (
-              <img
-                src={`${uniqueImages[1]}`}
-                alt=""
-                width={600}
-                height={1000}
-                className="w-full h-full object-cover"
-              />
-            )}
-          </div>
-        </div>
-
-        {/* Second row - full width */}
-        {uniqueImages[2] && (
-          <div className="h-96 bg-neutral-900">
+        {/* First row - two equal columns (if we have at least 2 images) */}
+        {uniqueImages.length >= 2 && (
+          <div className="grid grid-cols-2 gap-4">
             <img
-              src={`${uniqueImages[2]}`}
+              src={uniqueImages[0]}
               alt=""
-              width={1200}
-              height={600}
-              className="w-full h-full object-cover"
+              width={600}
+              height={1000}
+              className="w-full h-full object-cover bg-neutral-900"
+            />
+            <img
+              src={uniqueImages[1]}
+              alt=""
+              width={600}
+              height={1000}
+              className="w-full h-full object-cover bg-neutral-900"
             />
           </div>
         )}
 
-        {/* Third row - three equal columns */}
-        {(uniqueImages[3] || uniqueImages[4] || uniqueImages[5]) && (
-          <div className="grid grid-cols-3 gap-4">
-            {uniqueImages[3] && (
-              <div className="bg-neutral-900">
-                <img
-                  src={`${uniqueImages[3]}`}
-                  alt=""
-                  width={600}
-                  height={300}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
-            {uniqueImages[4] && (
-              <div className="bg-neutral-900">
-                <img
-                  src={`${uniqueImages[4]}`}
-                  alt=""
-                  width={1000}
-                  height={300}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
-            {uniqueImages[5] && (
-              <div className="bg-neutral-900">
-                <img
-                  src={`${uniqueImages[5]}`}
-                  alt=""
-                  width={1000}
-                  height={300}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
+        {/* If we only have 1 image, show it in full width */}
+        {uniqueImages.length === 1 && (
+          <img
+            src={uniqueImages[0]}
+            alt=""
+            width={1200}
+            height={600}
+            className="w-full h-96 object-cover bg-neutral-900"
+          />
+        )}
+
+        {/* Second row - full width (if we have at least 3 images) */}
+        {uniqueImages.length >= 3 && (
+          <img
+            src={uniqueImages[2]}
+            alt=""
+            width={1200}
+            height={600}
+            className="w-full h-96 object-cover bg-neutral-900"
+          />
+        )}
+
+        {/* Third row - flexible columns based on available images */}
+        {uniqueImages.length > 3 && (
+          <div
+            className={`grid grid-cols-${Math.min(uniqueImages.length - 3, 3)} gap-4`}
+          >
+            {uniqueImages.slice(3, 6).map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt=""
+                width={600}
+                height={300}
+                className="w-full h-full object-cover bg-neutral-900"
+              />
+            ))}
           </div>
         )}
       </div>
@@ -119,7 +100,7 @@ const ProjectDetail = () => {
           {error && <p>Error loading project details</p>}
           {project && project.images && project.images.length > 0 && (
             <img
-              src={`${project.images[0]}`}
+              src={project.images[0]}
               alt=""
               className="object-cover w-full h-full md:h-[80vh]"
             />
