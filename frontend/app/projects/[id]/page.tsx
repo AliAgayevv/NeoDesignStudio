@@ -35,7 +35,7 @@ const ProjectDetail = () => {
           <div className="bg-neutral-900">
             {uniqueImages[0] && (
               <img
-                src={`/uploads${uniqueImages[0]}`}
+                src={`${uniqueImages[0]}`}
                 alt=""
                 width={600}
                 height={1000}
@@ -46,7 +46,7 @@ const ProjectDetail = () => {
           <div className="bg-neutral-900">
             {uniqueImages[1] && (
               <img
-                src={`/uploads${uniqueImages[1]}`}
+                src={`${uniqueImages[1]}`}
                 alt=""
                 width={600}
                 height={1000}
@@ -60,7 +60,7 @@ const ProjectDetail = () => {
         {uniqueImages[2] && (
           <div className="h-96 bg-neutral-900">
             <img
-              src={`/uploads${uniqueImages[2]}`}
+              src={`${uniqueImages[2]}`}
               alt=""
               width={1200}
               height={600}
@@ -75,7 +75,7 @@ const ProjectDetail = () => {
             {uniqueImages[3] && (
               <div className="bg-neutral-900">
                 <img
-                  src={`/uploads${uniqueImages[3]}`}
+                  src={`${uniqueImages[3]}`}
                   alt=""
                   width={600}
                   height={300}
@@ -86,7 +86,7 @@ const ProjectDetail = () => {
             {uniqueImages[4] && (
               <div className="bg-neutral-900">
                 <img
-                  src={`/uploads${uniqueImages[4]}`}
+                  src={`${uniqueImages[4]}`}
                   alt=""
                   width={1000}
                   height={300}
@@ -97,7 +97,7 @@ const ProjectDetail = () => {
             {uniqueImages[5] && (
               <div className="bg-neutral-900">
                 <img
-                  src={`/uploads${uniqueImages[5]}`}
+                  src={`${uniqueImages[5]}`}
                   alt=""
                   width={1000}
                   height={300}
@@ -119,7 +119,7 @@ const ProjectDetail = () => {
           {error && <p>Error loading project details</p>}
           {project && project.images && project.images.length > 0 && (
             <img
-              src={`/uploads${project.images[0]}`}
+              src={`${project.images[0]}`}
               alt=""
               className="object-cover w-full h-full md:h-[80vh]"
             />
