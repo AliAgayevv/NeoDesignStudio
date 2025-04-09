@@ -152,6 +152,8 @@ const SimpleMobileFooter: React.FC = () => {
     { title: "Contact", link: null, loc: "contact" },
   ];
 
+  // In your SimpleMobileFooter component, modify the handleNavClick function:
+
   const handleNavClick = (item: {
     title: string;
     link: string | null;
@@ -160,7 +162,15 @@ const SimpleMobileFooter: React.FC = () => {
     if (item.link) {
       window.location.href = item.link;
     } else if (item.loc) {
-      handleGoSomewhere(item.loc);
+      if (window.location.pathname !== "/") {
+        // Save the element to navigate to in sessionStorage
+        sessionStorage.setItem("navigateToElement", item.loc);
+        // Redirect to homepage
+        window.location.href = "/";
+      } else {
+        // Already on homepage, just scroll to the element
+        handleGoSomewhere(item.loc);
+      }
     }
   };
 
