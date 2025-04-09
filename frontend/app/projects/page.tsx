@@ -56,9 +56,13 @@ let isFirstTour = true;
 const RenderImage = ({
   project,
   aspectRatio,
+  index,
+  itemIndex = 0,
 }: {
   project: any;
   aspectRatio: string;
+  index: number;
+  itemIndex?: number;
 }) => {
   const language = useSelector(selectLanguage);
 
@@ -72,16 +76,29 @@ const RenderImage = ({
       <div className={`relative w-full overflow-hidden group ${aspectRatio}`}>
         {/* Main image with improved blur effect on hover */}
         <div className="w-full h-full">
-          <img
-            src={`${project.images[0]}`}
-            alt={project.projectId}
-            className="object-cover rounded-[12px] md:rounded-[50px] transition-all duration-300 w-full h-full md:group-hover:blur-sm "
+          <Image
+            src={
+              project.images[0]?.startsWith("/") ||
+              project.images[0]?.startsWith("http")
+                ? project.images[0]
+                : `/uploads/${project.images[0]}`
+            }
+            alt={project.projectId || "Project image"}
+            width={800}
+            height={600}
+            quality={80}
+            priority={index === 0 && itemIndex < 2}
+            loading={index === 0 && itemIndex < 2 ? "eager" : "lazy"}
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTExMTExIi8+PC9zdmc+"
+            className="object-cover rounded-[12px] md:rounded-[50px] transition-all duration-300 w-full h-full md:group-hover:blur-sm"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
 
           {/* Subtle overlay gradient to enhance blur effect */}
           <div
             className="absolute inset-0 opacity-0 bg-black/20 rounded-[12px] md:rounded-[50px] 
-                         md:group-hover:opacity-100 transition-all duration-500"
+                       md:group-hover:opacity-100 transition-all duration-500"
           ></div>
         </div>
 
@@ -100,8 +117,8 @@ const RenderImage = ({
           </h3>
           <div
             className="flex items-center justify-center gap-8 text-white 
-                        transform transition-transform duration-500 
-                        translate-y-4 group-hover:translate-y-0"
+                      transform transition-transform duration-500 
+                      translate-y-4 group-hover:translate-y-0"
           >
             <div className="flex items-center">
               <div className="mr-2">
@@ -173,6 +190,8 @@ const RenderImageGrid = ({ items, index }: ProjectGroup) => {
           <RenderImage
             project={items[0]}
             aspectRatio={gridConfig[0].aspectRatio}
+            index={index}
+            itemIndex={0}
           />
         </div>
       )}
@@ -181,6 +200,8 @@ const RenderImageGrid = ({ items, index }: ProjectGroup) => {
           <RenderImage
             project={items[1]}
             aspectRatio={gridConfig[1].aspectRatio}
+            index={index}
+            itemIndex={1}
           />
         </div>
       )}
@@ -191,6 +212,8 @@ const RenderImageGrid = ({ items, index }: ProjectGroup) => {
           <RenderImage
             project={items[2]}
             aspectRatio={gridConfig[2].aspectRatio}
+            index={index}
+            itemIndex={2}
           />
         </div>
       )}
@@ -199,6 +222,8 @@ const RenderImageGrid = ({ items, index }: ProjectGroup) => {
           <RenderImage
             project={items[3]}
             aspectRatio={gridConfig[3].aspectRatio}
+            index={index}
+            itemIndex={3}
           />
         </div>
       )}
@@ -209,6 +234,8 @@ const RenderImageGrid = ({ items, index }: ProjectGroup) => {
           <RenderImage
             project={items[4]}
             aspectRatio={gridConfig[4].aspectRatio}
+            index={index}
+            itemIndex={4}
           />
         </div>
       )}
@@ -219,6 +246,8 @@ const RenderImageGrid = ({ items, index }: ProjectGroup) => {
           <RenderImage
             project={items[5]}
             aspectRatio={gridConfig[5].aspectRatio}
+            index={index}
+            itemIndex={5}
           />
         </div>
       )}
@@ -227,6 +256,8 @@ const RenderImageGrid = ({ items, index }: ProjectGroup) => {
           <RenderImage
             project={items[6]}
             aspectRatio={gridConfig[6].aspectRatio}
+            index={index}
+            itemIndex={6}
           />
         </div>
       )}
@@ -281,14 +312,6 @@ type CategoryLabels = {
     [category in CategoryType]: string;
   };
 };
-
-// Props interface for the component
-interface CategoryFilterProps {
-  activeCategory: CategoryType;
-  setActiveCategory: (category: CategoryType) => void;
-  lang: string;
-  categoryLabels: CategoryLabels;
-}
 
 // Props interface for the component
 interface CategoryFilterProps {
@@ -468,6 +491,10 @@ const Page = () => {
             className="w-full opacity-50 absolute top-0 left-0 h-full object-cover z-0"
             width={1920}
             height={1080}
+            quality={70}
+            priority={true}
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxMTExMTEiLz48L3N2Zz4="
           />
 
           <AnimatePresence mode="wait">
