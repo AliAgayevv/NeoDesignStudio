@@ -90,6 +90,7 @@ const RenderImage = ({
             priority={index === 0 && itemIndex < 2}
             loading={index === 0 && itemIndex < 2 ? "eager" : "lazy"}
             placeholder="blur"
+            unoptimized={true}
             blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTExMTExIi8+PC9zdmc+"
             className="object-cover rounded-[12px] md:rounded-[50px] transition-all duration-300 w-full h-full md:group-hover:blur-sm"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
