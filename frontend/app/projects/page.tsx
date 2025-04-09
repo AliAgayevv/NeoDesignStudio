@@ -142,7 +142,6 @@ const RenderImage = ({
 const RenderImageGrid = ({ items, index }: ProjectGroup) => {
   // Grid layout configurations
   const isFirst = index === 0;
-  console.log(isFirstTour);
 
   const gridConfig = [
     {
@@ -162,6 +161,7 @@ const RenderImageGrid = ({ items, index }: ProjectGroup) => {
 
   if (isFirst) {
     isFirstTour = false;
+    console.log(isFirstTour);
   }
 
   // This will maintain the same exact layout but only render as many items as we have

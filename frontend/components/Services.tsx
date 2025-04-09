@@ -132,13 +132,6 @@ const Services = () => {
   }, [dispatch]);
 
   // Debug log to see what's happening with the images
-  useEffect(() => {
-    if (interiorData || exteriorData || businessData) {
-      console.log("Interior data:", interiorData);
-      console.log("Exterior data:", exteriorData);
-      console.log("Business data:", businessData);
-    }
-  }, [interiorData, exteriorData, businessData]);
 
   return (
     <section className="mx-auto h-full  w-11/12" id="services">

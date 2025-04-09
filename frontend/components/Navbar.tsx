@@ -115,13 +115,11 @@ const Navbar = () => {
         );
 
         if (!item) {
-          console.log(`Could not find navbar item for ${itemName}`);
           return;
         }
 
         const section = document.getElementById(sectionId);
         if (!section) {
-          console.log(`Could not find section with id "${sectionId}"`);
           return;
         }
 
@@ -129,9 +127,6 @@ const Navbar = () => {
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
-                console.log(
-                  `${sectionId} section is visible, setting navbar item`,
-                );
                 setSelectedItem(item.id);
                 lastActiveSection = sectionId;
               } else if (lastActiveSection === sectionId) {
