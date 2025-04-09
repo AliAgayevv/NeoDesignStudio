@@ -33,43 +33,75 @@ const ProjectDetail = () => {
         {/* First row - two equal columns (if we have at least 2 images) */}
         {uniqueImages.length >= 2 && (
           <div className="grid grid-cols-2 gap-4">
-            <img
-              src={uniqueImages[0]}
-              alt=""
-              width={600}
-              height={1000}
-              className="w-full h-full object-cover bg-neutral-900"
-            />
-            <img
-              src={uniqueImages[1]}
-              alt=""
-              width={600}
-              height={1000}
-              className="w-full h-full object-cover bg-neutral-900"
-            />
+            <div className="bg-neutral-900">
+              <Image
+                src={
+                  uniqueImages[0].startsWith("/") ||
+                  uniqueImages[0].startsWith("http")
+                    ? uniqueImages[0]
+                    : `/uploads/${uniqueImages[0]}`
+                }
+                alt=""
+                width={600}
+                height={1000}
+                unoptimized={true}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="bg-neutral-900">
+              <Image
+                src={
+                  uniqueImages[1].startsWith("/") ||
+                  uniqueImages[1].startsWith("http")
+                    ? uniqueImages[1]
+                    : `/uploads/${uniqueImages[1]}`
+                }
+                alt=""
+                width={600}
+                height={1000}
+                unoptimized={true}
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
         )}
 
         {/* If we only have 1 image, show it in full width */}
         {uniqueImages.length === 1 && (
-          <img
-            src={uniqueImages[0]}
-            alt=""
-            width={1200}
-            height={600}
-            className="w-full  h-96 md:h-auto object-cover bg-neutral-900"
-          />
+          <div className="bg-neutral-900">
+            <Image
+              src={
+                uniqueImages[0].startsWith("/") ||
+                uniqueImages[0].startsWith("http")
+                  ? uniqueImages[0]
+                  : `/uploads/${uniqueImages[0]}`
+              }
+              alt=""
+              width={1200}
+              height={600}
+              unoptimized={true}
+              className="w-full h-96 md:h-auto object-cover"
+            />
+          </div>
         )}
 
         {/* Second row - full width (if we have at least 3 images) */}
         {uniqueImages.length >= 3 && (
-          <img
-            src={uniqueImages[2]}
-            alt=""
-            width={1200}
-            height={600}
-            className="w-full  h-96 md:h-auto object-cover bg-neutral-900"
-          />
+          <div className="bg-neutral-900">
+            <Image
+              src={
+                uniqueImages[2].startsWith("/") ||
+                uniqueImages[2].startsWith("http")
+                  ? uniqueImages[2]
+                  : `/uploads/${uniqueImages[2]}`
+              }
+              alt=""
+              width={1200}
+              height={600}
+              unoptimized={true}
+              className="w-full h-96 md:h-auto object-cover"
+            />
+          </div>
         )}
 
         {/* Third row - flexible columns based on available images */}
@@ -78,14 +110,20 @@ const ProjectDetail = () => {
             className={`grid grid-cols-${Math.min(uniqueImages.length - 3, 3)} gap-4`}
           >
             {uniqueImages.slice(3, 6).map((image, index) => (
-              <img
-                key={index}
-                src={image}
-                alt=""
-                width={600}
-                height={600}
-                className="w-full h-full object-cover bg-neutral-900"
-              />
+              <div key={index} className="bg-neutral-900">
+                <Image
+                  src={
+                    image.startsWith("/") || image.startsWith("http")
+                      ? image
+                      : `/uploads/${image}`
+                  }
+                  alt=""
+                  width={600}
+                  height={600}
+                  unoptimized={true}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             ))}
           </div>
         )}
@@ -100,9 +138,18 @@ const ProjectDetail = () => {
           {isLoading && <p>Loading...</p>}
           {error && <p>Error loading project details</p>}
           {project && project.images && project.images.length > 0 && (
-            <img
-              src={project.images[0]}
+            <Image
+              src={
+                project.images[0].startsWith("/") ||
+                project.images[0].startsWith("http")
+                  ? project.images[0]
+                  : `/uploads/${project.images[0]}`
+              }
               alt=""
+              width={1200}
+              height={800}
+              unoptimized={true}
+              priority={true}
               className="object-cover w-full h-full md:h-[80vh]"
             />
           )}
