@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     siteName: "Neo Design Studio",
     images: [
       {
-        url: "/favicon.svg",
+        url: "/ogLogo.jpg",
         width: 1200,
         height: 630,
         alt: "Neo Design Studio Logo",
@@ -62,14 +62,6 @@ export const metadata: Metadata = {
     ],
     locale: "en_US",
     type: "website",
-  },
-
-  twitter: {
-    card: "summary_large_image",
-    title: "Neo Design Studio",
-    description:
-      "Neo Design Studio is a design studio that specializes in creating beautiful and innovative interior and exterior spaces.",
-    images: ["/favicon.svg"],
   },
 };
 export default function RootLayout({ children }: RootLayoutProps) {
