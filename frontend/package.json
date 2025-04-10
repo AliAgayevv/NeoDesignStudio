@@ -15,7 +15,7 @@
     "formik": "^2.4.6",
     "framer-motion": "^12.4.10",
     "lenis": "^1.2.3",
-    "motion": "^12.4.7",
+    "motion": "^12.6.3",
     "next": "15.1.7",
     "next-fonts": "^1.5.1",
     "next-video": "^2.1.0",
