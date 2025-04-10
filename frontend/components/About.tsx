@@ -5,6 +5,7 @@ import Image from "next/image";
 import aboutUsPhoto from "../public/assets/photos/aboutUsPhoto.jpeg";
 import SectionHeaderTitle from "./SectionHeaderTitle";
 import { Playfair } from "next/font/google";
+import { motion } from "framer-motion";
 
 import { useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
@@ -46,24 +47,41 @@ const About = () => {
         className={` ${playfairDisplayFont600.className} mt-6 flex w-full flex-col-reverse justify-between gap-8 tracking-wide md:flex-row`}
       >
         <div className="flex flex-col gap-5 text-xl text-light_gray md:w-2/3">
-          <h2 className="text-3xl font-semibold">{howWeCanHelp[lang]}</h2>
-          <p
+          <motion.h2
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.3 }}
+            className="text-3xl font-semibold"
+          >
+            {howWeCanHelp[lang]}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 200 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            viewport={{ once: true, amount: 0.3 }}
             className="text-left ml-20  text-xl  md:text-2xl"
             style={{ lineHeight: "2.5rem" }}
           >
             {aboutUs[lang]}
-          </p>
+          </motion.p>
         </div>
-        <div className="relative w-full md:w-1/2 md:overflow-visible">
+        <motion.div
+          initial={{ opacity: 0, x: 200 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.3 }}
+          className="relative w-full md:w-1/2 md:overflow-visible"
+        >
           <div className="absolute bottom-6 left-8 z-0 h-full w-full -translate-x-6 rounded-lg border border-[#955C22] shadow-md md:bottom-12 md:left-10 md:-translate-x-4" />
 
           <Image
             alt="Learn More Image"
             src={aboutUsPhoto}
             className="relative z-10 h-auto w-full rounded-lg object-cover shadow-lg md:min-h-[600px]"
-            // object-cover rounded-lg shadow-lg md:min-h-[600px] h-auto w-full
           />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -16,6 +16,7 @@ import { Playfair_Display } from "next/font/google";
 import { setCategory } from "@/store/services/categorySlice";
 import { useGetWorkByCategoryQuery } from "@/store/services/workApi";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 const playfairDisplayFont800 = Playfair_Display({
   subsets: ["latin"],
@@ -140,7 +141,11 @@ const Services = () => {
       {/* Desktop view */}
       <div className="hidden w-full items-center justify-between md:flex">
         {serviceCards.map(({ id, img, isReversed, text, category }) => (
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: isReversed ? -50 : 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.3 }}
             key={id}
             onClick={() => handleCategoryChange(category as any)}
             className="cursor-pointer max-w-[30%]"
@@ -150,12 +155,18 @@ const Services = () => {
               isReversed={isReversed}
               text={text[language]}
             />
-          </div>
+          </motion.div>
         ))}
       </div>
 
       {/* Mobile view */}
-      <div className="mx-auto block w-full md:hidden">
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.3 }}
+        className="mx-auto block w-full md:hidden"
+      >
         <Swiper
           slidesPerView={1}
           loop={true}
@@ -194,7 +205,7 @@ const Services = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
+      </motion.div>
     </section>
   );
 };
