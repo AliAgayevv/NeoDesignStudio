@@ -11,10 +11,93 @@ import { useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
 import { handleGoSomewhere } from "@/utils/handleGoSomewhere";
 
-const motto = {
+// Define the supported languages
+type Language = "en" | "az" | "ru";
+
+// Define the shape of translation strings
+interface TranslationStrings {
+  company: string;
+  aboutUs: string;
+  portfolio: string;
+  services: string;
+  exterior: string;
+  interior: string;
+  business: string;
+  contact: string;
+  privacy: string;
+  designedBy: string;
+  getQuote: string;
+  instagram: string;
+  pinterest: string;
+  behance: string;
+  whatsapp: string;
+}
+
+// Define translations record type for type safety
+type Translations = Record<Language, TranslationStrings>;
+
+// Define motto record type for type safety
+type Motto = Record<Language, string>;
+
+const motto: Motto = {
   en: "You imagine, we make it real.",
   az: "Siz xəyal edin, biz gerçəkləşdirək.",
   ru: "Вы мечтаете, мы воплощаем.",
+};
+
+// Translation data with proper typing
+const translations: Translations = {
+  en: {
+    company: "Company",
+    aboutUs: "About Us",
+    portfolio: "Portfolio",
+    services: "Services",
+    exterior: "Exterior",
+    interior: "Interior",
+    business: "Business",
+    contact: "Contact",
+    privacy: "Privacy & terms",
+    designedBy: "Designed by",
+    getQuote: "Get a quote",
+    instagram: "Instagram",
+    pinterest: "Pinterest",
+    behance: "Behance",
+    whatsapp: "Whatsapp",
+  },
+  az: {
+    company: "Şirkət",
+    aboutUs: "Haqqımızda",
+    portfolio: "Portfolio",
+    services: "Xidmətlər",
+    exterior: "Eksteryer",
+    interior: "İnteryer",
+    business: "Biznes",
+    contact: "Əlaqə",
+    privacy: "Gizlilik və şərtlər",
+    designedBy: "Dizayner",
+    getQuote: "Qiymət al",
+    instagram: "Instagram",
+    pinterest: "Pinterest",
+    behance: "Behance",
+    whatsapp: "Whatsapp",
+  },
+  ru: {
+    company: "Компания",
+    aboutUs: "О нас",
+    portfolio: "Портфолио",
+    services: "Услуги",
+    exterior: "Экстерьер",
+    interior: "Интерьер",
+    business: "Бизнес",
+    contact: "Контакты",
+    privacy: "Конфиденциальность и условия",
+    designedBy: "Дизайнер",
+    getQuote: "Получить смету",
+    instagram: "Instagram",
+    pinterest: "Pinterest",
+    behance: "Behance",
+    whatsapp: "Whatsapp",
+  },
 };
 
 const playfairDisplayFont600 = Playfair_Display({
@@ -47,70 +130,26 @@ const FooterComponent: React.FC<FooterComponentProps> = ({
   );
 };
 
-const footerLinks = [
-  {
-    id: 1,
-    mainTitle: "Company",
-    subTitles: [
-      {
-        id: 1,
-        title: "About Us",
-        link: "about",
-      },
-      {
-        id: 2,
-        title: "Portfolio",
-        link: "/projects",
-      },
-    ],
-  },
-  {
-    id: 2,
-    mainTitle: "Services",
-    subTitles: [
-      {
-        id: 1,
-        title: "Exterior",
-        link: "/projects",
-      },
-      {
-        id: 2,
-        title: "Interior",
-        link: "/projects",
-      },
-      {
-        id: 3,
-        title: "Business",
-        link: "/projects",
-      },
-    ],
-  },
-  {
-    id: 3,
-    mainTitle: "Contact",
-    subTitles: [
-      {
-        id: 1,
-        title: "+994 51 897 01 15",
-        link: "touchPhone",
-      },
-      {
-        id: 2,
-        title: "neodesignstudio2019@gmail.com",
-        link: "touchEmail",
-      },
-    ],
-  },
-];
+// Define types for navigation items
+interface NavigationLink {
+  title: string;
+  link: string | null;
+  loc: string | null;
+}
 
-interface FooterLinkProps {
-  mainTitle: string;
-  subTitles: { title: string; link: string }[];
+// Define types for social icons
+interface SocialIcon {
+  icon: React.ReactNode;
+  link: string;
 }
 
 // Simple mobile footer component that matches the design in the photo
 const SimpleMobileFooter: React.FC = () => {
-  const socialIcons = [
+  // Type assertion to ensure lang is of type Language
+  const lang = useSelector(selectLanguage) as Language;
+  const t = translations[lang];
+
+  const socialIcons: SocialIcon[] = [
     {
       icon: (
         <svg viewBox="0 0 24 24" width="24" height="24" fill="#555555">
@@ -145,20 +184,14 @@ const SimpleMobileFooter: React.FC = () => {
     },
   ];
 
-  const navigationLinks = [
-    { title: "About Us", link: null, loc: "about" },
-    { title: "Portfolio", link: "/projects", loc: null },
-    { title: "Services", link: null, loc: "services" },
-    { title: "Contact", link: null, loc: "contact" },
+  const navigationLinks: NavigationLink[] = [
+    { title: t.aboutUs, link: null, loc: "about" },
+    { title: t.portfolio, link: "/projects", loc: null },
+    { title: t.services, link: null, loc: "services" },
+    { title: t.contact, link: null, loc: "contact" },
   ];
 
-  // In your SimpleMobileFooter component, modify the handleNavClick function:
-
-  const handleNavClick = (item: {
-    title: string;
-    link: string | null;
-    loc: string | null;
-  }) => {
+  const handleNavClick = (item: NavigationLink): void => {
     if (item.link) {
       window.location.href = item.link;
     } else if (item.loc) {
@@ -222,10 +255,10 @@ const SimpleMobileFooter: React.FC = () => {
       </div>
 
       <div className="w-full flex gap-3 flex-col items-center text-sm text-[#777777] mt-4">
-        <p>Privacy & terms</p>
+        <p>{t.privacy}</p>
         <a href="https://www.linkedin.com/in/nazrin-mahmudlu/" target="_blank">
           <p>
-            Designed by{" "}
+            {t.designedBy}{" "}
             <span className="underline underline-offset-2">
               Nazrin Mahmudlu
             </span>
@@ -235,6 +268,86 @@ const SimpleMobileFooter: React.FC = () => {
     </div>
   );
 };
+
+// Define types for footer links structure
+interface FooterLink {
+  id: number;
+  mainTitle: string;
+  subTitles: SubTitle[];
+}
+
+interface SubTitle {
+  id: number;
+  title: string;
+  link: string;
+}
+
+// Create multilingual footer links
+const getFooterLinks = (lang: Language): FooterLink[] => {
+  const t = translations[lang];
+
+  return [
+    {
+      id: 1,
+      mainTitle: t.company,
+      subTitles: [
+        {
+          id: 1,
+          title: t.aboutUs,
+          link: "about",
+        },
+        {
+          id: 2,
+          title: t.portfolio,
+          link: "/projects",
+        },
+      ],
+    },
+    {
+      id: 2,
+      mainTitle: t.services,
+      subTitles: [
+        {
+          id: 1,
+          title: t.exterior,
+          link: "/projects",
+        },
+        {
+          id: 2,
+          title: t.interior,
+          link: "/projects",
+        },
+        {
+          id: 3,
+          title: t.business,
+          link: "/projects",
+        },
+      ],
+    },
+    {
+      id: 3,
+      mainTitle: t.contact,
+      subTitles: [
+        {
+          id: 1,
+          title: "+994 51 897 01 15",
+          link: "touchPhone",
+        },
+        {
+          id: 2,
+          title: "neodesignstudio2019@gmail.com",
+          link: "touchEmail",
+        },
+      ],
+    },
+  ];
+};
+
+// Define FooterLinkProps interface
+interface FooterLinkProps {
+  mainTitle: string;
+  subTitles: SubTitle[];
+}
 
 // Original desktop version
 const DesktopFooterLink: React.FC<FooterLinkProps> = ({
@@ -299,31 +412,47 @@ const DesktopFooterLink: React.FC<FooterLinkProps> = ({
   );
 };
 
-const footerElements = [
-  {
-    id: 1,
-    title: "Instagram",
-    link: "https://www.instagram.com/neodesign_studio/",
-  },
-  {
-    id: 2,
-    title: "Pinterest",
-    link: "https://www.pinterest.com/NeoDesign_Studio/",
-  },
-  {
-    id: 3,
-    title: "Behance",
-    link: "https://www.behance.net/orxanagayev",
-  },
-  {
-    id: 4,
-    title: "Whatsapp",
-    link: "https://wa.link/r4z1i6",
-  },
-];
+// Define footer element type
+interface FooterElement {
+  id: number;
+  title: string;
+  link: string;
+}
 
-const Footer = () => {
-  const lang = useSelector(selectLanguage);
+// Get translated footer elements
+const getFooterElements = (lang: Language): FooterElement[] => {
+  const t = translations[lang];
+
+  return [
+    {
+      id: 1,
+      title: t.instagram,
+      link: "https://www.instagram.com/neodesign_studio/",
+    },
+    {
+      id: 2,
+      title: t.pinterest,
+      link: "https://www.pinterest.com/NeoDesign_Studio/",
+    },
+    {
+      id: 3,
+      title: t.behance,
+      link: "https://www.behance.net/orxanagayev",
+    },
+    {
+      id: 4,
+      title: t.whatsapp,
+      link: "https://wa.link/r4z1i6",
+    },
+  ];
+};
+
+const Footer: React.FC = () => {
+  // Type assertion to ensure lang is of type Language
+  const lang = useSelector(selectLanguage) as Language;
+  const t = translations[lang];
+  const footerLinks = getFooterLinks(lang);
+  const footerElements = getFooterElements(lang);
 
   return (
     <div className="bg-[#F6F4F4] w-full h-auto py-10">
@@ -361,7 +490,7 @@ const Footer = () => {
               href="https://www.linkedin.com/in/nazrin-mahmudlu/"
               target="_blank"
             >
-              Designed by{" "}
+              {t.designedBy}{" "}
               <span className="underline underline-offset-2">
                 Nazrin Mahmudlu
               </span>
@@ -370,7 +499,7 @@ const Footer = () => {
               className={`rounded-full border-dark_gray bg-light_gray border md:hover:bg-dark_gray md:hover:text-light_gray transition-colors duration-300 cursor-pointer text-dark_gray py-2.5 px-6 ${montserratFont700.className}`}
               onClick={() => handleGoSomewhere("contact")}
             >
-              Get a quote
+              {t.getQuote}
             </button>
           </div>
         </div>
