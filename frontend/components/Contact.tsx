@@ -9,6 +9,7 @@ import { selectLanguage } from "@/store/services/languageSlice";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { motion } from "framer-motion";
 
 const contactElement = {
   az: {
@@ -89,6 +90,57 @@ const SubheaderTitle: React.FC<subheaderTitleProps> = ({ children }) => {
   return <h3 className="subheader_text text-light_gray">{children}</h3>;
 };
 
+// Animated form field component
+interface AnimatedFormFieldProps {
+  label: string;
+  name: string;
+  type?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<any>) => void;
+  onBlur: (e: React.FocusEvent<any>) => void;
+  placeholder: string;
+  error?: string | undefined;
+  touched?: boolean | undefined;
+  delay: number;
+  className?: string;
+}
+
+const AnimatedFormField: React.FC<AnimatedFormFieldProps> = ({
+  label,
+  name,
+  type = "text",
+  value,
+  onChange,
+  onBlur,
+  placeholder,
+  error,
+  touched,
+  delay,
+  className = "w-full",
+}) => {
+  return (
+    <motion.div
+      className={`flex flex-col gap-2 ${className}`}
+      initial={{ opacity: 0, x: 50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut", delay }}
+      viewport={{ once: true, amount: 0.3 }}
+    >
+      <label>{label}</label>
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        placeholder={placeholder}
+        className="w-full rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6] focus:outline-none"
+      />
+      {touched && error && <div className="text-red-500 text-sm">{error}</div>}
+    </motion.div>
+  );
+};
+
 const Contact = () => {
   const lang = useSelector(selectLanguage);
 
@@ -140,27 +192,43 @@ const Contact = () => {
 
   return (
     <div className="mx-auto h-full w-11/12" id="contact">
-      <SectionHeaderTitle>{contactElement[lang].title}</SectionHeaderTitle>
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <SectionHeaderTitle>{contactElement[lang].title}</SectionHeaderTitle>
+      </motion.div>
       <div
         className={`flex w-full flex-col justify-between items-start md:flex-row ${montserratFont600.className}`}
       >
-        <div className="w-full  md:w-6/12">
-          <div className="gap- flex w-full flex-col items-start mt-10">
+        <div className="w-full md:w-6/12">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.3 }}
+            className="gap- flex w-full flex-col items-start mt-10"
+          >
             <SubheaderTitle>{contactElement[lang].callUs}</SubheaderTitle>
             <p className="text-[#e7e7e6]/50"></p>
             <p className="my-5 flex items-center gap-1.5">
               <IoCallOutline />
               <span>051 897 01 15</span>
             </p>
-            <p className="text-[#e7e7e6]/50 w-full   md:w-3/4 mb-4">
+            <p className="text-[#e7e7e6]/50 w-full md:w-3/4 mb-4">
               {contactElement[lang].callUsDetailed}
             </p>
             <SubheaderTitle>{contactElement[lang].chatWithUs}</SubheaderTitle>
-            {/* <p className="mb-5 text-[#e7e7e6]/50">
-              Speak to ur friendly team via live chat
-            </p> */}
-          </div>
-          <div className="flex flex-col gap-3 pt-0 text-[#E7E7E6] md:pt-2 ">
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.3 }}
+            className="flex flex-col gap-3 pt-0 text-[#E7E7E6] md:pt-2 "
+          >
             <a
               href={`mailto:neodesignstudio2019@gmail.com?subject=Interior Design&body=Hello.%20I%20want%20to%20design%20my%20house%20.`}
               className="uppercase underline underline-offset-4 md:hover:text-[#855E36] transition-all duration-300 md:hover:cursor-pointer"
@@ -181,101 +249,94 @@ const Contact = () => {
             >
               {contactElement[lang].sendMessageViaWhatsapp}
             </a>
-          </div>
+          </motion.div>
         </div>
         <hr className="mx-auto mt-5 block" />
         <form className="mt-8 w-full md:w-1/2" onSubmit={formik.handleSubmit}>
-          <div className="flex justify-between gap-2 md:gap-4">
-            <div className="flex w-1/2 flex-col gap-4">
-              <label>{contactElement[lang].firstName}</label>
-              <input
-                type="text"
-                name="firstName"
-                value={formik.values.firstName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                placeholder={contactElement[lang].firstName}
-                className="rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6] focus:outline-none"
-              />
-              {formik.touched.firstName && formik.errors.firstName && (
-                <div className="text-red-500 text-sm">
-                  {formik.errors.firstName}
-                </div>
-              )}
-            </div>
-            <div className="flex w-1/2 flex-col gap-4">
-              <label>{contactElement[lang].surname}</label>
-              <input
-                type="text"
-                name="surname"
-                value={formik.values.surname}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                placeholder={contactElement[lang].surname}
-                className="rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6] focus:outline-none"
-              />
-              {formik.touched.surname && formik.errors.surname && (
-                <div className="text-red-500 text-sm">
-                  {formik.errors.surname}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="mt-5 flex flex-col gap-2">
-            <label>{contactElement[lang].email}</label>
-            <input
-              type="email"
-              name="email"
-              value={formik.values.email}
+          <motion.div
+            className="flex justify-between gap-2 md:gap-4"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.3 }}
+          >
+            <AnimatedFormField
+              label={contactElement[lang].firstName}
+              name="firstName"
+              value={formik.values.firstName}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              placeholder={contactElement[lang].email}
-              className="w-full rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6] focus:outline-none"
+              placeholder={contactElement[lang].firstName}
+              error={formik.errors.firstName}
+              touched={formik.touched.firstName}
+              delay={0}
+              className="w-1/2"
             />
-            {formik.touched.email && formik.errors.email && (
-              <div className="text-red-500 text-sm">{formik.errors.email}</div>
-            )}
-          </div>
-          <div className="mt-5 flex flex-col gap-2">
-            <label>{contactElement[lang].phoneNumber}</label>
-            <input
-              type="text"
-              name="phoneNumber"
-              value={formik.values.phoneNumber}
+
+            <AnimatedFormField
+              label={contactElement[lang].surname}
+              name="surname"
+              value={formik.values.surname}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              placeholder={contactElement[lang].phoneNumber}
-              className="w-full rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6] focus:outline-none"
+              placeholder={contactElement[lang].surname}
+              error={formik.errors.surname}
+              touched={formik.touched.surname}
+              delay={0.1}
+              className="w-1/2"
             />
-            {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-              <div className="text-red-500 text-sm">
-                {formik.errors.phoneNumber}
-              </div>
-            )}
-          </div>
-          <div className="mt-5 flex flex-col gap-2">
-            <label>{contactElement[lang].message}</label>
-            <input
-              type="text"
-              name="message"
-              value={formik.values.message}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder={contactElement[lang].messageInner}
-              className="w-full rounded-xl border border-[#e7e7e6]/50 bg-[#1e1e1e] p-3 text-[#e7e7e6] focus:outline-none"
-            />
-            {formik.touched.message && formik.errors.message && (
-              <div className="text-red-500 text-sm">
-                {formik.errors.message}
-              </div>
-            )}
-          </div>
-          <button
+          </motion.div>
+
+          <AnimatedFormField
+            label={contactElement[lang].email}
+            name="email"
+            type="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder={contactElement[lang].email}
+            error={formik.errors.email}
+            touched={formik.touched.email}
+            delay={0.2}
+            className="mt-5"
+          />
+
+          <AnimatedFormField
+            label={contactElement[lang].phoneNumber}
+            name="phoneNumber"
+            value={formik.values.phoneNumber}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder={contactElement[lang].phoneNumber}
+            error={formik.errors.phoneNumber}
+            touched={formik.touched.phoneNumber}
+            delay={0.3}
+            className="mt-5"
+          />
+
+          <AnimatedFormField
+            label={contactElement[lang].message}
+            name="message"
+            value={formik.values.message}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder={contactElement[lang].messageInner}
+            error={formik.errors.message}
+            touched={formik.touched.message}
+            delay={0.4}
+            className="mt-5"
+          />
+
+          <motion.button
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.5 }}
+            viewport={{ once: true, amount: 0.3 }}
             className="mt-10 w-40 ml-auto bg-[#e7e7e6] text-[#646060] md:hover:bg-[#646060] md:hover:text-[#e7e7e6] flex justify-center p-3 rounded-xl transition-all duration-300 ease-out"
             type="submit"
           >
             {contactElement[lang].submit}
-          </button>
+          </motion.button>
         </form>
       </div>
       <div className="block md:hidden bg-black w-full h-[100px]"></div>

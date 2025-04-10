@@ -1,5 +1,6 @@
 import React from "react";
 import HeaderTitle from "./HeaderTitle";
+import { motion } from "framer-motion";
 
 interface ServicesCardProps {
   img: any;
@@ -29,9 +30,18 @@ const ServicesCard: React.FC<ServicesCardProps> = ({
           className={`aspect-[9/16] max-h-[60vh] w-full object-cover transition-transform duration-300 md:hover:scale-110`}
         />
       </div>
-      <HeaderTitle classname={`my-auto ${!isReversed ? "translate-y-40" : ""}`}>
-        {text}
-      </HeaderTitle>
+      <motion.div
+        initial={{ opacity: 0, y: isReversed ? -50 : 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <HeaderTitle
+          classname={`my-auto ${!isReversed ? "translate-y-40" : ""}`}
+        >
+          {text}
+        </HeaderTitle>
+      </motion.div>
     </div>
   );
 };
