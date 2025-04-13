@@ -7,7 +7,7 @@ import { selectLanguage } from "@/store/services/languageSlice";
 import Image from "next/image";
 import areaSVG from "@/public/assets/icons/areaSVG.svg";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Define interfaces for props and data
 interface AnimatedImageProps {
@@ -80,6 +80,32 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
       ? imagePath
       : `/uploads/${imagePath}`;
   };
+
+  // Setup keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Navigate left with left arrow key
+      if (e.key === "ArrowLeft" && currentIndex > 0) {
+        onNavigate(currentIndex - 1);
+      }
+      // Navigate right with right arrow key
+      else if (e.key === "ArrowRight" && currentIndex < images.length - 1) {
+        onNavigate(currentIndex + 1);
+      }
+      // Close with Escape key
+      else if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    // Add event listener
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [currentIndex, images.length, onNavigate, onClose]);
 
   return (
     <motion.div
