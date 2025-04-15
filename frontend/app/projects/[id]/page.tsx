@@ -68,6 +68,7 @@ const AnimatedImage: React.FC<AnimatedImageProps> = ({
 };
 
 // Image Focus Modal Component
+// Image Focus Modal Component with Touch Swipe and Animations
 const ImageFocus: React.FC<ImageFocusProps> = ({
   images,
   currentIndex,
@@ -77,6 +78,10 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
   // State for tracking touch events
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | null>(
+    null,
+  );
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   // Minimum swipe distance required (in pixels)
   const minSwipeDistance = 50;
@@ -88,10 +93,28 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
       : `/uploads/${imagePath}`;
   };
 
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Check on initial load
+    checkMobile();
+
+    // Check on resize
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
+
   // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null); // Reset end position
     setTouchStart(e.targetTouches[0].clientX);
+    setSwipeDirection(null);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -108,9 +131,11 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
     // Navigate based on swipe direction
     if (isLeftSwipe && currentIndex < images.length - 1) {
       // Swipe left -> next image
+      setSwipeDirection("left");
       onNavigate(currentIndex + 1);
     } else if (isRightSwipe && currentIndex > 0) {
       // Swipe right -> previous image
+      setSwipeDirection("right");
       onNavigate(currentIndex - 1);
     }
 
@@ -122,15 +147,23 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
   // Setup keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Navigate left with left arrow key
       if (e.key === "ArrowLeft" && currentIndex > 0) {
+        setSwipeDirection("right");
         onNavigate(currentIndex - 1);
-      } else if (e.key === "ArrowRight" && currentIndex < images.length - 1) {
+      }
+      // Navigate right with right arrow key
+      else if (e.key === "ArrowRight" && currentIndex < images.length - 1) {
+        setSwipeDirection("left");
         onNavigate(currentIndex + 1);
-      } else if (e.key === "Escape") {
+      }
+      // Close with Escape key
+      else if (e.key === "Escape") {
         onClose();
       }
     };
 
+    // Add event listener
     window.addEventListener("keydown", handleKeyDown);
 
     // Cleanup event listener on component unmount
@@ -138,6 +171,35 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [currentIndex, images.length, onNavigate, onClose]);
+
+  // Get animation variants for the image transition
+  const getAnimationVariants = () => {
+    const variants = {
+      enter: {
+        x:
+          swipeDirection === "left"
+            ? 300
+            : swipeDirection === "right"
+              ? -300
+              : 0,
+        opacity: 0,
+      },
+      center: {
+        x: 0,
+        opacity: 1,
+      },
+      exit: {
+        x:
+          swipeDirection === "left"
+            ? -300
+            : swipeDirection === "right"
+              ? 300
+              : 0,
+        opacity: 0,
+      },
+    };
+    return variants;
+  };
 
   return (
     <motion.div
@@ -169,12 +231,13 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
           </svg>
         </button>
 
-        {/* Navigation buttons */}
-        {currentIndex > 0 && (
+        {/* Navigation buttons - only show on desktop */}
+        {!isMobile && currentIndex > 0 && (
           <button
             className="absolute left-4 z-10 p-2 text-white"
             onClick={(e) => {
               e.stopPropagation();
+              setSwipeDirection("right");
               onNavigate(currentIndex - 1);
             }}
           >
@@ -194,11 +257,12 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
           </button>
         )}
 
-        {currentIndex < images.length - 1 && (
+        {!isMobile && currentIndex < images.length - 1 && (
           <button
             className="absolute right-4 z-10 p-2 text-white"
             onClick={(e) => {
               e.stopPropagation();
+              setSwipeDirection("left");
               onNavigate(currentIndex + 1);
             }}
           >
@@ -226,15 +290,25 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
           onTouchEnd={handleTouchEnd}
           onClick={(e) => e.stopPropagation()} // Prevent closing when touching the image
         >
-          <Image
-            src={getImagePath(images[currentIndex])}
-            alt=""
-            width={1600}
-            height={1200}
-            unoptimized={true}
-            className="max-w-full max-h-full object-contain"
-            draggable={false}
-          />
+          <motion.div
+            key={currentIndex}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            variants={getAnimationVariants()}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="w-full h-full flex items-center justify-center"
+          >
+            <Image
+              src={getImagePath(images[currentIndex])}
+              alt=""
+              width={1600}
+              height={1200}
+              unoptimized={true}
+              className="max-w-full max-h-full object-contain"
+              draggable={false} // Prevent default drag behavior
+            />
+          </motion.div>
         </div>
 
         {/* Image counter */}
