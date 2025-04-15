@@ -74,6 +74,13 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
   onClose,
   onNavigate,
 }) => {
+  // State for tracking touch events
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  // Minimum swipe distance required (in pixels)
+  const minSwipeDistance = 50;
+
   // Helper function for image path processing
   const getImagePath = (imagePath: string): string => {
     return imagePath.startsWith("/") || imagePath.startsWith("http")
@@ -81,24 +88,49 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
       : `/uploads/${imagePath}`;
   };
 
+  // Touch event handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null); // Reset end position
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    // Navigate based on swipe direction
+    if (isLeftSwipe && currentIndex < images.length - 1) {
+      // Swipe left -> next image
+      onNavigate(currentIndex + 1);
+    } else if (isRightSwipe && currentIndex > 0) {
+      // Swipe right -> previous image
+      onNavigate(currentIndex - 1);
+    }
+
+    // Reset touch positions
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
   // Setup keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Navigate left with left arrow key
       if (e.key === "ArrowLeft" && currentIndex > 0) {
         onNavigate(currentIndex - 1);
-      }
-      // Navigate right with right arrow key
-      else if (e.key === "ArrowRight" && currentIndex < images.length - 1) {
+      } else if (e.key === "ArrowRight" && currentIndex < images.length - 1) {
         onNavigate(currentIndex + 1);
-      }
-      // Close with Escape key
-      else if (e.key === "Escape") {
+      } else if (e.key === "Escape") {
         onClose();
       }
     };
 
-    // Add event listener
     window.addEventListener("keydown", handleKeyDown);
 
     // Cleanup event listener on component unmount
@@ -186,8 +218,14 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
           </button>
         )}
 
-        {/* Focused image */}
-        <div className="w-full h-full flex items-center justify-center">
+        {/* Focused image with touch event handlers */}
+        <div
+          className="w-full h-full flex items-center justify-center"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onClick={(e) => e.stopPropagation()} // Prevent closing when touching the image
+        >
           <Image
             src={getImagePath(images[currentIndex])}
             alt=""
@@ -195,6 +233,7 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
             height={1200}
             unoptimized={true}
             className="max-w-full max-h-full object-contain"
+            draggable={false}
           />
         </div>
 
