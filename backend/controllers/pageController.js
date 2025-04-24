@@ -31,7 +31,7 @@ exports.getPage = async (req, res) => {
 
     res.json({ page: pageData.page, content: pageData.content[lang] });
   } catch (err) {
-    console.error("❌ Error fetching page:", err);
+    console.error("Error fetching page:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };

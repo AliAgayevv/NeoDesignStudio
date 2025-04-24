@@ -3,7 +3,7 @@ const router = express.Router();
 const Contact = require("../models/Contact");
 const process = require("process");
 
-// middleware for delete contacts which are older than 30 days
+// helper function for delete contacts which are older than 30 days
 const deleteOldContacts = async () => {
   try {
     const thirtyDaysAgo = new Date();
