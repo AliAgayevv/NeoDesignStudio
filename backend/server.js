@@ -11,13 +11,9 @@ const fs = require("fs");
 const app = express();
 
 const allowedOrigins = [
-  "http://localhost:3000",
-  "https://demo-neodesignstudio.vercel.app",
   "http://45.85.146.73:3000",
   "https://45.85.146.73:3000",
-  "http://neodesignstudio.az",
   "https://neodesignstudio.az",
-  "http://www.neodesignstudio.az",
   "https://www.neodesignstudio.az",
 ];
 
@@ -68,7 +64,6 @@ app.use((req, res, next) => {
 
 const PORT = 4000;
 
-// Middleware
 // Middleware
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));

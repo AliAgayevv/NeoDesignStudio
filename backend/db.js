@@ -9,7 +9,7 @@ const connectDB = async () => {
       throw new Error("MONGO_URI is not defined in .env file");
     }
 
-    await mongoose.connect("mongodb://localhost:27017/neoDesign");
+    await mongoose.connect(process.env.MONGO_URI);
 
     console.log("✅✅✅ MongoDB Connected ✅✅✅");
 

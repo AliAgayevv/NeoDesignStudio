@@ -1,4 +1,8 @@
 # === Backend (Express.js) ===
+
+# internet olanda bunu push
+# git push --set-upstream origin dev --force
+
 /backend/node_modules/
 /backend/.env
 /backend/dist/
