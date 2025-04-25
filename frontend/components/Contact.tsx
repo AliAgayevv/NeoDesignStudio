@@ -121,8 +121,8 @@ const AnimatedFormField: React.FC<AnimatedFormFieldProps> = ({
   return (
     <motion.div
       className={`flex flex-col gap-2 ${className}`}
-      initial={{ opacity: 0, x: 50 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut", delay }}
       viewport={{ once: true, amount: 0.3 }}
     >
@@ -328,8 +328,8 @@ const Contact = () => {
           />
 
           <motion.button
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut", delay: 0.5 }}
             viewport={{ once: true, amount: 0.3 }}
             className="mt-10 w-40 ml-auto bg-[#e7e7e6] text-[#646060] md:hover:bg-[#646060] md:hover:text-[#e7e7e6] flex justify-center p-3 rounded-xl transition-all duration-300 ease-out"
