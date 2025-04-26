@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     siteName: "Neo Design Studio",
     images: [
       {
-        url: "../public/opengraph-image.png",
+        url: "https://opengraph.b-cdn.net/production/images/af8a8f82-1e9d-494b-b089-c0dcd9b167a3.png?token=meOGm2HIVgkasQjQCiOeRHVzIjjYuUxg46EHmbXWf6w&height=675&width=1200&expires=33281684945",
         width: 1200,
         height: 630,
         alt: "Neo Design Studio Logo",
