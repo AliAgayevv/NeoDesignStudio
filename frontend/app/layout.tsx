@@ -39,7 +39,6 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/site.webmanifest",
-
   openGraph: {
     title: "Neo Design Studio",
     description:
@@ -61,6 +60,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
+      <head>
+        <meta
+          name="google-site-verification"
+          content="SiRdbrEdfdL4qDAvrZn5hCWDDntt0Y0sb_po1BYgnJY"
+        />
+      </head>
       <body>
         <SmoothScroll>
           <ReduxProvider>
