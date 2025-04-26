@@ -1,41 +1,50 @@
 import ProjectDetail from "@/components/ProjectDetail";
-import { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import React from "react";
 
-interface ProjectDetailProps {
-  params: { id: string };
-}
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
-export async function generateMetadata({
-  params: { id },
-}: ProjectDetailProps): Promise<Metadata> {
-  const res = await fetch(
+// Dynamic Metadata
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const { id } = await params;
+  const project = await fetch(
     `https://neodesignstudio.az/api/portfolio/${id}?lang=en`,
-  );
-  const project: any = await res.json();
+  ).then((res) => res.json());
+
+  const previousImages = (await parent).openGraph?.images || [];
+
   return {
-    title: project.title,
-    description: project.description,
+    title: project.title || "Project Detail",
+    description:
+      project.description ||
+      "Discover detailed information about this project.",
     openGraph: {
-      images: [
-        {
-          url: project.images[0],
-          width: 800,
-          height: 600,
-        },
-      ],
+      images: [project.images?.[0] || "/default-image.jpg", ...previousImages],
     },
   };
 }
 
+// Page Component
 export default async function ProjectDetailPage({
   params,
-}: ProjectDetailProps) {
-  const { id } = params;
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   const res = await fetch(
     `https://neodesignstudio.az/api/portfolio/${id}?lang=en`,
   );
-  const data = await res.json();
+  const project = await res.json();
+
+  if (!project || project.error) {
+    return <div>No project found.</div>;
+  }
 
   return (
     <div>
