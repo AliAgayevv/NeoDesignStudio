@@ -43,12 +43,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Neo Design Studio",
     description:
-      "Neo Design Studio is a design studio that specializes in creating beautiful and innovative interior and exterior spaces.",
+      "Neo Design Studio has been operating since 2021, delivering over 300 design projects with carefully selected modern styles and professional design solutions.",
     url: "https://neodesignstudio.az",
     siteName: "Neo Design Studio",
     images: [
       {
-        url: "../public/ogLogo.jpg",
+        url: "../public/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "Neo Design Studio Logo",
