@@ -10,20 +10,14 @@ type RootLayoutProps = {
 };
 
 export const metadata: Metadata = {
-  title: "Neo Design Studio",
-  themeColor: "#000000",
-  colorScheme: "dark",
-  appleWebApp: {
-    title: "Neo Design Studio",
-    statusBarStyle: "black-translucent",
-    capable: true,
-    startupImage: [
-      { url: "/apple-touch-icon.png", media: "(device-width: 375px)" },
-      { url: "/apple-touch-icon.png", media: "(device-width: 768px)" },
-    ],
+  title: {
+    default: "Neo Design Studio",
+    template: "%s | Neo Design Studio",
   },
   description:
-    "Neo Design Studio is a design studio that specializes in creating beautiful and innovative interior and exterior spaces.",
+    "Neo Design Studio has been operating since 2021, delivering over 300 design projects with carefully selected modern styles and professional design solutions.",
+  themeColor: "#000000",
+  colorScheme: "dark",
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -54,7 +48,7 @@ export const metadata: Metadata = {
     siteName: "Neo Design Studio",
     images: [
       {
-        url: "/ogLogo.jpg",
+        url: "../public/ogLogo.jpg",
         width: 1200,
         height: 630,
         alt: "Neo Design Studio Logo",
