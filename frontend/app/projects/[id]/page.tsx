@@ -31,21 +31,7 @@ export async function generateMetadata(
 }
 
 // Page Component
-export default async function ProjectDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const res = await fetch(
-    `https://neodesignstudio.az/api/portfolio/${id}?lang=en`,
-  );
-  const project = await res.json();
-
-  if (!project || project.error) {
-    return <div>No project found.</div>;
-  }
-
+export default async function ProjectDetailPage() {
   return (
     <div>
       <ProjectDetail />
