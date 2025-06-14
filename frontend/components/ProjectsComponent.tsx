@@ -53,6 +53,8 @@ const cormarantGaramondFont700 = Cormorant_Garamond({
   weight: "700",
 });
 
+const baseURLTEMP = "http://45.85.146.73:4000";
+
 const RenderImage = ({
   project,
   aspectRatio,
@@ -71,6 +73,8 @@ const RenderImage = ({
     return null;
   }
 
+  console.log("Project Image:", baseURLTEMP + project.images[0]);
+
   return (
     <Link href={`/projects/${project.projectId}`}>
       <div className={`relative w-full overflow-hidden group ${aspectRatio}`}>
@@ -80,8 +84,8 @@ const RenderImage = ({
             src={
               project.images[0]?.startsWith("/") ||
               project.images[0]?.startsWith("http")
-                ? project.images[0]
-                : `/uploads/${project.images[0]}`
+                ? baseURLTEMP + project.images[0]
+                : `${baseURLTEMP}/uploads/${project.images[0]}`
             }
             alt={project.projectId || "Project image"}
             width={800}
@@ -90,7 +94,6 @@ const RenderImage = ({
             priority={index === 0 && itemIndex < 2}
             loading={index === 0 && itemIndex < 2 ? "eager" : "lazy"}
             placeholder="blur"
-            unoptimized={true}
             blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTExMTExIi8+PC9zdmc+"
             className="object-cover rounded-[12px] md:rounded-[50px] transition-all duration-300 w-full h-full md:group-hover:blur-sm"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
