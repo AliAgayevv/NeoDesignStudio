@@ -11,7 +11,7 @@ const connectDB = async () => {
 
     await mongoose.connect(process.env.MONGO_URI);
 
-    console.log("✅✅✅ MongoDB Connected ✅✅✅");
+    console.log("✅ MongoDB Connected Successfully", process.env.MONGO_URI);
 
     const collections = await mongoose.connection.db
       .listCollections()

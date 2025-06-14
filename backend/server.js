@@ -27,41 +27,41 @@ app.use(
 );
 
 // Add this middleware to prevent direct access
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  const referer = req.headers.referer;
+// app.use((req, res, next) => {
+//   const origin = req.headers.origin;
+//   const referer = req.headers.referer;
 
-  // Allow direct access to static files
-  if (req.path.startsWith("/uploads/")) {
-    return next();
-  }
+//   // Allow direct access to static files
+//   if (req.path.startsWith("/uploads/")) {
+//     return next();
+//   }
 
-  // If origin header exists and is in allowed origins, allow the request
-  if (origin && allowedOrigins.includes(origin)) {
-    return next();
-  }
+//   // If origin header exists and is in allowed origins, allow the request
+//   if (origin && allowedOrigins.includes(origin)) {
+//     return next();
+//   }
 
-  // If referer exists, check if it starts with any allowed origin
-  if (referer) {
-    for (const allowedOrigin of allowedOrigins) {
-      if (referer.startsWith(allowedOrigin)) {
-        return next();
-      }
-    }
-  }
+//   // If referer exists, check if it starts with any allowed origin
+//   if (referer) {
+//     for (const allowedOrigin of allowedOrigins) {
+//       if (referer.startsWith(allowedOrigin)) {
+//         return next();
+//       }
+//     }
+//   }
 
-  // Block requests that don't have proper origin/referer
-  // But add special exception for development environment
-  if (process.env.NODE_ENV === "development") {
-    return next(); // Allow all requests in development mode
-  }
+//   // Block requests that don't have proper origin/referer
+//   // But add special exception for development environment
+//   if (process.env.NODE_ENV === "development") {
+//     return next(); // Allow all requests in development mode
+//   }
 
-  // For production, block direct access
-  return res.status(403).json({
-    error: "Direct access not allowed",
-    message: "Please access this API through the allowed client applications",
-  });
-});
+//   // For production, block direct access
+//   return res.status(403).json({
+//     error: "Direct access not allowed",
+//     message: "Please access this API through the allowed client applications",
+//   });
+// });
 
 const PORT = 4000;
 
