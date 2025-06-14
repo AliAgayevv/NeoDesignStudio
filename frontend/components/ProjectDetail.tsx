@@ -284,7 +284,7 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
           >
             <Image
               src={`
-                http://45.85.146.73:4000/${images[currentIndex]}
+              ${process.env.BACKEND_URL}/${images[currentIndex]}
                 `}
               alt={`Project image ${currentIndex + 1}`}
               width={1600}
@@ -320,7 +320,7 @@ const ProjectDetail: React.FC = () => {
 
   // Helper function for image path processing
   const getImagePath = (imagePath: string): string => {
-    return "http://45.85.146.73:4000" + imagePath;
+    return process.env.BACKEND_URL + imagePath;
   };
 
   // Helper function to get text content (handle both string and object formats)

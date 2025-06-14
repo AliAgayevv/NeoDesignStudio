@@ -19,16 +19,13 @@ export const useAuth = () => {
         }
 
         // Verify token
-        const response = await fetch(
-          "http://45.85.146.73:4000/api/login/verify",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-auth-token": token,
-            },
+        const response = await fetch("api/login/verify", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": token,
           },
-        );
+        });
 
         if (response.ok) {
           // Token is valid

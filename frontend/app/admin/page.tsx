@@ -50,7 +50,8 @@ export default function Login() {
               setError("");
 
               const response = await fetch(
-                "http://45.85.146.73:4000/api/login",
+                // "http://45.85.146.73:4000/api/login",
+                `/api/login`,
                 {
                   method: "POST",
                   headers: {
