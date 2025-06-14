@@ -54,9 +54,6 @@ const cormarantGaramondFont700 = Cormorant_Garamond({
 });
 
 // Helper function for image URL processing
-const getImageUrl = (imagePath: string): string => {
-  return "https://45.85.146.73:4000";
-};
 
 // Helper function to get text content (handle both string and object formats)
 const getTextContent = (content: any, language: string): string => {
@@ -115,7 +112,6 @@ const RenderImage: React.FC<RenderImageProps> = ({
     return null;
   }
 
-  const imageUrl = getImageUrl(project.images[0]);
   const titleText = getTextContent(project.title, language);
   const locationText = getTextContent(project.location, language);
 

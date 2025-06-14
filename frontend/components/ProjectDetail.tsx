@@ -96,9 +96,6 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
   const minSwipeDistance = 50;
 
   // Helper function for image path processing
-  const getImagePath = (imagePath: string): string => {
-    return "https://45.85.146.73:4000";
-  };
 
   // Check if device is mobile
   useEffect(() => {

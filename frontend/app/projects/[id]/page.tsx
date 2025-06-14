@@ -1,20 +1,11 @@
 import ProjectDetail from "@/components/ProjectDetail";
-import type { Metadata, ResolvingMetadata } from "next";
+
 import Link from "next/link";
 import React from "react";
 
-type Props = {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
-
-// Dynamic Metadata with proper error handling
-
 // Page Component with error boundary
-export default async function ProjectDetailPage({ params }: Props) {
+export default function ProjectDetailPage() {
   try {
-    const { id } = await params;
-
     return (
       <div className="min-h-screen">
         <ProjectDetail />
