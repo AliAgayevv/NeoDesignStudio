@@ -4,15 +4,40 @@ import {
   useCreateWorkMutation,
   useUpdateWorkMutation,
   useDeleteImageMutation,
+  type Work,
+  type UpdateWorkContent,
 } from "@/store/services/workApi";
-import { Project } from "./types";
 import useOutsideClick from "@/utils/hooks/useOutsideClick";
 import { GrFormClose } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 
+// Form-specific types based on Work type from API
+interface ProjectFormData {
+  projectId: string;
+  description: {
+    az: string;
+    en: string;
+    ru: string;
+  };
+  title: {
+    az: string;
+    en: string;
+    ru: string;
+  };
+  location: {
+    az: string;
+    en: string;
+    ru: string;
+  };
+  area: number;
+  category: string;
+  images: File[];
+  _id?: string;
+}
+
 interface ProjectFormProps {
   onClose: () => void;
-  initialValues?: Project | null;
+  initialValues?: Work | null;
 }
 
 interface DeleteConfirmationModalProps {
@@ -22,12 +47,12 @@ interface DeleteConfirmationModalProps {
   imagePath: string;
 }
 
-const DeleteConfirmationModal = ({
+const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
   imagePath,
-}: DeleteConfirmationModalProps) => {
+}) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useOutsideClick(modalRef, () => {
@@ -37,9 +62,7 @@ const DeleteConfirmationModal = ({
   if (!isOpen) return null;
 
   // Backend URL'i ekle
-  const fullImageUrl = imagePath.startsWith("http")
-    ? imagePath
-    : `${process.env.NEXT_PUBLIC_API_URL || "https://neodesignstudio.az"}${imagePath}`;
+  const fullImageUrl = "https://45.85.146.73:4000" + imagePath;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
@@ -56,7 +79,7 @@ const DeleteConfirmationModal = ({
             alt="Image to delete"
             className="max-h-40 object-contain rounded border"
             onError={(e) => {
-              e.currentTarget.src = "/placeholder-image.png"; // Fallback image
+              (e.target as HTMLImageElement).src = "/placeholder-image.png";
             }}
           />
         </div>
@@ -82,10 +105,10 @@ const DeleteConfirmationModal = ({
   );
 };
 
-export default function ProjectForm({
+const ProjectForm: React.FC<ProjectFormProps> = ({
   onClose,
   initialValues,
-}: ProjectFormProps) {
+}) => {
   // Create and update mutations
   const [createWork, { isLoading: isCreating }] = useCreateWorkMutation();
   const [updateWork, { isLoading: isUpdating }] = useUpdateWorkMutation();
@@ -93,7 +116,7 @@ export default function ProjectForm({
 
   const ref = useRef<HTMLDivElement>(null);
   const [hasNewImages, setHasNewImages] = useState(false);
-  const [currentImages, setCurrentImages] = useState(
+  const [currentImages, setCurrentImages] = useState<string[]>(
     initialValues?.images || [],
   );
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
@@ -107,16 +130,15 @@ export default function ProjectForm({
   });
 
   // Default values for the form if no initial data is provided
-  const initialData: Project = {
-    projectId: "",
-    description: { az: "", en: "", ru: "" },
-    title: { az: "", en: "", ru: "" },
-    location: { az: "", en: "", ru: "" },
-    area: 0,
+  const initialData: ProjectFormData = {
+    projectId: initialValues?.projectId || "",
+    description: initialValues?.description || { az: "", en: "", ru: "" },
+    title: initialValues?.title || { az: "", en: "", ru: "" },
+    location: initialValues?.location || { az: "", en: "", ru: "" },
+    area: initialValues?.area ? Number(initialValues.area) : 0,
     images: [],
-    ...initialValues,
-    _id: initialValues?._id ? initialValues?._id : "",
-    category: initialValues?.category ? initialValues?.category : "",
+    _id: initialValues?._id || "",
+    category: initialValues?.category || "",
   };
 
   const handleDeleteImage = (imagePath: string, index: number) => {
@@ -140,14 +162,22 @@ export default function ProjectForm({
 
       console.log("Delete image result:", result);
 
-      // Backend response format: { success: true, data: { remainingImages: [...] }, message: "..." }
-      let remainingImages;
-      if (result?.data?.remainingImages) {
-        remainingImages = result.data.remainingImages;
-      } else if (result?.remainingImages) {
-        remainingImages = result.remainingImages;
+      // Handle different response formats
+      let remainingImages: string[];
+      if (result && typeof result === "object") {
+        if ("remainingImages" in result) {
+          remainingImages = result.remainingImages as string[];
+        } else if ("deletedImage" in result) {
+          // Fallback: manual removal
+          remainingImages = currentImages.filter(
+            (_, idx) => idx !== imageToDelete.index,
+          );
+        } else {
+          remainingImages = currentImages.filter(
+            (_, idx) => idx !== imageToDelete.index,
+          );
+        }
       } else {
-        // Fallback: manual removal
         remainingImages = currentImages.filter(
           (_, idx) => idx !== imageToDelete.index,
         );
@@ -169,11 +199,9 @@ export default function ProjectForm({
     }
   };
 
-  // ProjectForm.tsx - handleSubmit fonksiyonunu tamamen değiştirin:
-
   const handleSubmit = async (
-    values: Project,
-    { setSubmitting }: FormikHelpers<Project>,
+    values: ProjectFormData,
+    { setSubmitting }: FormikHelpers<ProjectFormData>,
   ) => {
     try {
       console.log("=== FORM SUBMISSION DEBUG ===");
@@ -216,7 +244,7 @@ export default function ProjectForm({
           console.log("Update with images result:", result);
         } else {
           // Update without new images (text content only)
-          const contentData = {
+          const contentData: UpdateWorkContent = {
             description: values.description,
             title: values.title,
             location: values.location,
@@ -296,7 +324,7 @@ export default function ProjectForm({
 
         // Debug: Log all FormData entries
         console.log("=== FINAL FORMDATA CONTENTS ===");
-        for (let [key, value] of formData.entries()) {
+        for (const [key, value] of formData.entries()) {
           if (value instanceof File) {
             console.log(
               `${key}:`,
@@ -359,7 +387,7 @@ export default function ProjectForm({
           initialValues={initialData}
           onSubmit={handleSubmit}
           validate={(values) => {
-            const errors: any = {};
+            const errors: Partial<Record<keyof ProjectFormData, string>> = {};
 
             if (!values.projectId) {
               errors.projectId = "Required";
@@ -382,11 +410,21 @@ export default function ProjectForm({
             );
 
             if (!hasTitle) {
-              errors.title = "At least one language title is required";
+              (errors as any).title = "At least one language title is required";
             }
 
             if (!hasLocation) {
-              errors.location = "At least one language location is required";
+              (errors as any).location =
+                "At least one language location is required";
+            }
+
+            // Validate images for new projects
+            if (
+              !initialValues &&
+              (!values.images || values.images.length === 0)
+            ) {
+              (errors as any).images =
+                "At least one image is required for new projects";
             }
 
             return errors;
@@ -604,9 +642,8 @@ export default function ProjectForm({
                     </div>
                     <div className="grid grid-cols-4 gap-2">
                       {currentImages.map((image, index) => {
-                        const fullImageUrl = image.startsWith("http")
-                          ? image
-                          : `${process.env.NEXT_PUBLIC_API_URL || "https://neodesignstudio.az"}${image}`;
+                        const fullImageUrl =
+                          "https://45.85.146.73:4000" + image;
 
                         return (
                           <div
@@ -621,7 +658,8 @@ export default function ProjectForm({
                               className="w-full h-full object-cover group-hover:opacity-50 transition-opacity"
                               alt={`Project image ${index + 1}`}
                               onError={(e) => {
-                                e.currentTarget.src = "/placeholder-image.png";
+                                (e.target as HTMLImageElement).src =
+                                  "/placeholder-image.png";
                               }}
                             />
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -691,7 +729,7 @@ export default function ProjectForm({
                           ✓ {values.images.length} new image(s) selected
                         </p>
                         <div className="mt-1 text-xs text-gray-500">
-                          {Array.from(values.images).map((file: any, idx) => (
+                          {Array.from(values.images).map((file: File, idx) => (
                             <div key={idx}>• {file.name}</div>
                           ))}
                         </div>
@@ -769,4 +807,6 @@ export default function ProjectForm({
       </div>
     </div>
   );
-}
+};
+
+export default ProjectForm;

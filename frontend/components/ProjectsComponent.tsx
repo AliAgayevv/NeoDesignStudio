@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLanguage } from "@/store/services/languageSlice";
 import { motion, AnimatePresence } from "framer-motion";
-import { useGetAllWorksQuery } from "@/store/services/workApi";
+import { useGetAllWorksQuery, type Work } from "@/store/services/workApi";
 import { selectCategory, setCategory } from "@/store/services/categorySlice";
 
 import LoadingAnimation from "@/components/LoadingAnimation";
@@ -53,18 +53,55 @@ const cormarantGaramondFont700 = Cormorant_Garamond({
   weight: "700",
 });
 
-const baseURLTEMP = "http://45.85.146.73:4000";
+// Helper function for image URL processing
+const getImageUrl = (imagePath: string): string => {
+  return "https://45.85.146.73:4000";
+};
 
-const RenderImage = ({
+// Helper function to get text content (handle both string and object formats)
+const getTextContent = (content: any, language: string): string => {
+  if (typeof content === "string") {
+    return content;
+  }
+  if (typeof content === "object" && content !== null) {
+    return (
+      content[language] || content["en"] || content["az"] || content["ru"] || ""
+    );
+  }
+  return "";
+};
+
+// Types
+type CategoryType = "all" | "interior" | "exterior" | "business";
+
+interface ProjectGroup {
+  items: Work[];
+  index: number;
+}
+
+interface CategoryFilterProps {
+  activeCategory: CategoryType;
+  setActiveCategory: (category: CategoryType) => void;
+  lang: string;
+  categoryLabels: {
+    [lang: string]: {
+      [category in CategoryType]: string;
+    };
+  };
+}
+
+interface RenderImageProps {
+  project: Work;
+  aspectRatio: string;
+  index: number;
+  itemIndex?: number;
+}
+
+const RenderImage: React.FC<RenderImageProps> = ({
   project,
   aspectRatio,
   index,
   itemIndex = 0,
-}: {
-  project: any;
-  aspectRatio: string;
-  index: number;
-  itemIndex?: number;
 }) => {
   const language = useSelector(selectLanguage);
 
@@ -73,7 +110,16 @@ const RenderImage = ({
     return null;
   }
 
-  console.log("Project Image:", baseURLTEMP + project.images[0]);
+  // Ensure project has images
+  if (!project.images || project.images.length === 0) {
+    return null;
+  }
+
+  const imageUrl = getImageUrl(project.images[0]);
+  const titleText = getTextContent(project.title, language);
+  const locationText = getTextContent(project.location, language);
+
+  console.log(`https://45.85.146.73:4000${project.images[0]}`);
 
   return (
     <Link href={`/projects/${project.projectId}`}>
@@ -81,22 +127,20 @@ const RenderImage = ({
         {/* Main image with improved blur effect on hover */}
         <div className="w-full h-full">
           <Image
-            src={
-              project.images[0]?.startsWith("/") ||
-              project.images[0]?.startsWith("http")
-                ? baseURLTEMP + project.images[0]
-                : `${baseURLTEMP}/uploads/${project.images[0]}`
-            }
-            alt={project.projectId || "Project image"}
+            src={`http://45.85.146.73:4000${project.images[0]}`}
+            alt={titleText || project.projectId || "Project image"}
             width={800}
             height={600}
-            quality={80}
+            quality={65}
             priority={index === 0 && itemIndex < 2}
             loading={index === 0 && itemIndex < 2 ? "eager" : "lazy"}
             placeholder="blur"
             blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTExMTExIi8+PC9zdmc+"
             className="object-cover rounded-[12px] md:rounded-[50px] transition-all duration-300 w-full h-full md:group-hover:blur-sm"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            onError={(e) => {
+              e.currentTarget.src = "/placeholder-image.png";
+            }}
           />
 
           {/* Subtle overlay gradient to enhance blur effect */}
@@ -112,55 +156,61 @@ const RenderImage = ({
                      transition-all duration-500 rounded-[50px] flex-col items-center justify-center 
                      ${cormarantGaramondFont700.className} z-10`}
         >
-          <h3
-            className={`text-white text-5xl font-light uppercase tracking-wider mb-8 
-                      drop-shadow-md transform transition-transform duration-500 
-                      translate-y-4 group-hover:translate-y-0`}
-          >
-            {project.title[language]}
-          </h3>
+          {titleText && (
+            <h3
+              className={`text-white text-3xl md:text-5xl font-light uppercase tracking-wider mb-8 
+                        drop-shadow-md transform transition-transform duration-500 
+                        translate-y-4 group-hover:translate-y-0 text-center`}
+            >
+              {titleText}
+            </h3>
+          )}
           <div
-            className="flex items-center justify-center gap-8 text-white 
+            className="flex items-center justify-center gap-4 md:gap-8 text-white 
                       transform transition-transform duration-500 
                       translate-y-4 group-hover:translate-y-0"
           >
-            <div className="flex items-center">
-              <div className="mr-2">
-                <Image src={areaSVG} alt="area" width={32} height={32} />
+            {project.area && (
+              <div className="flex items-center">
+                <div className="mr-2">
+                  <Image src={areaSVG} alt="area" width={24} height={24} />
+                </div>
+                <span className="text-xl md:text-3xl drop-shadow-lg">
+                  {project.area} м²
+                </span>
               </div>
-              <span className="text-3xl drop-shadow-lg">{project.area} м²</span>
-            </div>
-            <div className="flex items-center">
-              <div className="mr-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                  <circle cx="12" cy="10" r="3"></circle>
-                </svg>
+            )}
+            {locationText && (
+              <div className="flex items-center">
+                <div className="mr-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <span className="text-xl md:text-3xl drop-shadow-lg">
+                  {locationText}
+                </span>
               </div>
-              <span className="text-3xl drop-shadow-lg">
-                {project.location[language]}
-              </span>
-            </div>
+            )}
           </div>
         </div>
-
-        {/* Category badge */}
       </div>
     </Link>
   );
 };
 
-const RenderImageGrid = ({ items, index }: ProjectGroup) => {
+const RenderImageGrid: React.FC<ProjectGroup> = ({ items, index }) => {
   // Grid layout configurations
   const isFirst = index === 0;
 
@@ -179,11 +229,6 @@ const RenderImageGrid = ({ items, index }: ProjectGroup) => {
     { width: "w-1/2", aspectRatio: "aspect-[1/1]" },
     { width: "w-1/2", aspectRatio: "aspect-[1/1.5]" },
   ];
-
-  if (isFirst) {
-    isFirstTour = false;
-    console.log(isFirstTour);
-  }
 
   // This will maintain the same exact layout but only render as many items as we have
   return (
@@ -269,23 +314,10 @@ const RenderImageGrid = ({ items, index }: ProjectGroup) => {
   );
 };
 
-interface Project {
-  projectId: string;
-  images: string[];
-  title: { [key: string]: string };
-  area: number;
-  location: { [key: string]: string };
-  category?: string;
-}
-
-interface ProjectGroup {
-  items: Project[];
-  index: number;
-}
-const prepareProjectGroups = (projects: Project[]): Project[][] => {
+const prepareProjectGroups = (projects: Work[]): Work[][] => {
   if (!projects || projects.length === 0) return [];
 
-  const groups: Project[][] = [];
+  const groups: Work[][] = [];
   const itemsPerGroup = 7;
 
   // Calculate how many complete groups we can make
@@ -306,23 +338,6 @@ const prepareProjectGroups = (projects: Project[]): Project[][] => {
 
   return groups;
 };
-
-type CategoryType = "all" | "interior" | "exterior" | "business";
-
-// Category labels type
-type CategoryLabels = {
-  [lang: string]: {
-    [category in CategoryType]: string;
-  };
-};
-
-// Props interface for the component
-interface CategoryFilterProps {
-  activeCategory: CategoryType;
-  setActiveCategory: (category: CategoryType) => void;
-  lang: string;
-  categoryLabels: CategoryLabels;
-}
 
 const CategoryFilter: React.FC<CategoryFilterProps> = ({
   activeCategory,
@@ -349,7 +364,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
             {/* White underline only for active category */}
             {activeCategory === category && (
               <motion.div
-                className={` absolute h-0.5 bg-white  bottom-0 ${activeCategory === "all" ? "-left-1 w-10" : "w-full"}`}
+                className={`absolute h-0.5 bg-white bottom-0 ${activeCategory === "all" ? "-left-1 w-10" : "w-full"}`}
                 layoutId="activeUnderline"
                 transition={{ type: "spring", stiffness: 500, damping: 30 }}
               />
@@ -371,50 +386,30 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
   );
 };
 
-// Type for project categories
-type categoryTypes = "all" | "interior" | "exterior" | "business";
-
-let isFirstTour = true;
-
-// ProjectsComponent içindeki değiştirilmesi gereken kısımlar:
-
-const ProjectsComponent = () => {
-  const { data: apiResponse, isLoading, error } = useGetAllWorksQuery();
+const ProjectsComponent: React.FC = () => {
+  // DÜZELTME: transformResponse sayesinde data artık direkt Work[] array'i
+  const { data, isLoading, error } = useGetAllWorksQuery();
   const lang = useSelector(selectLanguage);
   const [visibleGroups, setVisibleGroups] = useState(1);
   const dispatch = useDispatch();
 
   const activeCategory = useSelector(selectCategory);
-  const observerTarget = useRef(null);
+  const observerTarget = useRef<HTMLDivElement>(null);
 
-  const handleCategoryChange = (category: categoryTypes) => {
+  const handleCategoryChange = (category: CategoryType) => {
     dispatch(setCategory(category));
   };
 
-  // Backend'den gelen data yapısını handle et
-  // Backend artık { success: true, data: [...], message: "..." } formatında döndürüyor
-  const data = apiResponse?.data || apiResponse || [];
-
-  console.log("API Response:", apiResponse);
-  console.log("Extracted Data:", data);
-
   // Filter projects by category
-  const filteredData = Array.isArray(data)
+  const filteredData: Work[] = Array.isArray(data)
     ? activeCategory === "all"
       ? data
       : data.filter((project) => project.category === activeCategory)
     : [];
 
-  console.log("Filtered Data:", filteredData);
-
   // Get project groups
-  const projectGroups = Array.isArray(filteredData)
-    ? prepareProjectGroups(
-        filteredData.map((project) => ({
-          ...project,
-          area: Number(project.area),
-        })),
-      )
+  const projectGroups: Work[][] = Array.isArray(filteredData)
+    ? prepareProjectGroups(filteredData)
     : [];
 
   // Reset visible groups when category changes
@@ -422,6 +417,7 @@ const ProjectsComponent = () => {
     setVisibleGroups(1);
   }, [activeCategory]);
 
+  // Load saved category from localStorage
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedCategory = localStorage.getItem(
@@ -436,6 +432,7 @@ const ProjectsComponent = () => {
     }
   }, [dispatch]);
 
+  // Infinite scroll observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -457,30 +454,35 @@ const ProjectsComponent = () => {
     };
   }, [projectGroups.length, visibleGroups]);
 
-  // Error handling'i iyileştir
+  // Loading state
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black text-white">
         <div className="w-11/12 mx-auto pt-32 text-left">
-          <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
+          <SectionHeaderTitle>
+            {headerTitle[lang as keyof typeof headerTitle]}
+          </SectionHeaderTitle>
           <LoadingAnimation />
         </div>
       </div>
     );
   }
 
+  // Error state
   if (error) {
     console.error("API Error:", error);
     return (
       <div className="min-h-screen bg-black text-white">
         <div className="w-11/12 mx-auto pt-32 text-left">
-          <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
+          <SectionHeaderTitle>
+            {headerTitle[lang as keyof typeof headerTitle]}
+          </SectionHeaderTitle>
           <div className="text-center mt-8">
             <p className="text-xl mb-4">
               Failed to load projects. Please try again later.
             </p>
             <p className="text-sm text-gray-400">
-              Error: {error?.message || "Unknown error occurred"}
+              Error: {(error as any)?.message || "Unknown error occurred"}
             </p>
             <button
               className="mt-4 bg-deep_brown px-6 py-2 rounded-full hover:bg-deep_brown/80 transition-colors"
@@ -494,12 +496,14 @@ const ProjectsComponent = () => {
     );
   }
 
-  // Data yoksa veya boşsa
+  // No data state
   if (!data || !Array.isArray(data) || data.length === 0) {
     return (
       <div className="min-h-screen bg-black text-white">
         <div className="w-11/12 mx-auto pt-32 text-left">
-          <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
+          <SectionHeaderTitle>
+            {headerTitle[lang as keyof typeof headerTitle]}
+          </SectionHeaderTitle>
           <div className="text-center mt-8">
             <p className="text-xl mb-4">No projects found.</p>
             <p className="text-sm text-gray-400">
@@ -515,7 +519,9 @@ const ProjectsComponent = () => {
     <div className="min-h-screen bg-black text-white">
       <div className="w-11/12 mx-auto pb-24">
         <div className="pt-40">
-          <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
+          <SectionHeaderTitle>
+            {headerTitle[lang as keyof typeof headerTitle]}
+          </SectionHeaderTitle>
         </div>
 
         <CategoryFilter

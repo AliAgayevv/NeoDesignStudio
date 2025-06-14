@@ -35,6 +35,15 @@ interface ImageFocusProps {
   onNavigate: (index: number) => void;
 }
 
+// Error type for better error handling
+interface ApiError {
+  status?: number;
+  data?: {
+    message?: string;
+  };
+  message?: string;
+}
+
 // Animated image component
 const AnimatedImage: React.FC<AnimatedImageProps> = ({
   src,
@@ -63,9 +72,6 @@ const AnimatedImage: React.FC<AnimatedImageProps> = ({
         unoptimized={true}
         priority={priority}
         className={className}
-        onError={(e) => {
-          e.currentTarget.src = "/placeholder-image.png";
-        }}
       />
     </motion.div>
   );
@@ -91,16 +97,7 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
 
   // Helper function for image path processing
   const getImagePath = (imagePath: string): string => {
-    if (imagePath.startsWith("http")) {
-      return imagePath;
-    }
-    if (imagePath.startsWith("/uploads/")) {
-      return `${process.env.NEXT_PUBLIC_API_URL || "https://neodesignstudio.az"}${imagePath}`;
-    }
-    if (imagePath.startsWith("/")) {
-      return `${process.env.NEXT_PUBLIC_API_URL || "https://neodesignstudio.az"}${imagePath}`;
-    }
-    return `${process.env.NEXT_PUBLIC_API_URL || "https://neodesignstudio.az"}/uploads/${imagePath}`;
+    return "https://45.85.146.73:4000";
   };
 
   // Check if device is mobile
@@ -187,6 +184,8 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
     };
     return variants;
   };
+
+  console.log(images);
 
   return (
     <motion.div
@@ -287,16 +286,15 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
             className="w-full h-full flex items-center justify-center"
           >
             <Image
-              src={getImagePath(images[currentIndex])}
+              src={`
+                http://45.85.146.73:4000/${images[currentIndex]}
+                `}
               alt={`Project image ${currentIndex + 1}`}
               width={1600}
               height={1200}
               unoptimized={true}
               className="max-w-full max-h-full object-contain"
               draggable={false}
-              onError={(e) => {
-                e.currentTarget.src = "/placeholder-image.png";
-              }}
             />
           </motion.div>
         </div>
@@ -314,51 +312,18 @@ const ProjectDetail: React.FC = () => {
   const params = useParams();
   const id = params.id as string;
   const lang = useSelector(selectLanguage);
-  const {
-    data: apiResponse,
-    error,
-    isLoading,
-  } = useGetWorkByIdQuery({ id, lang });
+
+  // DÜZELTME: transformResponse sayesinde data artık direkt Work object'i
+  const { data: project, error, isLoading } = useGetWorkByIdQuery({ id, lang });
 
   // State for focused image
   const [focusedImageIndex, setFocusedImageIndex] = useState<number | null>(
     null,
   );
 
-  // Extract project data from API response (handle both old and new formats)
-  const project = React.useMemo(() => {
-    if (!apiResponse) return null;
-
-    console.log("API Response in ProjectDetail:", apiResponse);
-
-    // Handle new backend format: { success: true, data: {...}, message: "..." }
-    if (apiResponse.success && apiResponse.data) {
-      return apiResponse.data;
-    }
-
-    // Handle old format: direct project object
-    if (apiResponse.projectId || apiResponse.title) {
-      return apiResponse;
-    }
-
-    // Fallback
-    return apiResponse;
-  }, [apiResponse]);
-
-  console.log("Processed project data:", project);
-
   // Helper function for image path processing
   const getImagePath = (imagePath: string): string => {
-    if (imagePath.startsWith("http")) {
-      return imagePath;
-    }
-    if (imagePath.startsWith("/uploads/")) {
-      return `${process.env.NEXT_PUBLIC_API_URL || "https://neodesignstudio.az"}${imagePath}`;
-    }
-    if (imagePath.startsWith("/")) {
-      return `${process.env.NEXT_PUBLIC_API_URL || "https://neodesignstudio.az"}${imagePath}`;
-    }
-    return `${process.env.NEXT_PUBLIC_API_URL || "https://neodesignstudio.az"}/uploads/${imagePath}`;
+    return "http://45.85.146.73:4000" + imagePath;
   };
 
   // Helper function to get text content (handle both string and object formats)
@@ -420,7 +385,7 @@ const ProjectDetail: React.FC = () => {
         {uniqueImages.length === 1 && (
           <div className="bg-neutral-900 rounded-lg overflow-hidden">
             <AnimatedImage
-              src={getImagePath(uniqueImages[0])}
+              src={getImagePath(uniqueImages[2])}
               alt={`Gallery image 1`}
               width={1200}
               height={600}
@@ -513,15 +478,18 @@ const ProjectDetail: React.FC = () => {
     );
   }
 
-  // Error state
+  // Error state - DÜZELTME: Better error type handling
   if (error) {
     console.error("ProjectDetail API Error:", error);
+    const apiError = error as ApiError;
+
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Error Loading Project</h1>
           <p className="text-gray-400 mb-6">
-            {error?.data?.message ||
+            {apiError?.data?.message ||
+              apiError?.message ||
               "Failed to load project details. Please try again."}
           </p>
           <Link
@@ -542,7 +510,7 @@ const ProjectDetail: React.FC = () => {
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Project Not Found</h1>
           <p className="text-gray-400 mb-6">
-            The project you're looking for could not be found.
+            The project you are looking for does not exist or has been removed.
           </p>
           <Link
             href="/projects"
@@ -581,9 +549,6 @@ const ProjectDetail: React.FC = () => {
                 unoptimized={true}
                 priority={true}
                 className="object-cover w-full h-full md:h-[80vh] hover:scale-105 transition-transform duration-300"
-                onError={(e) => {
-                  e.currentTarget.src = "/placeholder-image.png";
-                }}
               />
             </motion.div>
           )}

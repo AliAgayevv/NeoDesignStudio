@@ -10,7 +10,7 @@ export default function ProjectTable({
 }) {
   const [projects, setProjects] = useState<Project[]>([]);
   const {
-    data: apiResponse,
+    data: worksData, // Renamed for clarity
     isLoading,
     error,
     refetch,
@@ -18,32 +18,14 @@ export default function ProjectTable({
   const [deleteWork, { isLoading: isDeleting }] = useDeleteWorkMutation();
 
   useEffect(() => {
-    // Backend'den gelen data yapısını handle et
-    // Backend artık { success: true, data: [...], message: "..." } formatında döndürebiliyor
-    // VEYA direkt array olarak döndürebiliyor (eski format)
-    let extractedData;
+    if (worksData) {
+      console.log("Works Data:", worksData);
 
-    if (apiResponse) {
-      // Yeni format: { success: true, data: [...] }
-      if (apiResponse.data && Array.isArray(apiResponse.data)) {
-        extractedData = apiResponse.data;
-      }
-      // Eski format: direkt array
-      else if (Array.isArray(apiResponse)) {
-        extractedData = apiResponse;
-      }
-      // Fallback
-      else {
-        extractedData = [];
-        console.warn("Unexpected API response format:", apiResponse);
-      }
-
-      console.log("API Response:", apiResponse);
-      console.log("Extracted Data:", extractedData);
-
-      if (Array.isArray(extractedData)) {
+      // worksData is already Work[] after transformResponse
+      // No need to check for .data property since transformResponse handles that
+      if (Array.isArray(worksData)) {
         setProjects(
-          extractedData.map((work: any) => ({
+          worksData.map((work: any) => ({
             _id: work._id,
             projectId: work.projectId,
             images: work.images || [],
@@ -54,9 +36,12 @@ export default function ProjectTable({
             category: work.category || "",
           })),
         );
+      } else {
+        console.warn("Unexpected works data format:", worksData);
+        setProjects([]);
       }
     }
-  }, [apiResponse]);
+  }, [worksData]);
 
   const handleDelete = async (projectId: string) => {
     if (window.confirm("Bu projeyi silmek istediğinizden emin misiniz?")) {

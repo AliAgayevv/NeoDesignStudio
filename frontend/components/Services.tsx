@@ -17,6 +17,7 @@ import { setCategory } from "@/store/services/categorySlice";
 import { useGetWorkByCategoryQuery } from "@/store/services/workApi";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const playfairDisplayFont800 = Playfair_Display({
   subsets: ["latin"],
@@ -192,12 +193,22 @@ const Services = () => {
                     {item.text[language]}
                   </div>
                   <div className="w-full h-full rounded-3xl overflow-hidden">
-                    <img
+                    {/* <img
                       src={
                         typeof item.img === "string" ? item.img : imgExample.src
                       }
                       alt={`${item.category} example`}
                       className="w-full h-full object-cover rounded-3xl"
+                    /> */}
+                    <Image
+                      src={
+                        typeof item.img === "string" ? item.img : imgExample.src
+                      }
+                      alt={`${item.category} example`}
+                      className="w-full h-full object-cover rounded-3xl"
+                      width={500}
+                      height={500}
+                      priority
                     />
                   </div>
                 </div>

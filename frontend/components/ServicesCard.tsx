@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 import HeaderTitle from "./HeaderTitle";
 import { motion } from "framer-motion";
@@ -24,10 +25,18 @@ const ServicesCard: React.FC<ServicesCardProps> = ({
           isReversed ? "translate-y-44" : ""
         }`}
       >
-        <img
+        {/* <img
           src={img}
           alt={`${text} Image`}
           className={`aspect-[9/16] max-h-[60vh] w-full object-cover transition-transform duration-300 md:hover:scale-110`}
+        /> */}
+        <Image
+          src={img}
+          alt={`${text} Image`}
+          className={`aspect-[9/16] max-h-[60vh] w-full object-cover transition-transform duration-300 md:hover:scale-110`}
+          width={500}
+          height={500}
+          priority
         />
       </div>
       <motion.div
