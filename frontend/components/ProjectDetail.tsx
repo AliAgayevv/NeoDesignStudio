@@ -283,8 +283,7 @@ const ImageFocus: React.FC<ImageFocusProps> = ({
             className="w-full h-full flex items-center justify-center"
           >
             <Image
-              src={`
-              ${process.env.BACKEND_URL}/${images[currentIndex]}
+              src={`https://neodesignstudio.az${images[currentIndex]}
                 `}
               alt={`Project image ${currentIndex + 1}`}
               width={1600}
@@ -539,7 +538,7 @@ const ProjectDetail: React.FC = () => {
               onClick={() => setFocusedImageIndex(0)}
             >
               <Image
-                src={getImagePath(project.images[0])}
+                src={"https://neodesignstudio.az" + project.images[0]}
                 alt={projectTitle || "Project main image"}
                 width={1200}
                 height={800}
