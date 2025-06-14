@@ -375,29 +375,40 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
 type categoryTypes = "all" | "interior" | "exterior" | "business";
 
 let isFirstTour = true;
+
+// ProjectsComponent içindeki değiştirilmesi gereken kısımlar:
+
 const ProjectsComponent = () => {
-  const { data, isLoading, error } = useGetAllWorksQuery();
+  const { data: apiResponse, isLoading, error } = useGetAllWorksQuery();
   const lang = useSelector(selectLanguage);
   const [visibleGroups, setVisibleGroups] = useState(1);
   const dispatch = useDispatch();
 
   const activeCategory = useSelector(selectCategory);
-
   const observerTarget = useRef(null);
 
   const handleCategoryChange = (category: categoryTypes) => {
     dispatch(setCategory(category));
   };
 
+  // Backend'den gelen data yapısını handle et
+  // Backend artık { success: true, data: [...], message: "..." } formatında döndürüyor
+  const data = apiResponse?.data || apiResponse || [];
+
+  console.log("API Response:", apiResponse);
+  console.log("Extracted Data:", data);
+
   // Filter projects by category
-  const filteredData = data
+  const filteredData = Array.isArray(data)
     ? activeCategory === "all"
       ? data
       : data.filter((project) => project.category === activeCategory)
     : [];
 
+  console.log("Filtered Data:", filteredData);
+
   // Get project groups
-  const projectGroups = filteredData
+  const projectGroups = Array.isArray(filteredData)
     ? prepareProjectGroups(
         filteredData.map((project) => ({
           ...project,
@@ -410,8 +421,6 @@ const ProjectsComponent = () => {
   useEffect(() => {
     setVisibleGroups(1);
   }, [activeCategory]);
-
-  // Set up infinite scroll
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -431,7 +440,6 @@ const ProjectsComponent = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && visibleGroups < projectGroups.length) {
-          // Load more groups when we reach the bottom
           setVisibleGroups((prev) => Math.min(prev + 1, projectGroups.length));
         }
       },
@@ -449,6 +457,7 @@ const ProjectsComponent = () => {
     };
   }, [projectGroups.length, visibleGroups]);
 
+  // Error handling'i iyileştir
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black text-white">
@@ -461,13 +470,42 @@ const ProjectsComponent = () => {
   }
 
   if (error) {
+    console.error("API Error:", error);
     return (
       <div className="min-h-screen bg-black text-white">
         <div className="w-11/12 mx-auto pt-32 text-left">
           <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
-          <p className="text-xl mt-8">
-            Failed to load projects. Please try again later.
-          </p>
+          <div className="text-center mt-8">
+            <p className="text-xl mb-4">
+              Failed to load projects. Please try again later.
+            </p>
+            <p className="text-sm text-gray-400">
+              Error: {error?.message || "Unknown error occurred"}
+            </p>
+            <button
+              className="mt-4 bg-deep_brown px-6 py-2 rounded-full hover:bg-deep_brown/80 transition-colors"
+              onClick={() => window.location.reload()}
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Data yoksa veya boşsa
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return (
+      <div className="min-h-screen bg-black text-white">
+        <div className="w-11/12 mx-auto pt-32 text-left">
+          <SectionHeaderTitle>{headerTitle[lang]}</SectionHeaderTitle>
+          <div className="text-center mt-8">
+            <p className="text-xl mb-4">No projects found.</p>
+            <p className="text-sm text-gray-400">
+              There are currently no projects to display.
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -514,7 +552,7 @@ const ProjectsComponent = () => {
                   .slice(0, visibleGroups)
                   .map((group, index) => (
                     <RenderImageGrid
-                      key={`group-${index}`}
+                      key={`group-${index}-${activeCategory}`}
                       items={group}
                       index={index}
                     />
