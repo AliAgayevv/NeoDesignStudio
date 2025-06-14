@@ -123,7 +123,7 @@ const RenderImage: React.FC<RenderImageProps> = ({
         {/* Main image with improved blur effect on hover */}
         <div className="w-full h-full">
           <Image
-            src={`https://neodesignstudio.az/${project.images[0]}`}
+            src={`https://neodesignstudio.az${project.images[0]}`}
             alt={titleText || project.projectId || "Project image"}
             width={800}
             height={600}

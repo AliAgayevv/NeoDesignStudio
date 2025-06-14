@@ -55,6 +55,7 @@ const AnimatedImage: React.FC<AnimatedImageProps> = ({
   delay = 0,
   onClick,
 }) => {
+  console.log(`Loading image: {ANIMATEDIMAGE} ${src}`);
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -319,7 +320,7 @@ const ProjectDetail: React.FC = () => {
 
   // Helper function for image path processing
   const getImagePath = (imagePath: string): string => {
-    return process.env.BACKEND_URL + imagePath;
+    return "https://neodesignstudio.az" + imagePath;
   };
 
   // Helper function to get text content (handle both string and object formats)
