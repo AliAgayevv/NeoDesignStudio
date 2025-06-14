@@ -115,8 +115,11 @@ const RenderImage: React.FC<RenderImageProps> = ({
   const titleText = getTextContent(project.title, language);
   const locationText = getTextContent(project.location, language);
 
-  console.log(`https://45.85.146.73:4000${project.images[0]}`);
-
+  console.log("Project Photo:", project.images[0]);
+  console.log(
+    "Project Photo with URL:",
+    `https://neodesignstudio.az${project.images[0]}`,
+  );
   return (
     <Link href={`/projects/${project.projectId}`}>
       <div className={`relative w-full overflow-hidden group ${aspectRatio}`}>
@@ -130,13 +133,8 @@ const RenderImage: React.FC<RenderImageProps> = ({
             quality={65}
             priority={index === 0 && itemIndex < 2}
             loading={index === 0 && itemIndex < 2 ? "eager" : "lazy"}
-            placeholder="blur"
-            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTExMTExIi8+PC9zdmc+"
             className="object-cover rounded-[12px] md:rounded-[50px] transition-all duration-300 w-full h-full md:group-hover:blur-sm"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            onError={(e) => {
-              e.currentTarget.src = "/placeholder-image.png";
-            }}
           />
 
           {/* Subtle overlay gradient to enhance blur effect */}
