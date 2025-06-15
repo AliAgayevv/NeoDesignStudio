@@ -206,9 +206,8 @@ process.on("SIGTERM", () => {
   });
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+app.listen(4000, () => {
+  console.log("Server running on port 4000");
 });
 
 // Export optimizeImage middleware for use in routes
