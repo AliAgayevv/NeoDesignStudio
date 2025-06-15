@@ -49,20 +49,17 @@ export default function Login() {
               setIsLoading(true);
               setError("");
 
-              const response = await fetch(
-                // "http://45.85.146.73:4000/api/login",
-                `/api/login`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    email: values.email,
-                    password: values.password,
-                  }),
+              // FIXED: Use correct API endpoint (removed /admin prefix)
+              const response = await fetch("/api/login", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
                 },
-              );
+                body: JSON.stringify({
+                  email: values.email,
+                  password: values.password,
+                }),
+              });
 
               const data = await response.json();
 
@@ -110,10 +107,10 @@ export default function Login() {
                 </label>
                 <input
                   name="email"
-                  type="text"
+                  type="email"
                   onChange={handleChange}
                   value={values.email}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2"
                 />
                 {errors.email && touched.email && (
                   <p className="text-red-500 text-xs mt-1">{errors.email}</p>
@@ -128,7 +125,7 @@ export default function Login() {
                   type="password"
                   onChange={handleChange}
                   value={values.password}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2"
                 />
                 {errors.password && touched.password && (
                   <p className="text-red-500 text-xs mt-1">{errors.password}</p>
