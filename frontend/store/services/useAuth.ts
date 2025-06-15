@@ -19,7 +19,7 @@ export const useAuth = () => {
         }
 
         // Verify token
-        const response = await fetch("api/login/verify", {
+        const response = await fetch("/api/login/verify", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
