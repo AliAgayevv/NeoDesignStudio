@@ -20,14 +20,13 @@ const allowedOrigins = [
   "https://www.neodesignstudio.az",
 ];
 
-// CORS optimizasyonu
 app.use(
   cors({
     origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
-    optionsSuccessStatus: 200, // Legacy browser desteği
-    maxAge: 86400, // 24 saat preflight cache
+    optionsSuccessStatus: 200,
+    maxAge: 86400,
   })
 );
 
@@ -71,7 +70,7 @@ app.use(
 
     // CORS headers
     res.set({
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": allowedOrigins.join(", "),
       "Access-Control-Allow-Methods": "GET",
       "Access-Control-Allow-Headers":
         "Origin, X-Requested-With, Content-Type, Accept",
