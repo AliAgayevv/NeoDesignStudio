@@ -12,36 +12,49 @@ const sharp = require("sharp"); // Görsel optimizasyonu için
 
 const app = express();
 
-// const allowedOrigins = [
-//   "http://localhost:3000",
-//   "http://45.85.146.73:3000",
-//   "https://45.85.146.73:3000",
-//   "https://neodesignstudio.az",
-//   "https://www.neodesignstudio.az",
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://45.85.146.73:3000",
+  "https://45.85.146.73:3000",
+  "https://neodesignstudio.az",
+  "https://www.neodesignstudio.az",
+];
 
-//   "http://192.168.1.142",
-//   "https://192.168.1.142",
-//   "http://192.168.1.142:3000",
-//   "https://192.168.1.142:3000",
+// Güvenli CORS middleware - sadece allowedOrigins'den gelen isteklere izin ver
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
 
-//   "http://188.253.217.112",
-//   "https://188.253.217.112",
-//   "http://188.253.217.112:3000",
-//   "https://188.253.217.112:3000",
+  // Origin kontrolü
+  if (!origin || !allowedOrigins.includes(origin)) {
+    return res.status(403).json({
+      error: "Forbidden",
+      message: "Bu kaynaktan erişim izni yok.",
+      code: 403,
+    });
+  }
 
-//   "http://localhost",
-//   "https://localhost",
-// ];
+  // İzin verilen origin'den geliyorsa CORS header'larını ekle
+  res.header("Access-Control-Allow-Origin", origin);
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Max-Age", "86400");
 
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    credentials: true,
-    optionsSuccessStatus: 200,
-    maxAge: 86400,
-  })
-);
+  // Preflight OPTIONS isteklerini handle et
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  next();
+});
+
+// Eski CORS konfigürasyonunu kaldırdık, artık yukarıdaki custom middleware kullanılıyor
 
 const PORT = 4000;
 
@@ -72,6 +85,16 @@ console.log("Serving static files from:", uploadsPath);
 app.use(
   "/uploads",
   (req, res, next) => {
+    // Origin kontrolü static files için de
+    const origin = req.headers.origin;
+    if (origin && !allowedOrigins.includes(origin)) {
+      return res.status(403).json({
+        error: "Forbidden",
+        message: "Bu kaynaktan statik dosyalara erişim izni yok.",
+        code: 403,
+      });
+    }
+
     // Cache headers ekle
     res.set({
       "Cache-Control": "public, max-age=31536000", // 1 yıl cache
@@ -81,13 +104,15 @@ app.use(
       Vary: "Accept-Encoding",
     });
 
-    // CORS headers
-    res.set({
-      "Access-Control-Allow-Origin": allowedOrigins.join(", "),
-      "Access-Control-Allow-Methods": "GET",
-      "Access-Control-Allow-Headers":
-        "Origin, X-Requested-With, Content-Type, Accept",
-    });
+    // CORS headers - sadece izin verilen origin için
+    if (origin && allowedOrigins.includes(origin)) {
+      res.set({
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Headers":
+          "Origin, X-Requested-With, Content-Type, Accept",
+      });
+    }
 
     next();
   },
