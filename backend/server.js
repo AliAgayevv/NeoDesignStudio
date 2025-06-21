@@ -12,30 +12,30 @@ const sharp = require("sharp"); // Görsel optimizasyonu için
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://45.85.146.73:3000",
-  "https://45.85.146.73:3000",
-  "https://neodesignstudio.az",
-  "https://www.neodesignstudio.az",
+// const allowedOrigins = [
+//   "http://localhost:3000",
+//   "http://45.85.146.73:3000",
+//   "https://45.85.146.73:3000",
+//   "https://neodesignstudio.az",
+//   "https://www.neodesignstudio.az",
 
-  "http://192.168.1.142",
-  "https://192.168.1.142",
-  "http://192.168.1.142:3000",
-  "https://192.168.1.142:3000",
+//   "http://192.168.1.142",
+//   "https://192.168.1.142",
+//   "http://192.168.1.142:3000",
+//   "https://192.168.1.142:3000",
 
-  "http://188.253.217.112",
-  "https://188.253.217.112",
-  "http://188.253.217.112:3000",
-  "https://188.253.217.112:3000",
+//   "http://188.253.217.112",
+//   "https://188.253.217.112",
+//   "http://188.253.217.112:3000",
+//   "https://188.253.217.112:3000",
 
-  "http://localhost",
-  "https://localhost",
-];
+//   "http://localhost",
+//   "https://localhost",
+// ];
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
     optionsSuccessStatus: 200,
