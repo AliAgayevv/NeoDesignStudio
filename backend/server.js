@@ -4,28 +4,21 @@ const pageRoutes = require("./routes/pageRoutes");
 const workRoutes = require("./routes/workRoutes");
 const contactRoute = require("./routes/contact");
 const loginRoutes = require("./routes/login");
-const cors = require("cors");
-const uploads = require("./middlewares/upload");
 const path = require("path");
 const fs = require("fs");
-const sharp = require("sharp"); // Görsel optimizasyonu için
+const sharp = require("sharp");
+const compression = require("compression");
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://45.85.146.73:3000",
-  "https://45.85.146.73:3000",
-  "https://neodesignstudio.az",
-  "https://www.neodesignstudio.az",
-];
+const ALLOWED_ORIGIN = "https://neodesignstudio.az";
 
-// Güvenli CORS middleware - sadece allowedOrigins'den gelen isteklere izin ver
+// ✅ Sıkı CORS middleware
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
-  // Same-origin istekleri (origin header olmayan) veya izin verilen origin'leri kabul et
-  if (origin && !allowedOrigins.includes(origin)) {
+  // Sadece belirli origin’e izin ver
+  if (!origin || origin !== ALLOWED_ORIGIN) {
     return res.status(403).json({
       error: "Forbidden",
       message: "Bu kaynaktan erişim izni yok.",
@@ -33,22 +26,19 @@ app.use((req, res, next) => {
     });
   }
 
-  // İzin verilen origin'den geliyorsa veya same-origin ise CORS header'larını ekle
-  if (origin && allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Origin", origin);
-  }
+  // CORS header'ları ekle
+  res.header("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
+  res.header("Access-Control-Allow-Credentials", "true");
   res.header(
     "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
   );
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Max-Age", "86400");
 
-  // Preflight OPTIONS isteklerini handle et
+  // OPTIONS istekleri için hemen cevap dön
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
@@ -56,40 +46,21 @@ app.use((req, res, next) => {
   next();
 });
 
-// Eski CORS konfigürasyonunu kaldırdık, artık yukarıdaki custom middleware kullanılıyor
-
-const PORT = 4000;
-
-// Middleware optimizasyonu
+// Middleware'ler
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(compression({ level: 6, threshold: 1024 }));
 
-// Compression middleware (performans için)
-const compression = require("compression");
-app.use(
-  compression({
-    level: 6, // Sıkıştırma seviyesi
-    threshold: 1024, // 1KB'den büyük dosyalar
-    filter: (req, res) => {
-      if (req.headers["x-no-compression"]) {
-        return false;
-      }
-      return compression.filter(req, res);
-    },
-  })
-);
-
-// Static file serving optimization
+// 🔧 Görsel Yükleme Yolu
 const uploadsPath = path.resolve(__dirname, "public/uploads");
 console.log("Serving static files from:", uploadsPath);
 
-// Cache kontrolü ile static file serving
+// ✅ Statik dosyalarda da CORS ve güvenlik kontrolü
 app.use(
   "/uploads",
   (req, res, next) => {
-    // Origin kontrolü static files için de - same-origin isteklere izin ver
     const origin = req.headers.origin;
-    if (origin && !allowedOrigins.includes(origin)) {
+    if (!origin || origin !== ALLOWED_ORIGIN) {
       return res.status(403).json({
         error: "Forbidden",
         message: "Bu kaynaktan statik dosyalara erişim izni yok.",
@@ -97,33 +68,25 @@ app.use(
       });
     }
 
-    // Cache headers ekle
     res.set({
-      "Cache-Control": "public, max-age=31536000", // 1 yıl cache
+      "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+      "Access-Control-Allow-Methods": "GET",
+      "Access-Control-Allow-Headers":
+        "Origin, X-Requested-With, Content-Type, Accept",
+      "Cache-Control": "public, max-age=31536000",
       Expires: new Date(Date.now() + 31536000000).toUTCString(),
       "Last-Modified": new Date().toUTCString(),
       ETag: `"${Date.now()}"`,
       Vary: "Accept-Encoding",
     });
 
-    // CORS headers - sadece izin verilen origin için
-    if (origin && allowedOrigins.includes(origin)) {
-      res.set({
-        "Access-Control-Allow-Origin": origin,
-        "Access-Control-Allow-Methods": "GET",
-        "Access-Control-Allow-Headers":
-          "Origin, X-Requested-With, Content-Type, Accept",
-      });
-    }
-
     next();
   },
   express.static(uploadsPath, {
-    maxAge: "1y", // 1 yıl cache
+    maxAge: "1y",
     etag: true,
     lastModified: true,
     setHeaders: (res, path) => {
-      // Görsel dosyaları için özel headers
       if (path.match(/\.(jpg|jpeg|png|gif|webp|avif)$/i)) {
         res.set("Content-Type", "image/" + path.split(".").pop().toLowerCase());
       }
@@ -131,15 +94,7 @@ app.use(
   })
 );
 
-// Fallback static serving
-const middlewarePath = path.resolve(__dirname, "middlewares/uploads");
-console.log("Fallback serving from:", middlewarePath);
-app.use(
-  "/opt/render/project/src/backend/middlewares/uploads",
-  express.static(middlewarePath, { maxAge: "1y" })
-);
-
-// Görsel optimizasyonu middleware'i
+// Görsel optimizasyon middleware'i
 const optimizeImage = async (req, res, next) => {
   if (!req.file) return next();
 
@@ -149,78 +104,61 @@ const optimizeImage = async (req, res, next) => {
     const nameWithoutExt = path.parse(filename).name;
     const ext = path.parse(filename).ext.toLowerCase();
 
-    // Sadece görsel dosyalarını işle
-    if (![".jpg", ".jpeg", ".png", ".gif"].includes(ext)) {
-      return next();
-    }
+    if (![".jpg", ".jpeg", ".png", ".gif"].includes(ext)) return next();
 
     console.log(`Optimizing image: ${filename}`);
 
-    // Farklı boyutlarda görseller oluştur
     const sizes = [
       { width: 400, height: 300, suffix: "small" },
       { width: 800, height: 600, suffix: "medium" },
       { width: 1200, height: 900, suffix: "large" },
     ];
 
-    const optimizationPromises = sizes.map(async (size) => {
+    const optimizationPromises = sizes.map((size) => {
       const outputPath = path.join(
         outputDir,
         `${nameWithoutExt}-${size.suffix}.webp`
       );
-
       return sharp(filePath)
         .resize(size.width, size.height, {
           fit: "cover",
           position: "center",
           withoutEnlargement: true,
         })
-        .webp({
-          quality: 75,
-          effort: 4,
-          lossless: false,
-        })
+        .webp({ quality: 75, effort: 4, lossless: false })
         .toFile(outputPath);
     });
 
-    // Orijinal dosyayı da optimize et
     const originalOptimizedPath = path.join(
       outputDir,
       `${nameWithoutExt}-optimized${ext}`
     );
-    const originalOptimization = sharp(filePath)
-      .jpeg({ quality: 85, progressive: true })
-      .png({ compressionLevel: 8, progressive: true })
-      .toFile(originalOptimizedPath);
+    optimizationPromises.push(
+      sharp(filePath)
+        .jpeg({ quality: 85, progressive: true })
+        .png({ compressionLevel: 8, progressive: true })
+        .toFile(originalOptimizedPath)
+    );
 
-    optimizationPromises.push(originalOptimization);
-
-    // Tüm optimizasyonları bekle
     await Promise.all(optimizationPromises);
-
-    console.log(`Image optimization completed for: ${filename}`);
-
-    // Orijinal dosyayı optimize edilmiş versiyonla değiştir
     fs.renameSync(originalOptimizedPath, filePath);
 
+    console.log(`Image optimization completed for: ${filename}`);
     next();
   } catch (error) {
     console.error("Image optimization error:", error);
-    // Hata olsa bile devam et
     next();
   }
 };
 
-// Database bağlantısı
+// 📦 Route tanımları
 connectDB();
-
-// Routes
 app.use("/api/contact", contactRoute);
 app.use("/api/pages", pageRoutes);
 app.use("/api/portfolio", workRoutes);
 app.use("/api/login", loginRoutes);
 
-// Error handling middleware
+// Hata yönetimi
 app.use((error, req, res, next) => {
   console.error("Server error:", error);
 
@@ -237,17 +175,11 @@ app.use((error, req, res, next) => {
   });
 });
 
-// Graceful shutdown
-process.on("SIGTERM", () => {
-  console.log("SIGTERM received, shutting down gracefully");
-  server.close(() => {
-    console.log("Process terminated");
-  });
+// Sunucuyu başlat
+const PORT = 4000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
-app.listen(4000, () => {
-  console.log("Server running on port 4000");
-});
-
-// Export optimizeImage middleware for use in routes
+// optimizeImage middleware export
 module.exports = { app, optimizeImage };
