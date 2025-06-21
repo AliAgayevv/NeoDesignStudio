@@ -10,12 +10,13 @@ exports.getPage = async (req, res) => {
     const pageData = await Page.findOne({ page });
 
     if (!lang) {
-      return res.stauts(200).json({
+      return res.status(200).json({
         message:
           "Language not specified. Returning selected page with all languages.",
         pages: pageData,
       });
     }
+
     if (!["az", "en", "ru"].includes(lang)) {
       return res.status(400).json({ message: "Invalid language parameter." });
     }
@@ -79,6 +80,20 @@ exports.updatePage = async (req, res) => {
     }
 
     res.json({ message: "Page updated", page: updatedPage });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+exports.deletePage = async (req, res) => {
+  try {
+    const { page } = req.params;
+
+    const deletedPage = await Page.findOneAndDelete({ page });
+    if (!deletedPage) {
+      return res.status(404).json({ message: "Page not found" });
+    }
+    res.json({ message: "Page deleted successfully", page: deletedPage });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
