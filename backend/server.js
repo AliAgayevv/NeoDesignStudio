@@ -24,8 +24,8 @@ const allowedOrigins = [
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
-  // Origin kontrolü
-  if (!origin || !allowedOrigins.includes(origin)) {
+  // Same-origin istekleri (origin header olmayan) veya izin verilen origin'leri kabul et
+  if (origin && !allowedOrigins.includes(origin)) {
     return res.status(403).json({
       error: "Forbidden",
       message: "Bu kaynaktan erişim izni yok.",
@@ -33,8 +33,10 @@ app.use((req, res, next) => {
     });
   }
 
-  // İzin verilen origin'den geliyorsa CORS header'larını ekle
-  res.header("Access-Control-Allow-Origin", origin);
+  // İzin verilen origin'den geliyorsa veya same-origin ise CORS header'larını ekle
+  if (origin && allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
   res.header(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
@@ -85,7 +87,7 @@ console.log("Serving static files from:", uploadsPath);
 app.use(
   "/uploads",
   (req, res, next) => {
-    // Origin kontrolü static files için de
+    // Origin kontrolü static files için de - same-origin isteklere izin ver
     const origin = req.headers.origin;
     if (origin && !allowedOrigins.includes(origin)) {
       return res.status(403).json({
