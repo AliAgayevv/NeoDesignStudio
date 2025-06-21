@@ -85,10 +85,45 @@ exports.updatePage = async (req, res) => {
   }
 };
 
+exports.patchPage = async (req, res) => {
+  try {
+    const { page } = req.params;
+    const { content } = req.body;
+
+    // Mevcut page'i al
+    const existingPage = await Page.findOne({ page });
+    if (!existingPage) {
+      return res.status(404).json({ message: "Page not found" });
+    }
+
+    // Mevcut content ile yeni content'i birleştir
+    const updatedContent = { ...existingPage.content };
+
+    Object.keys(content).forEach((lang) => {
+      if (updatedContent[lang]) {
+        updatedContent[lang] = { ...updatedContent[lang], ...content[lang] };
+      } else {
+        updatedContent[lang] = content[lang];
+      }
+    });
+
+    const updatedPage = await Page.findOneAndUpdate(
+      { page },
+      { $set: { content: updatedContent } },
+      { new: true }
+    );
+
+    res.json({ message: "Page updated successfully", page: updatedPage });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
 exports.deletePage = async (req, res) => {
   try {
     const { page } = req.params;
 
+    console.log(`Deleting page: ${page}`);
     const deletedPage = await Page.findOneAndDelete({ page });
     if (!deletedPage) {
       return res.status(404).json({ message: "Page not found" });
