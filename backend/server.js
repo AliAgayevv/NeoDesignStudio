@@ -18,6 +18,19 @@ const allowedOrigins = [
   "https://45.85.146.73:3000",
   "https://neodesignstudio.az",
   "https://www.neodesignstudio.az",
+
+  "http://192.168.1.142",
+  "https://192.168.1.142",
+  "http://192.168.1.142:3000",
+  "https://192.168.1.142:3000",
+
+  "http://188.253.217.112",
+  "https://188.253.217.112",
+  "http://188.253.217.112:3000",
+  "https://188.253.217.112:3000",
+
+  "http://localhost",
+  "https://localhost",
 ];
 
 app.use(
