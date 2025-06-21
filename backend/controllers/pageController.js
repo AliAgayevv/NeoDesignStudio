@@ -5,10 +5,6 @@ exports.getPage = async (req, res) => {
     const { page } = req.params;
     const { lang } = req.query;
 
-    if (!["az", "en", "ru"].includes(lang)) {
-      return res.status(400).json({ message: "Invalid language parameter." });
-    }
-
     const allPages = await Page.find({}, { page: 1, _id: 0 });
 
     const pageData = await Page.findOne({ page });
@@ -19,6 +15,9 @@ exports.getPage = async (req, res) => {
           "Language not specified. Returning selected page with all languages.",
         pages: pageData,
       });
+    }
+    if (!["az", "en", "ru"].includes(lang)) {
+      return res.status(400).json({ message: "Invalid language parameter." });
     }
 
     if (!pageData) {
