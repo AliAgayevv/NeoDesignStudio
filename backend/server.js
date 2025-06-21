@@ -11,14 +11,17 @@ const compression = require("compression");
 
 const app = express();
 
+// ✅ Sıkı CORS middleware
 const ALLOWED_ORIGIN = "https://neodesignstudio.az";
 
-// ✅ Sıkı CORS middleware
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
-  // Sadece belirli origin’e izin ver
-  if (!origin || origin !== ALLOWED_ORIGIN) {
+  // Eğer origin yoksa (same-origin istek), izin ver
+  const isSameOrigin = !origin;
+  const isAllowedOrigin = origin === ALLOWED_ORIGIN;
+
+  if (!isSameOrigin && !isAllowedOrigin) {
     return res.status(403).json({
       error: "Forbidden",
       message: "Bu kaynaktan erişim izni yok.",
@@ -26,19 +29,20 @@ app.use((req, res, next) => {
     });
   }
 
-  // CORS header'ları ekle
-  res.header("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
+  // Eğer CORS gerekiyorsa header ekle (sadece cross-origin'de gerekli)
+  if (origin && isAllowedOrigin) {
+    res.header("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+    );
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+  }
 
-  // OPTIONS istekleri için hemen cevap dön
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
