@@ -1,4 +1,23 @@
 const Page = require("../models/Page");
+const multer = require("multer");
+const path = require("path");
+
+// Multer konfigürasyonu
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      Date.now() +
+        "-" +
+        Math.round(Math.random() * 1e9) +
+        path.extname(file.originalname)
+    );
+  },
+});
+const upload = multer({ storage: storage });
 
 exports.getPage = async (req, res) => {
   try {
@@ -85,39 +104,67 @@ exports.updatePage = async (req, res) => {
   }
 };
 
-exports.patchPage = async (req, res) => {
-  try {
-    const { page } = req.params;
-    const { content } = req.body;
+exports.patchPage = [
+  upload.array("images", 10), // maksimum 10 dosya
+  async (req, res) => {
+    try {
+      const { page } = req.params;
 
-    // Mevcut page'i al
-    const existingPage = await Page.findOne({ page });
-    if (!existingPage) {
-      return res.status(404).json({ message: "Page not found" });
-    }
-
-    // Mevcut content ile yeni content'i birleştir
-    const updatedContent = { ...existingPage.content };
-
-    Object.keys(content).forEach((lang) => {
-      if (updatedContent[lang]) {
-        updatedContent[lang] = { ...updatedContent[lang], ...content[lang] };
-      } else {
-        updatedContent[lang] = content[lang];
+      // Mevcut page'i al
+      const existingPage = await Page.findOne({ page });
+      if (!existingPage) {
+        return res.status(404).json({ message: "Page not found" });
       }
-    });
 
-    const updatedPage = await Page.findOneAndUpdate(
-      { page },
-      { $set: { content: updatedContent } },
-      { new: true }
-    );
+      // Upload edilen dosyaların path'lerini al
+      const imagePaths = req.files
+        ? req.files.map((file) => `/uploads/${file.filename}`)
+        : [];
 
-    res.json({ message: "Page updated successfully", page: updatedPage });
-  } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
-  }
-};
+      // Mevcut content'i koru
+      const updatedContent = { ...existingPage.content };
+
+      // Eğer content body'de varsa onu da ekle
+      if (req.body.content) {
+        const content = JSON.parse(req.body.content);
+        Object.keys(content).forEach((lang) => {
+          if (updatedContent[lang]) {
+            updatedContent[lang] = {
+              ...updatedContent[lang],
+              ...content[lang],
+            };
+          } else {
+            updatedContent[lang] = content[lang];
+          }
+        });
+      }
+
+      // Images varsa her dile ekle
+      if (imagePaths.length > 0) {
+        Object.keys(updatedContent).forEach((lang) => {
+          if (!updatedContent[lang].images) {
+            updatedContent[lang].images = [];
+          }
+          updatedContent[lang].images.push(...imagePaths);
+        });
+      }
+
+      const updatedPage = await Page.findOneAndUpdate(
+        { page },
+        { $set: { content: updatedContent } },
+        { new: true }
+      );
+
+      res.json({
+        message: "Page updated successfully",
+        page: updatedPage,
+        uploadedImages: imagePaths,
+      });
+    } catch (err) {
+      res.status(500).json({ message: "Server error", error: err.message });
+    }
+  },
+];
 
 exports.deletePage = async (req, res) => {
   try {
