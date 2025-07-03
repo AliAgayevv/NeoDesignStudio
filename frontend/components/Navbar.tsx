@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import languageIcon from "@/public/assets/icons/languageIcon.svg";
+
 import phoneDropdownIcon from "@/public/assets/icons/phoneDropdownIcon.svg";
 import wellDoneIcon from "@/public/assets/icons/wellDoneIcon.svg";
 import { useEffect, useRef, useState } from "react";
@@ -201,7 +201,7 @@ const Navbar = () => {
     >
       <div className="mx-auto flex min-h-24 w-11/12 justify-between p-4 md:justify-normal">
         <Image
-          src={languageIcon}
+          src="/assets/icons/languageIcon.svg"
           alt="Language Icon"
           width={32}
           height={32}
