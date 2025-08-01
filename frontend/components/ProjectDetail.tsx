@@ -378,11 +378,11 @@ const ProjectDetail: React.FC = () => {
           </div>
         )}
 
-        {/* If we only have 1 image, show it in full width */}
+        {/* If we only have 1 image, show it in full width - FIXED */}
         {uniqueImages.length === 1 && (
           <div className="bg-neutral-900 rounded-lg overflow-hidden">
             <AnimatedImage
-              src={getImagePath(uniqueImages[2])}
+              src={getImagePath(uniqueImages[0])} // ✅ Fixed: was uniqueImages[2]
               alt={`Gallery image 1`}
               width={1200}
               height={600}
