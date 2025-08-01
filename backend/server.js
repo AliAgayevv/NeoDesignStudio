@@ -11,13 +11,11 @@ const compression = require("compression");
 
 const app = express();
 
-// ✅ Sıkı CORS middleware
 const ALLOWED_ORIGIN = "https://neodesignstudio.az";
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
-  // Eğer origin yoksa (same-origin istek), izin ver
   const isSameOrigin = !origin;
   const isAllowedOrigin = origin === ALLOWED_ORIGIN;
 
@@ -58,45 +56,6 @@ app.use(compression({ level: 6, threshold: 1024 }));
 // 🔧 Görsel Yükleme Yolu
 const uploadsPath = path.resolve(__dirname, "public/uploads");
 console.log("Serving static files from:", uploadsPath);
-
-// ✅ Statik dosyalarda da CORS ve güvenlik kontrolü
-app.use(
-  "/uploads",
-  (req, res, next) => {
-    const origin = req.headers.origin;
-    if (!origin || origin !== ALLOWED_ORIGIN) {
-      return res.status(403).json({
-        error: "Forbidden",
-        message: "Bu kaynaktan statik dosyalara erişim izni yok.",
-        code: 403,
-      });
-    }
-
-    res.set({
-      "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
-      "Access-Control-Allow-Methods": "GET",
-      "Access-Control-Allow-Headers":
-        "Origin, X-Requested-With, Content-Type, Accept",
-      "Cache-Control": "public, max-age=31536000",
-      Expires: new Date(Date.now() + 31536000000).toUTCString(),
-      "Last-Modified": new Date().toUTCString(),
-      ETag: `"${Date.now()}"`,
-      Vary: "Accept-Encoding",
-    });
-
-    next();
-  },
-  express.static(uploadsPath, {
-    maxAge: "1y",
-    etag: true,
-    lastModified: true,
-    setHeaders: (res, path) => {
-      if (path.match(/\.(jpg|jpeg|png|gif|webp|avif)$/i)) {
-        res.set("Content-Type", "image/" + path.split(".").pop().toLowerCase());
-      }
-    },
-  })
-);
 
 // Görsel optimizasyon middleware'i
 const optimizeImage = async (req, res, next) => {
