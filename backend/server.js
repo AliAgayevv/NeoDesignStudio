@@ -57,6 +57,21 @@ app.use(compression({ level: 6, threshold: 1024 }));
 const uploadsPath = path.resolve(__dirname, "public/uploads");
 console.log("Serving static files from:", uploadsPath);
 
+// ✅ ƏSAS DÜZƏLTMƏ: Static file serving əlavə edildi
+app.use("/uploads", express.static(uploadsPath));
+
+// İsteğe bağlı: Bütün public qovluğunu serve etmək
+// app.use(express.static(path.join(__dirname, 'public')));
+
+// Debug üçün əlavə məlumat
+if (fs.existsSync(uploadsPath)) {
+  const files = fs.readdirSync(uploadsPath);
+  console.log(`✅ Found ${files.length} files in uploads directory`);
+  console.log(`📁 First 3 files: ${files.slice(0, 3).join(", ")}`);
+} else {
+  console.error(`❌ Uploads directory does not exist: ${uploadsPath}`);
+}
+
 // Görsel optimizasyon middleware'i
 const optimizeImage = async (req, res, next) => {
   if (!req.file) return next();
@@ -142,6 +157,9 @@ app.use((error, req, res, next) => {
 const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(
+    `🔗 Static files available at: http://localhost:${PORT}/uploads/`
+  );
 });
 
 // optimizeImage middleware export
