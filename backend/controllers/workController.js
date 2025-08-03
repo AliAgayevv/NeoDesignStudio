@@ -307,7 +307,9 @@ exports.getAllWorks = async (req, res) => {
   try {
     console.log("Fetching all works...");
 
-    const projects = await Work.find().sort({ createdAt: -1 }); // Daha performanslı sorting
+    // First in last out (FILO) order
+    // const projects = await Work.find().sort({ createdAt: -1 });
+    const projects = await Work.find().sort({ _id: -1 }).lean();
 
     console.log(`✓ Fetched ${projects.length} works`);
 
