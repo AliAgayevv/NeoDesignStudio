@@ -62,7 +62,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   if (!isOpen) return null;
 
   // Backend URL'i ekle
-  const fullImageUrl = "https://45.85.146.73:4000" + imagePath;
+  const fullImageUrl = "https://neodesignstudio.az" + imagePath;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
